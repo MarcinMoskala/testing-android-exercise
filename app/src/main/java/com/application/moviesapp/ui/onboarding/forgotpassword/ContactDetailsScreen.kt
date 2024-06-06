@@ -46,19 +46,23 @@ import com.application.moviesapp.ui.theme.MoviesAppTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun ContactDetailsScreen(modifier: Modifier = Modifier,
-                         email: String = "",
-                         onPasswordResetOtp: () -> Unit = { },
-                         snackbarHostState: SnackbarHostState = SnackbarHostState()) {
+fun ContactDetailsScreen(
+    modifier: Modifier = Modifier,
+    email: String = "",
+    onPasswordResetOtp: () -> Unit = { },
+    snackbarHostState: SnackbarHostState = SnackbarHostState()
+) {
 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween) {
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
         Image(
             painter = painterResource(id = R.drawable.ic_reset_password_one),
@@ -67,54 +71,71 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
             contentScale = ContentScale.Crop,
         )
 
-        Text(text = stringResource(R.string.select_which_contact_details_should_we_use_to_reset_your_password),
-            style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = stringResource(R.string.select_which_contact_details_should_we_use_to_reset_your_password),
+            style = MaterialTheme.typography.bodyLarge
+        )
 
-        OutlinedButton(onClick = {  },
+        OutlinedButton(
+            onClick = { },
             shape = RoundedCornerShape(30),
-            border = BorderStroke(width = .5.dp, color =  Color.LightGray),
+            border = BorderStroke(width = .5.dp, color = Color.LightGray),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
 
-            Row(modifier = modifier
-                .fillMaxWidth()
-                .padding(10.dp),
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
 
-                IconButton(onClick = { /*TODO*/ },
+                IconButton(
+                    onClick = { /*TODO*/ },
                     modifier = modifier
                         .background(
                             color = Color(0xFFFF6363),
                             shape = RoundedCornerShape(50)
                         )
-                        .padding(8.dp)) {
-                    Icon(imageVector = Icons.Rounded.Email,
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Email,
                         contentDescription = null,
                         modifier = modifier.size(24.dp),
-                        tint = Color.Unspecified)
+                        tint = Color.Unspecified
+                    )
                 }
 
                 Column {
-                    Text(text = stringResource(R.string.via_email),
+                    Text(
+                        text = stringResource(R.string.via_email),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.DarkGray)
+                        color = Color.DarkGray
+                    )
 
-                    Text(text = email,
+                    Text(
+                        text = email,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSecondary,
-                        fontWeight = FontWeight.Bold)
+                        fontWeight = FontWeight.Bold
+                    )
                 }
 
             }
         }
 
-        Button(onClick = {
-            onPasswordResetOtp()
-                       coroutineScope.launch {
-                           snackbarHostState.showSnackbar(message = context.getString(R.string.password_reset_email_sent_successfully), duration = SnackbarDuration.Short)
-                       }
-                         },
+        Button(
+            onClick = {
+                onPasswordResetOtp()
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.password_reset_email_sent_successfully),
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            },
             modifier = modifier
                 .shadow(
                     elevation = 4.dp,
@@ -123,10 +144,13 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
                     shape = RoundedCornerShape(50)
                 )
                 .fillMaxWidth()
-                .requiredHeight(50.dp)) {
+                .requiredHeight(50.dp)
+        ) {
 
-            Text(text = stringResource(R.string.continue_text),
-                modifier = modifier.padding(4.dp))
+            Text(
+                text = stringResource(R.string.continue_text),
+                modifier = modifier.padding(4.dp)
+            )
         }
     }
 }

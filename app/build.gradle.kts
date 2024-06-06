@@ -76,7 +76,6 @@ android {
             isMinifyEnabled = false
 
             val TEST_API_KEY: String by project
-            val FACEBOOK_APP_ID: String by project
             val YOUTUBE_API_KEY: String by project
 
             buildConfigField(type = "String", name =  "API_KEY", value = TEST_API_KEY)
@@ -84,8 +83,6 @@ android {
             buildConfigField(type = "String", name = "IMAGE_BASE_URL", value = "\"https://image.tmdb.org/t/p/original/\"")
             buildConfigField(type = "String", name = "YOUTUBE_API_KEY", value = YOUTUBE_API_KEY)
             buildConfigField(type = "String", name = "YOUTUBE_BASE_URL", value = "\"https://youtube.googleapis.com/\"")
-            resValue("string", "FACEBOOK_APP_ID", FACEBOOK_APP_ID)
-
         }
         getByName("release") {
             isDebuggable = false
@@ -97,7 +94,6 @@ android {
                 "proguard-rules.pro"
             )
             val PRO_API_KEY: String by project
-            val FACEBOOK_APP_ID: String by project
             val YOUTUBE_API_KEY: String by project
 
             buildConfigField(type = "String", name = "API_KEY", value = PRO_API_KEY)
@@ -105,7 +101,6 @@ android {
             buildConfigField(type = "String", name = "IMAGE_BASE_URL", value = "\"https://image.tmdb.org/t/p/original/\"")
             buildConfigField(type = "String", name = "YOUTUBE_API_KEY", value = YOUTUBE_API_KEY)
             buildConfigField(type = "String", name = "YOUTUBE_BASE_URL", value = "\"https://youtube.googleapis.com/\"")
-            resValue("string", "FACEBOOK_APP_ID", FACEBOOK_APP_ID)
 
             signingConfig = signingConfigs.getByName("config")
         }
@@ -217,8 +212,8 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
-    implementation(libs.facebook.android.sdk )
-    implementation(libs.facebook.login)
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation(libs.gson)
 
     // Pager
     implementation(libs.accompanist.pager)

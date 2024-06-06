@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LanguageActivity: BaseActivity() {
+class LanguageActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, LanguageActivity::class.java)

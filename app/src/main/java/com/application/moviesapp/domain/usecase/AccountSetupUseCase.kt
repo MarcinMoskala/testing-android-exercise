@@ -17,7 +17,13 @@ interface AccountSetupUseCase {
 
     suspend fun updateGenre(genre: Set<MoviesDetail.Genre>)
 
-    suspend fun updateProfile(fullName: String, nickName: String, email: String, phoneNumber: Long, gender: String)
+    suspend fun updateProfile(
+        fullName: String,
+        nickName: String,
+        email: String,
+        phoneNumber: Long,
+        gender: String
+    )
 
     suspend fun updateInfo(userId: String, member: Member)
 
@@ -28,12 +34,14 @@ interface AccountSetupUseCase {
     fun getUserDetail(userId: String): Flow<Resource<Member>>
 }
 
-class GetAccountSetupInteractor @Inject constructor(private val repository: UserPreferenceRepository,
-                                                    private val accountSetupRepository: AccountSetupRepository): AccountSetupUseCase {
+class GetAccountSetupInteractor @Inject constructor(
+    private val repository: UserPreferenceRepository,
+    private val accountSetupRepository: AccountSetupRepository
+) : AccountSetupUseCase {
 
-                                                        private companion object {
-                                                            const val TAG = "GetAccountSetupInteractor"
-                                                        }
+    private companion object {
+        const val TAG = "GetAccountSetupInteractor"
+    }
 
     override val readUserPreference: Flow<UserPreferences>
         get() = repository.userPreferenceFlow
@@ -52,11 +60,17 @@ class GetAccountSetupInteractor @Inject constructor(private val repository: User
         repository.updateProfile(fullName, nickName, email, phoneNumber, gender)
     }
 
-    override suspend fun updateInfo(userId: String, member: Member) = accountSetupRepository.uploadUserData(userId, member)
+    override suspend fun updateInfo(userId: String, member: Member) =
+        accountSetupRepository.uploadUserData(userId, member)
 
-    override fun uploadProfilePhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>> = accountSetupRepository.uploadPhoto(userId, uri)
+    override fun uploadProfilePhoto(
+        userId: String,
+        uri: Uri
+    ): Flow<Resource<UploadTask.TaskSnapshot>> = accountSetupRepository.uploadPhoto(userId, uri)
 
-    override fun getPhoto(userId: String): Flow<Resource<Uri>> = accountSetupRepository.getPhoto(userId)
+    override fun getPhoto(userId: String): Flow<Resource<Uri>> =
+        accountSetupRepository.getPhoto(userId)
 
-    override fun getUserDetail(userId: String): Flow<Resource<Member>> = accountSetupRepository.getUserDetail(userId)
+    override fun getUserDetail(userId: String): Flow<Resource<Member>> =
+        accountSetupRepository.getUserDetail(userId)
 }

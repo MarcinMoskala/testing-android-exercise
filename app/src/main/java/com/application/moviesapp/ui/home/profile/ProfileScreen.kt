@@ -71,14 +71,17 @@ import com.application.moviesapp.ui.utility.toImageUrl
 import timber.log.Timber
 
 private const val TAG = "ProfileScreen"
+
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier,
-                  uiState: UserData? = null,
-                  onSignOutClick: () -> Unit = {},
-                  darkModeUiState: SettingsPreference = SettingsPreference(false),
-                  onModeClick: (Boolean) -> Unit = {},
-                  onProfileClick: (Uri) -> Unit = { _ -> },
-                  profileUIState: Resource<Uri> = Resource.Loading) {
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    uiState: UserData? = null,
+    onSignOutClick: () -> Unit = {},
+    darkModeUiState: SettingsPreference = SettingsPreference(false),
+    onModeClick: (Boolean) -> Unit = {},
+    onProfileClick: (Uri) -> Unit = { _ -> },
+    profileUIState: Resource<Uri> = Resource.Loading
+) {
 
     val context = LocalContext.current
 
@@ -89,32 +92,42 @@ fun ProfileScreen(modifier: Modifier = Modifier,
         }
     }
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .wrapContentSize(align = Alignment.Center)
-        .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(align = Alignment.Center)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
         Column(
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            IconButton(onClick = { getContent.launch("image/*") }, modifier = modifier.size(100.dp)) {
+            IconButton(
+                onClick = { getContent.launch("image/*") },
+                modifier = modifier.size(100.dp)
+            ) {
 
                 when (profileUIState) {
                     is Resource.Loading -> {
-                        Icon(painterResource(id = R.drawable.ic_image_placeholder),
+                        Icon(
+                            painterResource(id = R.drawable.ic_image_placeholder),
                             contentDescription = null,
-                            modifier = modifier.size(100.dp))
+                            modifier = modifier.size(100.dp)
+                        )
                     }
 
                     is Resource.Failure -> {
-                        Icon(imageVector = Icons.Outlined.AccountCircle,
+                        Icon(
+                            imageVector = Icons.Outlined.AccountCircle,
                             contentDescription = null,
-                            modifier = modifier.size(100.dp))
+                            modifier = modifier.size(100.dp)
+                        )
                     }
 
                     is Resource.Success -> {
@@ -132,17 +145,21 @@ fun ProfileScreen(modifier: Modifier = Modifier,
                     }
                 }
             }
-            
-            Text(text = uiState?.userName ?: "",
+
+            Text(
+                text = uiState?.userName ?: "",
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold)
-            
+                fontWeight = FontWeight.Bold
+            )
+
             Text(text = uiState?.email ?: "", style = MaterialTheme.typography.bodyLarge)
         }
 
         Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-            Row(modifier = modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -154,7 +171,10 @@ fun ProfileScreen(modifier: Modifier = Modifier,
                 }
             }
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -166,7 +186,10 @@ fun ProfileScreen(modifier: Modifier = Modifier,
                 }
             }
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.FileDownload, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -179,7 +202,10 @@ fun ProfileScreen(modifier: Modifier = Modifier,
             }
 
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.Language, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -192,19 +218,30 @@ fun ProfileScreen(modifier: Modifier = Modifier,
             }
 
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = if (darkModeUiState.data) Icons.Outlined.DarkMode else Icons.Outlined.LightMode, contentDescription = null)
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (darkModeUiState.data) Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
+                    contentDescription = null
+                )
 
                 Spacer(modifier = modifier.width(10.dp))
 
-                Text(text = if (darkModeUiState.data) stringResource(R.string.dark_mode) else stringResource(
-                    R.string.light_mode
-                ), modifier = modifier.weight(1f))
+                Text(
+                    text = if (darkModeUiState.data) stringResource(R.string.dark_mode) else stringResource(
+                        R.string.light_mode
+                    ), modifier = modifier.weight(1f)
+                )
 
                 Switch(checked = darkModeUiState.data, onCheckedChange = onModeClick)
             }
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -217,7 +254,10 @@ fun ProfileScreen(modifier: Modifier = Modifier,
             }
 
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(imageVector = Icons.Outlined.PrivacyTip, contentDescription = null)
 
                 Spacer(modifier = modifier.width(10.dp))
@@ -229,12 +269,29 @@ fun ProfileScreen(modifier: Modifier = Modifier,
                 }
             }
 
-            Row(modifier = modifier.fillMaxWidth().padding(vertical = 8.dp).clickable(onClick = { onSignOutClick() }, interactionSource = remember { MutableInteractionSource() }, indication = null), verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Outlined.Logout, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .clickable(
+                        onClick = { onSignOutClick() },
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ), verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Logout,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
 
                 Spacer(modifier = modifier.width(10.dp))
 
-                Text(text = stringResource(id = R.string.logout), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = stringResource(id = R.string.logout),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         }
     }

@@ -25,18 +25,27 @@ import com.application.moviesapp.domain.model.GeneralNotificationPreference
 import com.application.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
-fun NotificationScreen(modifier: Modifier = Modifier,
-                       paddingValues: PaddingValues = PaddingValues(),
-                       generalNotificationPreference: GeneralNotificationPreference = GeneralNotificationPreference(false),
-                       appUpdatesPreference: AppUpdatesPreference = AppUpdatesPreference(false),
-                       onGeneralNotificationChange: (Boolean) -> Unit = { _ -> },
-                       onAppUpdateChange: (Boolean) -> Unit = { _ -> }
+fun NotificationScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    generalNotificationPreference: GeneralNotificationPreference = GeneralNotificationPreference(
+        false
+    ),
+    appUpdatesPreference: AppUpdatesPreference = AppUpdatesPreference(false),
+    onGeneralNotificationChange: (Boolean) -> Unit = { _ -> },
+    onAppUpdateChange: (Boolean) -> Unit = { _ -> }
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),) {
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            ),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         Row(
             modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -44,7 +53,10 @@ fun NotificationScreen(modifier: Modifier = Modifier,
 
             Text(text = "General Notification", modifier = modifier.weight(1f))
 
-            Switch(checked = generalNotificationPreference.data, onCheckedChange = onGeneralNotificationChange)
+            Switch(
+                checked = generalNotificationPreference.data,
+                onCheckedChange = onGeneralNotificationChange
+            )
         }
 
         Row(

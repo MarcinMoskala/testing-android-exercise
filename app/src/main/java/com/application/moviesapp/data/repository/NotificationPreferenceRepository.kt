@@ -22,7 +22,8 @@ interface NotificationPreferenceRepository {
     suspend fun updateAppUpdatesPreference(value: Boolean)
 }
 
-class NotificationPreferencePreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>): NotificationPreferenceRepository {
+class NotificationPreferencePreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>) :
+    NotificationPreferenceRepository {
     private object PreferenceKeys {
         val IS_GENERAL_NOTIFICATION = booleanPreferencesKey("is_general_notification")
         val IS_APP_UPDATES = booleanPreferencesKey("is_app_updates")
@@ -37,8 +38,9 @@ class NotificationPreferencePreferenceImpl @Inject constructor(private val datas
                     throw exception
                 }
             }
-            .map {  preference ->
-                val isGeneralNotification = preference[PreferenceKeys.IS_GENERAL_NOTIFICATION] ?: true
+            .map { preference ->
+                val isGeneralNotification =
+                    preference[PreferenceKeys.IS_GENERAL_NOTIFICATION] ?: true
                 GeneralNotificationPreference(isGeneralNotification)
             }
     override val readAppUpdatesPreference: Flow<AppUpdatesPreference>
@@ -50,10 +52,11 @@ class NotificationPreferencePreferenceImpl @Inject constructor(private val datas
                     throw exception
                 }
             }
-            .map {  preference ->
+            .map { preference ->
                 val isAppUpdates = preference[PreferenceKeys.IS_APP_UPDATES] ?: true
                 AppUpdatesPreference(isAppUpdates)
             }
+
     override suspend fun updateGeneralNotificationPreference(value: Boolean) {
         datastore.edit { preference ->
             preference[PreferenceKeys.IS_GENERAL_NOTIFICATION] = value

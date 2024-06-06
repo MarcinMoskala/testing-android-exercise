@@ -64,14 +64,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class,
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterialApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
-fun MyListScreen(modifier: Modifier = Modifier,
-                 moviesFavouriteFlow: LazyPagingItems<MovieFavourite>? = null,
-                 lazyGridState: LazyGridState = LazyGridState(),
-                 bottomPadding: PaddingValues = PaddingValues()
+fun MyListScreen(
+    modifier: Modifier = Modifier,
+    moviesFavouriteFlow: LazyPagingItems<MovieFavourite>? = null,
+    lazyGridState: LazyGridState = LazyGridState(),
+    bottomPadding: PaddingValues = PaddingValues()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -127,72 +129,79 @@ fun MyListScreen(modifier: Modifier = Modifier,
 
 //                } else {
 
-                    Box(modifier = modifier
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                top = bottomPadding.calculateTopPadding(),
+                bottom = bottomPadding.calculateBottomPadding()
+            )
+            .pullRefresh(pullRefreshState)
+    ) {
+        Column() {
+            if (moviesFavouriteFlow?.itemCount == 0) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = modifier
                         .fillMaxSize()
-                        .padding(
-                            top = bottomPadding.calculateTopPadding(),
-                            bottom = bottomPadding.calculateBottomPadding()
-                        )
-                        .pullRefresh(pullRefreshState)) {
-                        Column() {
-                            if (moviesFavouriteFlow?.itemCount == 0) {
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                                    modifier = modifier
-                                        .fillMaxSize()
-                                        .wrapContentSize(align = Alignment.Center)
-                                        .padding(32.dp)
-                                ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_empty_list),
-                                        contentDescription = null,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                                            .size(200.dp),
-                                        contentScale = ContentScale.Crop,
-                                    )
+                        .wrapContentSize(align = Alignment.Center)
+                        .padding(32.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_empty_list),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                            .size(200.dp),
+                        contentScale = ContentScale.Crop,
+                    )
 
-                                    Text(
-                                        text = stringResource(R.string.you_list_is_empty),
-                                        style = MaterialTheme.typography.titleLarge,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                                    )
+                    Text(
+                        text = stringResource(R.string.you_list_is_empty),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    )
 
-                                    Text(
-                                        text = stringResource(R.string.it_seems_you_haven_t_listed_any_movies_or_series),
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                                    )
-                                }
-                            } else {
-                                LazyVerticalGrid(
-                                    columns = GridCells.Fixed(2),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                                    state = lazyGridState,
-                                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)) {
+                    Text(
+                        text = stringResource(R.string.it_seems_you_haven_t_listed_any_movies_or_series),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    )
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    state = lazyGridState,
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+                ) {
 
-                                    items(moviesFavouriteFlow?.itemCount ?: return@LazyVerticalGrid) { index ->
-                                        MovieImageCard(imageUrl = moviesFavouriteFlow[index]?.posterPath ?: "", rating = moviesFavouriteFlow[index]?.voteAverage.toString(), movieId = moviesFavouriteFlow[index]?.id ?: 0)
-                                    }
-                                }
-                            }
-                        }
-
-                        PullRefreshIndicator(
-                            refreshing = isRefreshing,
-                            state = pullRefreshState,
-                            modifier = Modifier.align(Alignment.TopCenter),
-                            contentColor = MaterialTheme.colorScheme.primary,
-                            backgroundColor = MaterialTheme.colorScheme.background
+                    items(moviesFavouriteFlow?.itemCount ?: return@LazyVerticalGrid) { index ->
+                        MovieImageCard(
+                            imageUrl = moviesFavouriteFlow[index]?.posterPath ?: "",
+                            rating = moviesFavouriteFlow[index]?.voteAverage.toString(),
+                            movieId = moviesFavouriteFlow[index]?.id ?: 0
                         )
                     }
+                }
+            }
+        }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentColor = MaterialTheme.colorScheme.primary,
+            backgroundColor = MaterialTheme.colorScheme.background
+        )
+    }
 //                }
 //            }
 //        }
@@ -200,11 +209,18 @@ fun MyListScreen(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "", rating: String = "", movieId: Int = 0) {
+private fun MovieImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "",
+    rating: String = "",
+    movieId: Int = 0
+) {
 
     val context = LocalContext.current
 
-    Card(shape = RoundedCornerShape(10), onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
+    Card(
+        shape = RoundedCornerShape(10),
+        onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -215,13 +231,22 @@ private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "",
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = modifier.height(250.dp))
+                modifier = modifier.height(250.dp)
+            )
 
-            Card(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.TopStart)
-                .padding(8.dp), shape = RoundedCornerShape(30), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(text = rating.toDoubleOrNull()?.toOneDecimal ?: "", modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            Card(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(30),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = rating.toDoubleOrNull()?.toOneDecimal ?: "",
+                    modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

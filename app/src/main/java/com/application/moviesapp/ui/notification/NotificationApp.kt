@@ -22,13 +22,24 @@ import com.application.moviesapp.domain.model.GeneralNotificationPreference
 import com.application.moviesapp.ui.viewmodel.ProfileViewModel
 
 @Composable
-fun NotificationApp(modifier: Modifier = Modifier, profileViewModel: ProfileViewModel = hiltViewModel()) {
+fun NotificationApp(
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
 
-    val generalNotificationUIState by profileViewModel.isGeneralNotification.collectAsState(initial = GeneralNotificationPreference(false))
-    val appUpdatesUIState by profileViewModel.isAppUpdates.collectAsState(initial = AppUpdatesPreference(false))
+    val generalNotificationUIState by profileViewModel.isGeneralNotification.collectAsState(
+        initial = GeneralNotificationPreference(
+            false
+        )
+    )
+    val appUpdatesUIState by profileViewModel.isAppUpdates.collectAsState(
+        initial = AppUpdatesPreference(
+            false
+        )
+    )
 
     Scaffold(
-        topBar = {  NotificationTopAppbar() }
+        topBar = { NotificationTopAppbar() }
     ) { paddingValues ->
 
         NotificationScreen(
@@ -36,7 +47,8 @@ fun NotificationApp(modifier: Modifier = Modifier, profileViewModel: ProfileView
             generalNotificationPreference = generalNotificationUIState,
             appUpdatesPreference = appUpdatesUIState,
             onGeneralNotificationChange = profileViewModel::updateGeneraNotification,
-            onAppUpdateChange = profileViewModel::updateAppUpdates)
+            onAppUpdateChange = profileViewModel::updateAppUpdates
+        )
     }
 }
 
@@ -50,8 +62,13 @@ private fun NotificationTopAppbar(modifier: Modifier = Modifier) {
         title = { Text(text = "Notification") },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
 }

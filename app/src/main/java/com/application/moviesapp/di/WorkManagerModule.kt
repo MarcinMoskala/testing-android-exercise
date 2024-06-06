@@ -21,5 +21,6 @@ object WorkManagerModule {
 
     @Provides
     @Singleton
-    fun providesWorkManagerInstance(@ApplicationContext context: Context) = WorkManager.getInstance(context)
+    fun providesWorkManagerInstance(@ApplicationContext context: Context) =
+        WorkManager.getInstance(context)
 }

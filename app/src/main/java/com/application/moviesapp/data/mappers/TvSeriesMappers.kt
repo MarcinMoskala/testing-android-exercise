@@ -8,7 +8,20 @@ import com.application.moviesapp.domain.model.TvSeriesTrailer
 
 fun TvSeriesNowPlayingDto.Result.toMovies(): TvSeriesNowPlaying {
     return TvSeriesNowPlaying(
-        adult, backdropPath, firstAirDate, genreIds, id, name, originCountry, originalLanguage, originalName, overview, popularity, posterPath, voteAverage, voteCount
+        adult,
+        backdropPath,
+        firstAirDate,
+        genreIds,
+        id,
+        name,
+        originCountry,
+        originalLanguage,
+        originalName,
+        overview,
+        popularity,
+        posterPath,
+        voteAverage,
+        voteCount
     )
 }
 

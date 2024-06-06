@@ -13,10 +13,12 @@ interface MoviesNowPlayingUseCase {
     operator fun invoke(): Flow<PagingData<MovieNowPlaying>>
 }
 
-class GetMoviesNowPlayingInteractor @Inject constructor(private val repository: MoviesRepository): MoviesNowPlayingUseCase {
-    override fun invoke(): Flow<PagingData<MovieNowPlaying>> = repository.getMoviesNowPlayingPagingFlow().map {
-        it.map { movieNowPlayingEntity ->
-            movieNowPlayingEntity.toMovies()
+class GetMoviesNowPlayingInteractor @Inject constructor(private val repository: MoviesRepository) :
+    MoviesNowPlayingUseCase {
+    override fun invoke(): Flow<PagingData<MovieNowPlaying>> =
+        repository.getMoviesNowPlayingPagingFlow().map {
+            it.map { movieNowPlayingEntity ->
+                movieNowPlayingEntity.toMovies()
+            }
         }
-    }
 }

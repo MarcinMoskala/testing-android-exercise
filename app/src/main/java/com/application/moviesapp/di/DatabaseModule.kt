@@ -15,6 +15,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesMoviesDatabase(@ApplicationContext context: Context) = MoviesDatabase.getDatabase(context)
+    fun providesMoviesDatabase(@ApplicationContext context: Context) =
+        MoviesDatabase.getDatabase(context)
 
 }

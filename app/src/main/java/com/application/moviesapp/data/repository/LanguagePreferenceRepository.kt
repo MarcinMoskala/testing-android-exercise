@@ -19,7 +19,8 @@ interface LanguagePreferenceRepository {
     suspend fun updatePreference(value: String)
 }
 
-class LanguagePreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>): LanguagePreferenceRepository {
+class LanguagePreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>) :
+    LanguagePreferenceRepository {
 
     private object PreferenceKeys {
         val LANGUAGE = stringPreferencesKey("language")
@@ -34,7 +35,7 @@ class LanguagePreferenceImpl @Inject constructor(private val datastore: DataStor
                     throw exception
                 }
             }
-            .map {  preference ->
+            .map { preference ->
                 val language = preference[PreferenceKeys.LANGUAGE] ?: language[0].language[0]
                 LanguagePreference(language)
             }

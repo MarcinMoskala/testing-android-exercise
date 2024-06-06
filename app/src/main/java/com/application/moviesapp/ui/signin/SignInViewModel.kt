@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class SignInViewModel: ViewModel() {
+class SignInViewModel : ViewModel() {
 
     private var _signInState = MutableStateFlow(SignInState())
     val signInInState: StateFlow<SignInState> = _signInState

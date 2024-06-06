@@ -76,19 +76,21 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import timber.log.Timber
 
 private const val TAG = "DetailPlayScreen"
+
 @Composable
-fun DetailPlayScreen(modifier: Modifier = Modifier,
-                     player: Player? = null,
-                     onPlayOrPause: () -> Unit = { },
-                     playerStreamUIState: PlayerStreamUIState = PlayerStreamUIState(),
-                     onScreenTouch: () -> Unit = { },
-                     onLockModeClick: () -> Unit = { },
-                     onVolumeClick: (String) -> Unit = { _ -> },
-                     onSeekTo: (Float) -> Unit = { },
-                     onSeekForward: () -> Unit = {  },
-                     onSeekBackward: () -> Unit = {  },
-                     onPlaybackSpeedClick: () -> Unit = {  },
-                     onDownloadClick: () -> Unit = { },
+fun DetailPlayScreen(
+    modifier: Modifier = Modifier,
+    player: Player? = null,
+    onPlayOrPause: () -> Unit = { },
+    playerStreamUIState: PlayerStreamUIState = PlayerStreamUIState(),
+    onScreenTouch: () -> Unit = { },
+    onLockModeClick: () -> Unit = { },
+    onVolumeClick: (String) -> Unit = { _ -> },
+    onSeekTo: (Float) -> Unit = { },
+    onSeekForward: () -> Unit = { },
+    onSeekBackward: () -> Unit = { },
+    onPlaybackSpeedClick: () -> Unit = { },
+    onDownloadClick: () -> Unit = { },
 ) {
     val context = LocalContext.current
 
@@ -117,12 +119,14 @@ fun DetailPlayScreen(modifier: Modifier = Modifier,
         )
 
 
-    Box(modifier = modifier.fillMaxSize().pointerInput(Unit) {
-        detectTransformGestures { _, pan, zoom, _ ->
-            scaleFactor = if (zoom >= 1f) 1f else 0f
-            fullScreenMode = if (scaleFactor >= 1f) true else false
-        }
-    }) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .pointerInput(Unit) {
+            detectTransformGestures { _, pan, zoom, _ ->
+                scaleFactor = if (zoom >= 1f) 1f else 0f
+                fullScreenMode = if (scaleFactor >= 1f) true else false
+            }
+        }) {
 
         AndroidView(
             factory = { context ->
@@ -161,36 +165,46 @@ fun DetailPlayScreen(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun CustomPlayerUI(modifier: Modifier = Modifier,
-                           videoTitle: String = "",
-                           player: Player? = null,
-                           onPlayOrPause: () -> Unit = {},
-                           playerStreamUIState: PlayerStreamUIState = PlayerStreamUIState(),
-                           onSeekTo: (Float) -> Unit = { },
-                           onFullScreenModeClicked: (Boolean) -> Unit = { _ -> },
-                           isFullScreen: Boolean = false,
-                           onSeekForward: () -> Unit = {  },
-                           onSeekBackward: () -> Unit = {  },
-                           onNextVideo: () -> Unit = {  },
-                           onPreviousVideo: () -> Unit = {  },
-                           onLockModeClick: () -> Unit = {  },
-                           onDownloadClick: () -> Unit = {  },
-                           onVolumeClick: (String) -> Unit = { _ -> },
-                           onPlaybackSpeedClick: () -> Unit = {  }) {
+private fun CustomPlayerUI(
+    modifier: Modifier = Modifier,
+    videoTitle: String = "",
+    player: Player? = null,
+    onPlayOrPause: () -> Unit = {},
+    playerStreamUIState: PlayerStreamUIState = PlayerStreamUIState(),
+    onSeekTo: (Float) -> Unit = { },
+    onFullScreenModeClicked: (Boolean) -> Unit = { _ -> },
+    isFullScreen: Boolean = false,
+    onSeekForward: () -> Unit = { },
+    onSeekBackward: () -> Unit = { },
+    onNextVideo: () -> Unit = { },
+    onPreviousVideo: () -> Unit = { },
+    onLockModeClick: () -> Unit = { },
+    onDownloadClick: () -> Unit = { },
+    onVolumeClick: (String) -> Unit = { _ -> },
+    onPlaybackSpeedClick: () -> Unit = { }
+) {
 
     val context = LocalContext.current
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
 
         if (playerStreamUIState.isLockMode.not()) {
-            Row(modifier = modifier.fillMaxWidth(),
+            Row(
+                modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
 
                 IconButton(onClick = { (context as Activity).finish() }) {
-                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 Text(
@@ -204,71 +218,125 @@ private fun CustomPlayerUI(modifier: Modifier = Modifier,
                 )
 
                 IconButton(onClick = { onPlaybackSpeedClick() }) {
-                    Icon(imageVector = Icons.Rounded.Speed, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.Speed,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.Timer, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.Timer,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.Subtitles, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.Subtitles,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.KeyboardVoice, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.KeyboardVoice,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.Cast, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.Cast,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
 
         Spacer(modifier = modifier.weight(1f))
 
-        Column(modifier = modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             if (playerStreamUIState.isLockMode.not()) {
-                Row(modifier = modifier.fillMaxWidth(),
+                Row(
+                    modifier = modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
 
-                    Text(text = playerStreamUIState.currentTime.formatMinSec(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary)
+                    Text(
+                        text = playerStreamUIState.currentTime.formatMinSec(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
 
-                    Slider(value = playerStreamUIState.currentTime.toFloat(),
+                    Slider(
+                        value = playerStreamUIState.currentTime.toFloat(),
                         onValueChange = { onSeekTo(it) },
                         modifier = modifier.weight(1f),
                         valueRange = 0f..playerStreamUIState.totalDuration.toFloat(),
-                        colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.onSecondary))
+                        colors = SliderDefaults.colors(thumbColor = MaterialTheme.colorScheme.onSecondary)
+                    )
 
-                    Text(text = playerStreamUIState.totalDuration.formatMinSec(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary)
+                    Text(
+                        text = playerStreamUIState.totalDuration.formatMinSec(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
 
-            Row(modifier = modifier.fillMaxWidth(),
+            Row(
+                modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
 
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
 
                     IconButton(onClick = onLockModeClick) {
-                        Icon(imageVector = if (playerStreamUIState.isLockMode.not()) Icons.Rounded.LockOpen else Icons.Rounded.Lock,
+                        Icon(
+                            imageVector = if (playerStreamUIState.isLockMode.not()) Icons.Rounded.LockOpen else Icons.Rounded.Lock,
                             contentDescription = null,
-                            modifier = modifier.size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                            modifier = modifier.size(24.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
 
                     if (playerStreamUIState.isLockMode.not()) {
-                        IconButton(onClick = { onVolumeClick((context as Activity).intent.getStringExtra(PlayActivity.FROM_SCREEN) ?: return@IconButton) }) {
-                            Icon(imageVector = if (playerStreamUIState.hasVolume) Icons.Rounded.VolumeUp else Icons.Rounded.VolumeOff,
+                        IconButton(onClick = {
+                            onVolumeClick(
+                                (context as Activity).intent.getStringExtra(
+                                    PlayActivity.FROM_SCREEN
+                                ) ?: return@IconButton
+                            )
+                        }) {
+                            Icon(
+                                imageVector = if (playerStreamUIState.hasVolume) Icons.Rounded.VolumeUp else Icons.Rounded.VolumeOff,
                                 contentDescription = null,
-                                modifier = modifier.size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }
@@ -276,43 +344,63 @@ private fun CustomPlayerUI(modifier: Modifier = Modifier,
                 Spacer(modifier = modifier.weight(1f))
 
                 if (playerStreamUIState.isLockMode.not()) {
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
 
                         IconButton(onClick = onSeekBackward) {
-                            Icon(imageVector = Icons.Rounded.Replay10,
+                            Icon(
+                                imageVector = Icons.Rounded.Replay10,
                                 contentDescription = null,
-                                modifier = modifier.size(30.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
 
                         IconButton(onClick = onPreviousVideo) {
-                            Icon(imageVector = Icons.Rounded.SkipPrevious,
+                            Icon(
+                                imageVector = Icons.Rounded.SkipPrevious,
                                 contentDescription = null,
-                                modifier = modifier.size(36.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(36.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
 
                         IconButton(onClick = onPlayOrPause) {
                             if (playerStreamUIState.isPlaying) {
-                                Icon(imageVector = Icons.Rounded.Pause,
+                                Icon(
+                                    imageVector = Icons.Rounded.Pause,
                                     contentDescription = null,
-                                    modifier = modifier.size(80.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                    modifier = modifier.size(80.dp),
+                                    tint = MaterialTheme.colorScheme.onPrimary
+                                )
                             } else {
-                                Icon(imageVector = Icons.Rounded.PlayArrow,
+                                Icon(
+                                    imageVector = Icons.Rounded.PlayArrow,
                                     contentDescription = null,
-                                    modifier = modifier.size(80.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                    modifier = modifier.size(80.dp),
+                                    tint = MaterialTheme.colorScheme.onPrimary
+                                )
                             }
                         }
 
                         IconButton(onClick = onNextVideo) {
-                            Icon(imageVector = Icons.Rounded.SkipNext,
+                            Icon(
+                                imageVector = Icons.Rounded.SkipNext,
                                 contentDescription = null,
-                                modifier = modifier.size(36.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(36.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
 
                         IconButton(onClick = onSeekForward) {
-                            Icon(imageVector = Icons.Rounded.Forward10,
+                            Icon(
+                                imageVector = Icons.Rounded.Forward10,
                                 contentDescription = null,
-                                modifier = modifier.size(30.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(30.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }
@@ -320,18 +408,26 @@ private fun CustomPlayerUI(modifier: Modifier = Modifier,
                 Spacer(modifier = modifier.weight(1f))
 
                 if (playerStreamUIState.isLockMode.not()) {
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
 
                         IconButton(onClick = onDownloadClick) {
-                            Icon(imageVector = Icons.Outlined.FileDownload,
+                            Icon(
+                                imageVector = Icons.Outlined.FileDownload,
                                 contentDescription = null,
-                                modifier = modifier.size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                         IconButton(onClick = { onFullScreenModeClicked(isFullScreen.not()) }) {
-                            Icon(imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
+                            Icon(
+                                imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
                                 contentDescription = null,
-                                modifier = modifier.size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                                modifier = modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }

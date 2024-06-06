@@ -39,40 +39,47 @@ import timber.log.Timber
 import javax.inject.Inject
 
 sealed interface DownloadUiState {
-    object Default: DownloadUiState
-    object Loading: DownloadUiState
-    data class Complete(val videoTitle: String = "",
-                        val videoThumbnail: String = "",
-                        val videoStreams: List<Stream> = emptyList(),
-                        val audioStreams: Stream? = null,
-    ): DownloadUiState
+    object Default : DownloadUiState
+    object Loading : DownloadUiState
+    data class Complete(
+        val videoTitle: String = "",
+        val videoThumbnail: String = "",
+        val videoStreams: List<Stream> = emptyList(),
+        val audioStreams: Stream? = null,
+    ) : DownloadUiState
 }
+
 @HiltViewModel
-class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseCase,
-                                           private val tvSerialDetailsUseCase: TvSeriesDetailsUseCase,
-                                           private val moviesTrailerUseCase: MovieTrailerUseCase,
-                                           private val tvSeriesTrailerUseCase: TvSeriesTrailerUseCase,
-                                           private val updateMovieFavouriteUseCase: MovieUpdateFavouriteInteractor,
-                                           private val getMovieStateUseCase: MovieStateUseCase,
-                                           private val videoInfoUseCase: VideoInfoUseCase,
-                                           private val downloadUseCase: DownloadUseCase,
-                                           private val tvSeriesEpisodesUseCase: TvSeriesEpisodesUseCase): ViewModel() {
+class DetailsViewModel @Inject constructor(
+    private val useCase: MovieDetailsUseCase,
+    private val tvSerialDetailsUseCase: TvSeriesDetailsUseCase,
+    private val moviesTrailerUseCase: MovieTrailerUseCase,
+    private val tvSeriesTrailerUseCase: TvSeriesTrailerUseCase,
+    private val updateMovieFavouriteUseCase: MovieUpdateFavouriteInteractor,
+    private val getMovieStateUseCase: MovieStateUseCase,
+    private val videoInfoUseCase: VideoInfoUseCase,
+    private val downloadUseCase: DownloadUseCase,
+    private val tvSeriesEpisodesUseCase: TvSeriesEpisodesUseCase
+) : ViewModel() {
 
     private companion object {
         const val TAG = "DetailsViewModel"
     }
 
     private var _movieDetailResponse = MutableStateFlow<Resource<MoviesDetail>>(Resource.Loading)
-    val movieDetailResponse  get() = _movieDetailResponse.asStateFlow()
+    val movieDetailResponse get() = _movieDetailResponse.asStateFlow()
 
-    private var _tvSeriesDetailResponse = MutableStateFlow<Resource<TvSeriesDetail>>(Resource.Loading)
+    private var _tvSeriesDetailResponse =
+        MutableStateFlow<Resource<TvSeriesDetail>>(Resource.Loading)
     val tvSeriesDetailResponse get() = _tvSeriesDetailResponse.asStateFlow()
 
 
-    private var _movieTrailerResponse = MutableStateFlow<Resource<List<MovieTrailerWithYoutube>>>(Resource.Loading)
+    private var _movieTrailerResponse =
+        MutableStateFlow<Resource<List<MovieTrailerWithYoutube>>>(Resource.Loading)
     val movieTrailerResponse get() = _movieTrailerResponse.asStateFlow()
 
-    private var _tvSeriesTrailerResponse = MutableStateFlow<Resource<List<TvSeriesTrailerWithYoutube>>>(Resource.Loading)
+    private var _tvSeriesTrailerResponse =
+        MutableStateFlow<Resource<List<TvSeriesTrailerWithYoutube>>>(Resource.Loading)
     val tvSeriesTrailerResponse get() = _tvSeriesTrailerResponse.asStateFlow()
 
 
@@ -80,7 +87,8 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
     val movieStateResponse get() = _movieStateResponse.asStateFlow()
 
 
-    private var _tvSeriesEpisodesResponse = MutableStateFlow<Resource<TvSeriesEpisodes>>(Resource.Loading)
+    private var _tvSeriesEpisodesResponse =
+        MutableStateFlow<Resource<TvSeriesEpisodes>>(Resource.Loading)
     val tvSeriesEpisodesResponse: StateFlow<Resource<TvSeriesEpisodes>> get() = _tvSeriesEpisodesResponse
 
 
@@ -108,21 +116,22 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
         Timber.tag(TAG).d(tvSeriesEpisodesResponse.value.toString())
     }
 
-    fun updateMovieFavourite(mediaType: String, mediaId: Int, isFavorite: Boolean) = viewModelScope.launch {
-        val jsonData = JSONObject()
-        try {
-            jsonData.put("media_type", mediaType)
-            jsonData.put("media_id", mediaId)
-            jsonData.put("favorite", isFavorite)
-        } catch (exception: JSONException) {
-            exception.printStackTrace()
+    fun updateMovieFavourite(mediaType: String, mediaId: Int, isFavorite: Boolean) =
+        viewModelScope.launch {
+            val jsonData = JSONObject()
+            try {
+                jsonData.put("media_type", mediaType)
+                jsonData.put("media_id", mediaId)
+                jsonData.put("favorite", isFavorite)
+            } catch (exception: JSONException) {
+                exception.printStackTrace()
+            }
+
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = jsonData.toString().toRequestBody(mediaType)
+
+            updateMovieFavouriteUseCase(requestBody)
         }
-
-        val mediaType = "application/json; charset=utf-8".toMediaType()
-        val requestBody = jsonData.toString().toRequestBody(mediaType)
-
-        updateMovieFavouriteUseCase(requestBody)
-    }
 
     fun getMovieState(movieId: Int) = viewModelScope.launch {
         _movieStateResponse.value = getMovieStateUseCase(movieId)
@@ -144,9 +153,11 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
                         audioStreams = getAudioStreams(audioStreams).last()
                     )
                 }
+
                 info.state == WorkInfo.State.CANCELLED -> {
                     DownloadUiState.Default
                 }
+
                 else -> DownloadUiState.Loading
             }
         }.stateIn(
@@ -155,7 +166,7 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
             initialValue = DownloadUiState.Default
         )
 
-    private fun getVideoStreams(videoStreams: String) : List<Stream> {
+    private fun getVideoStreams(videoStreams: String): List<Stream> {
         val listResult = mutableListOf<Stream>()
 
         videoStreams.split(",").forEach {
@@ -164,7 +175,7 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
         return listResult
     }
 
-    private fun getAudioStreams(audioStreams: String) : List<Stream> {
+    private fun getAudioStreams(audioStreams: String): List<Stream> {
         val listResult = mutableListOf<Stream>()
 
         audioStreams.split(",").forEach {
@@ -174,10 +185,20 @@ class DetailsViewModel @Inject constructor(private val useCase: MovieDetailsUseC
     }
 
     fun getVideoInfo(videoId: String = "") = viewModelScope.launch {
-         videoInfoUseCase.getVideoInfo("https://www.youtube.com/watch?v=$videoId")
+        videoInfoUseCase.getVideoInfo("https://www.youtube.com/watch?v=$videoId")
     }
 
-    fun videoDownload(videoId: String, videoStream: Stream, audioStream: Stream?, movieDownloadEntity: MovieDownloadEntity?) = viewModelScope.launch {
-        downloadUseCase("https://www.youtube.com/watch?v=$videoId", videoStream, audioStream, movieDownloadEntity)
+    fun videoDownload(
+        videoId: String,
+        videoStream: Stream,
+        audioStream: Stream?,
+        movieDownloadEntity: MovieDownloadEntity?
+    ) = viewModelScope.launch {
+        downloadUseCase(
+            "https://www.youtube.com/watch?v=$videoId",
+            videoStream,
+            audioStream,
+            movieDownloadEntity
+        )
     }
 }

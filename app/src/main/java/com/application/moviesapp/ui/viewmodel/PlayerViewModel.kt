@@ -37,6 +37,7 @@ data class MovieDownload(
     val title: String = "",
     val filePath: String = ""
 )
+
 data class PlayerUIState(
     val isPlaying: Boolean = true,
     val onScreenTouch: Boolean = true,
@@ -58,8 +59,9 @@ data class PlayerStreamUIState(
     val totalDuration: Long = 0L,
     val bufferedPercentage: Int = 0,
 )
+
 @HiltViewModel
-class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
+class PlayerViewModel @Inject constructor(val player: Player) : ViewModel() {
 
     private companion object {
         const val TAG = "PlayerViewModel"
@@ -75,12 +77,17 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
     private lateinit var runnable: Runnable
 
     fun playVideo(context: Context, videoTitle: String = "", filePath: String) {
-        player.setMediaItem(MediaItem.fromUri(
-            File(context.filesDir, "output/$filePath").toString()
-        ))
+        player.setMediaItem(
+            MediaItem.fromUri(
+                File(context.filesDir, "output/$filePath").toString()
+            )
+        )
         player.play()
         _playerUIState.update {
-            it.copy(isPlaying = true, movieDownload = MovieDownload(title = videoTitle, filePath = filePath))
+            it.copy(
+                isPlaying = true,
+                movieDownload = MovieDownload(title = videoTitle, filePath = filePath)
+            )
         }
 
         runnable = object : Runnable {
@@ -93,7 +100,7 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
                         bufferedPercentage = player.bufferedPercentage
                     )
                 }
-                handler.postDelayed(this,500L)
+                handler.postDelayed(this, 500L)
             }
         }
         runnable.run()
@@ -131,12 +138,13 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
 
                     _playerStreamUIState.update {
                         it.copy(
-                            totalDuration = videoMeta?.videoLength?.times(1000)?.coerceAtLeast(0L) ?: 0L,
+                            totalDuration = videoMeta?.videoLength?.times(1000)?.coerceAtLeast(0L)
+                                ?: 0L,
                             currentTime = player.currentPosition.coerceAtLeast(0L),
                             bufferedPercentage = player.bufferedPercentage
                         )
                     }
-                    handler.postDelayed(this,500L)
+                    handler.postDelayed(this, 500L)
                 }
             }
             runnable.run()
@@ -208,7 +216,11 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
             } else ""
         }
 
-        playVideo(context = context, videoTitle = videos[nextIndex].title ?: "", filePath = videos[nextIndex].filePath ?: "")
+        playVideo(
+            context = context,
+            videoTitle = videos[nextIndex].title ?: "",
+            filePath = videos[nextIndex].filePath ?: ""
+        )
 //        onPlayerListener()
     }
 
@@ -227,7 +239,11 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
             } else ""
         }
 
-        playVideo(context = context, videoTitle = videos[nextIndex].title ?: "", filePath = videos[nextIndex].filePath ?: "")
+        playVideo(
+            context = context,
+            videoTitle = videos[nextIndex].title ?: "",
+            filePath = videos[nextIndex].filePath ?: ""
+        )
 //        onPlayerListener()
     }
 
@@ -244,6 +260,7 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
                     player.volume = 0f
                 }
             }
+
             else -> {
                 _playerStreamUIState.update {
                     it.copy(hasVolume = it.hasVolume.not())
@@ -262,7 +279,12 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
         player.setPlaybackSpeed(speed)
     }
 
-    fun saveMediaToStorage(context: Context, filePath: String?, isVideo: Boolean, fileName: String) {
+    fun saveMediaToStorage(
+        context: Context,
+        filePath: String?,
+        isVideo: Boolean,
+        fileName: String
+    ) {
         filePath?.let {
             val values = ContentValues().apply {
                 val folderName = if (isVideo) {
@@ -326,7 +348,7 @@ class PlayerViewModel @Inject constructor(val player: Player): ViewModel() {
         super.onCleared()
         player.release()
 
-        runnable = Runnable {  }
+        runnable = Runnable { }
         handler.removeCallbacks(runnable)
     }
 

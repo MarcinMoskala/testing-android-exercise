@@ -13,10 +13,12 @@ interface MovieSearchUseCase {
     operator fun invoke(search: String = ""): Flow<PagingData<MovieSearch>>
 }
 
-class GetMovieSearchInteractor @Inject constructor(private val repository: MoviesRepository): MovieSearchUseCase {
-    override fun invoke(search: String): Flow<PagingData<MovieSearch>> = repository.getMovieBySearchPagingFlow(search).map {
-        it.map { movie ->
-            movie.toMovie()
+class GetMovieSearchInteractor @Inject constructor(private val repository: MoviesRepository) :
+    MovieSearchUseCase {
+    override fun invoke(search: String): Flow<PagingData<MovieSearch>> =
+        repository.getMovieBySearchPagingFlow(search).map {
+            it.map { movie ->
+                movie.toMovie()
+            }
         }
-    }
 }

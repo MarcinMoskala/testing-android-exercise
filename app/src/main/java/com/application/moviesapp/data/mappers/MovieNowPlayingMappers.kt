@@ -6,7 +6,20 @@ import com.application.moviesapp.domain.model.MovieNowPlaying
 
 fun MovieNowPlayingDto.Result.toMovies(): MovieNowPlaying {
     return MovieNowPlaying(
-        adult, backdropPath, genreIds, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, video, voteAverage, voteCount
+        adult,
+        backdropPath,
+        genreIds,
+        id,
+        originalLanguage,
+        originalTitle,
+        overview,
+        popularity,
+        posterPath,
+        releaseDate,
+        title,
+        video,
+        voteAverage,
+        voteCount
     )
 }
 

@@ -33,26 +33,30 @@ import java.io.IOException
 import javax.inject.Inject
 
 sealed interface ExploreUiState {
-    object Loading: ExploreUiState
-    data class Success(val response: MovieSimpleResponse): ExploreUiState
-    object Failure: ExploreUiState
+    object Loading : ExploreUiState
+    data class Success(val response: MovieSimpleResponse) : ExploreUiState
+    object Failure : ExploreUiState
 }
 
 data class SearchUiState(val search: String = "", val clicked: Boolean = false)
 
-data class SortAndFilterUiState(val genre: String = "",
-                                val sortBy: String = SORT_BY.POPULARITY.title,
-                                val includeAdult: Boolean = false)
+data class SortAndFilterUiState(
+    val genre: String = "",
+    val sortBy: String = SORT_BY.POPULARITY.title,
+    val includeAdult: Boolean = false
+)
 
 @HiltViewModel
-class ExploreViewModel @Inject constructor(private val useCase: MoviesSortUseCase,
-                                           private val repository: MoviesRepository,
-                                           private val moviesDiscoverUseCase: MoviesDiscoverUseCase,
-                                           private val tvSeriesDiscoverUseCase: TvSeriesDiscoverUseCase,
-                                           private val movieGenresUseCase: MovieGenresUseCase,
-                                           private val tvSeriesGenreUseCase: TvSeriesGenreUseCase,
-                                           private val movieSearchUseCase: MovieSearchUseCase,
-                                           private val accountSetupUseCase: AccountSetupUseCase): ViewModel() {
+class ExploreViewModel @Inject constructor(
+    private val useCase: MoviesSortUseCase,
+    private val repository: MoviesRepository,
+    private val moviesDiscoverUseCase: MoviesDiscoverUseCase,
+    private val tvSeriesDiscoverUseCase: TvSeriesDiscoverUseCase,
+    private val movieGenresUseCase: MovieGenresUseCase,
+    private val tvSeriesGenreUseCase: TvSeriesGenreUseCase,
+    private val movieSearchUseCase: MovieSearchUseCase,
+    private val accountSetupUseCase: AccountSetupUseCase
+) : ViewModel() {
 
     private companion object {
         const val TAG = "ExploreViewModel"
@@ -61,7 +65,8 @@ class ExploreViewModel @Inject constructor(private val useCase: MoviesSortUseCas
     val readUserPreference = accountSetupUseCase.readUserPreference.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = UserPreferences.getDefaultInstance())
+        initialValue = UserPreferences.getDefaultInstance()
+    )
 
 
     private var _exploreUiState = MutableStateFlow<ExploreUiState>(ExploreUiState.Loading)
@@ -77,21 +82,27 @@ class ExploreViewModel @Inject constructor(private val useCase: MoviesSortUseCas
     val sortAndFilterUiState get() = _sortAndFilterUiState.asStateFlow()
 
 
-    fun moviesPagingFlow(genres: String = "",
-                         sortBy: String = SORT_BY.POPULARITY.title,
-                         includeAdult: Boolean = false) =
+    fun moviesPagingFlow(
+        genres: String = "",
+        sortBy: String = SORT_BY.POPULARITY.title,
+        includeAdult: Boolean = false
+    ) =
         moviesDiscoverUseCase(
             genre = genres,
             sortBy = sortBy,
-            includeAdult = includeAdult).cachedIn(viewModelScope)
+            includeAdult = includeAdult
+        ).cachedIn(viewModelScope)
 
-    fun tvSeriesPagingFlow(genres: String = "",
-                         sortBy: String = SORT_BY.POPULARITY.title,
-                         includeAdult: Boolean = false) =
+    fun tvSeriesPagingFlow(
+        genres: String = "",
+        sortBy: String = SORT_BY.POPULARITY.title,
+        includeAdult: Boolean = false
+    ) =
         tvSeriesDiscoverUseCase(
             genre = "",
             sortBy = sortBy,
-            includeAdult = includeAdult).cachedIn(viewModelScope)
+            includeAdult = includeAdult
+        ).cachedIn(viewModelScope)
 
     fun getMovieBySearch(search: String = "") = movieSearchUseCase(search).cachedIn(viewModelScope)
 
@@ -112,6 +123,7 @@ class ExploreViewModel @Inject constructor(private val useCase: MoviesSortUseCas
             Categories.Movies -> {
                 _genreUiState.value = movieGenresUseCase()
             }
+
             Categories.TV -> {
                 _genreUiState.value = tvSeriesGenreUseCase()
             }
@@ -125,22 +137,34 @@ class ExploreViewModel @Inject constructor(private val useCase: MoviesSortUseCas
 
         if (genreList.contains(genre)) {
             genreList.remove(genre)
-            accountSetupUseCase.updateGenre(genre = genreList.map { MoviesDetail.Genre(it.id, it.name) }.toSet())
+            accountSetupUseCase.updateGenre(genre = genreList.map {
+                MoviesDetail.Genre(
+                    it.id,
+                    it.name
+                )
+            }.toSet())
 
             Timber.tag(TAG).d(genreList.toString())
         } else {
             genreList.add(genre)
-            accountSetupUseCase.updateGenre(genre = genreList.map { MoviesDetail.Genre(it.id, it.name) }.toSet())
+            accountSetupUseCase.updateGenre(genre = genreList.map {
+                MoviesDetail.Genre(
+                    it.id,
+                    it.name
+                )
+            }.toSet())
             Timber.tag(TAG).d(genreList.toString())
         }
     }
 
-    fun setSortAndFilter(genre: List<MovieGenre.Genre> = emptyList(),
-                         sortBy: SORT_BY = SORT_BY.POPULARITY,
-                         includeAdult: Boolean = false) {
+    fun setSortAndFilter(
+        genre: List<MovieGenre.Genre> = emptyList(),
+        sortBy: SORT_BY = SORT_BY.POPULARITY,
+        includeAdult: Boolean = false
+    ) {
         _sortAndFilterUiState.update {
             it.copy(
-                genre = genre.map { genre ->  genre.id }.joinToString(" | "),
+                genre = genre.map { genre -> genre.id }.joinToString(" | "),
                 sortBy = sortBy.title,
                 includeAdult = includeAdult
             )

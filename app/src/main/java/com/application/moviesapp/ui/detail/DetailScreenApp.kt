@@ -60,10 +60,12 @@ import com.application.moviesapp.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailScreenApp(modifier: Modifier = Modifier,
-                    navController: NavHostController = rememberNavController(),
-                    viewModel: DetailsViewModel = hiltViewModel(),
-                    homeViewModel: HomeViewModel = hiltViewModel()) {
+fun DetailScreenApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    viewModel: DetailsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel()
+) {
 
     val moviesDetailsUiState by viewModel.movieDetailResponse.collectAsState()
     val tvSeriesDetailsUiState by viewModel.tvSeriesDetailResponse.collectAsState()
@@ -87,7 +89,7 @@ fun DetailScreenApp(modifier: Modifier = Modifier,
             onSeasonClick = { seriesId, seasonNumber ->
                 viewModel.getTvSeriesEpisodes(seriesId = seriesId, seasonNumber = seasonNumber)
                 bottomSheetEnabled = false
-                            },
+            },
             tvSeriesDetailUiState = tvSeriesDetailsUiState
         )
     }
@@ -96,7 +98,7 @@ fun DetailScreenApp(modifier: Modifier = Modifier,
         topBar = { DetailTopAppbar() },
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) { paddingValues ->
+    ) { paddingValues ->
 
         NavHost(navController = navController, startDestination = DetailScreen.Detail.name) {
             composable(route = DetailScreen.Detail.name) {
@@ -143,27 +145,38 @@ private fun DetailTopAppbar(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     TopAppBar(
-        title = {  },
+        title = { },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
         actions = {
             IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Rounded.Cast, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.Cast,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomSheet(modifier: Modifier = Modifier,
-                        onDismiss: () -> Unit = {},
-                        onSeasonClick: (Int, Int) -> Unit = { _, _ -> },
-                        tvSeriesDetailUiState: Resource<TvSeriesDetail> = Resource.Loading) {
+private fun BottomSheet(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    onSeasonClick: (Int, Int) -> Unit = { _, _ -> },
+    tvSeriesDetailUiState: Resource<TvSeriesDetail> = Resource.Loading
+) {
 
     val bottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -182,38 +195,48 @@ private fun BottomSheet(modifier: Modifier = Modifier,
         tonalElevation = 0.dp
     ) {
         Column(modifier = modifier.systemBarsPadding()) {
-            Text(text = stringResource(R.string.seasons),
+            Text(
+                text = stringResource(R.string.seasons),
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentWidth(align = Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary)
+                color = MaterialTheme.colorScheme.primary
+            )
             when (tvSeriesDetailUiState) {
                 is Resource.Loading -> {
-                    CircularProgressIndicator(modifier = modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally))
+                    CircularProgressIndicator(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    )
                 }
+
                 is Resource.Failure -> {
                     Text(text = "Failure")
                 }
+
                 is Resource.Success -> {
-                    LazyColumn(modifier = modifier.fillMaxWidth(),
+                    LazyColumn(
+                        modifier = modifier.fillMaxWidth(),
                         contentPadding = PaddingValues(vertical = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
 
                         items(tvSeriesDetailUiState.data.seasons?.size ?: 0) { index ->
-                            Row(modifier = modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .clickable(onClick = {
-                                    onSeasonClick(
-                                        tvSeriesDetailUiState.data.id ?: 0, index
-                                    )
-                                }),
+                            Row(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp)
+                                    .clickable(onClick = {
+                                        onSeasonClick(
+                                            tvSeriesDetailUiState.data.id ?: 0, index
+                                        )
+                                    }),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
                                 Text(
                                     text = "Season ${index.inc()}",
                                     style = MaterialTheme.typography.titleMedium,
@@ -222,7 +245,11 @@ private fun BottomSheet(modifier: Modifier = Modifier,
                                 )
 
                                 Text(
-                                    text = "Episodes (${tvSeriesDetailUiState.data.seasons?.get(index)?.episodeCount})",
+                                    text = "Episodes (${
+                                        tvSeriesDetailUiState.data.seasons?.get(
+                                            index
+                                        )?.episodeCount
+                                    })",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }

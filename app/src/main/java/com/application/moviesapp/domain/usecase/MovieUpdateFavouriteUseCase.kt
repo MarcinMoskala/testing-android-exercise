@@ -12,7 +12,8 @@ interface MovieUpdateFavouriteUseCase {
     suspend operator fun invoke(body: RequestBody): Resource<MovieUpdateFavouriteDto>
 }
 
-class MovieUpdateFavouriteInteractor @Inject constructor(private val moviesRepository: MoviesRepository): MovieUpdateFavouriteUseCase {
+class MovieUpdateFavouriteInteractor @Inject constructor(private val moviesRepository: MoviesRepository) :
+    MovieUpdateFavouriteUseCase {
 
     private companion object {
         const val TAG = "MovieUpdateFavouriteInteractor"

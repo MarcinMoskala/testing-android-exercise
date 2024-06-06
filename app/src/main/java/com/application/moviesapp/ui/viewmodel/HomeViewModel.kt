@@ -20,44 +20,56 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface MovieNewReleaseUiState {
-    object Loading: MovieNewReleaseUiState
-    data class Success(val moviesNewReleases: MovieNewReleasesDto): MovieNewReleaseUiState
-    object Failure: MovieNewReleaseUiState
+    object Loading : MovieNewReleaseUiState
+    data class Success(val moviesNewReleases: MovieNewReleasesDto) : MovieNewReleaseUiState
+    object Failure : MovieNewReleaseUiState
 }
+
 sealed interface MovieTopRatedUiState {
-    object Loading: MovieTopRatedUiState
-    data class Success(val movieTopRated: MovieTopRatedResponse): MovieTopRatedUiState
-    object Failure: MovieTopRatedUiState
+    object Loading : MovieTopRatedUiState
+    data class Success(val movieTopRated: MovieTopRatedResponse) : MovieTopRatedUiState
+    object Failure : MovieTopRatedUiState
 }
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val moviesNowPlayingUseCase: MoviesNowPlayingUseCase,
     private val tvSeriesNowPlayingUseCase: TvSeriesNowPlayingUseCase,
     private val movieWithTvSeriesUseCase: MovieWithTvSeriesUseCase
-    ): ViewModel() {
+) : ViewModel() {
 
     private companion object {
         const val TAG = "HomeViewModel"
     }
 
-    private var _movieWithTvSeriesUiState = MutableStateFlow<Resource<MovieWithTvSeries>>(Resource.Loading)
+    private var _movieWithTvSeriesUiState =
+        MutableStateFlow<Resource<MovieWithTvSeries>>(Resource.Loading)
     val movieWithTvSeriesUiState: StateFlow<Resource<MovieWithTvSeries>> = _movieWithTvSeriesUiState
 
-    private var _moviesNewReleaseUiState = MutableStateFlow<MovieNewReleaseUiState>(MovieNewReleaseUiState.Loading)
+    private var _moviesNewReleaseUiState =
+        MutableStateFlow<MovieNewReleaseUiState>(MovieNewReleaseUiState.Loading)
     val moviesNewReleaseUiState: StateFlow<MovieNewReleaseUiState> = _moviesNewReleaseUiState
 
-    private var _moviesTopRatedUiState = MutableStateFlow<MovieTopRatedUiState>(MovieTopRatedUiState.Loading)
+    private var _moviesTopRatedUiState =
+        MutableStateFlow<MovieTopRatedUiState>(MovieTopRatedUiState.Loading)
     val movieTopRatedUiState: StateFlow<MovieTopRatedUiState> = _moviesTopRatedUiState
 
     private val auth = Firebase.auth
 
-    private var _profileInfoUiState = MutableStateFlow<UserData>(UserData(userId = "", userName = "", profilePictureUrl = "", email = ""))
+    private var _profileInfoUiState = MutableStateFlow<UserData>(
+        UserData(
+            userId = "",
+            userName = "",
+            profilePictureUrl = "",
+            email = ""
+        )
+    )
     val profileInfoUiState: StateFlow<UserData> = _profileInfoUiState
 
     fun getMovieWithTvSeries() = viewModelScope.launch {
         _movieWithTvSeriesUiState.value = movieWithTvSeriesUseCase()
     }
- 
+
 //    fun getMovieNewReleases() = viewModelScope.launch(Dispatchers.IO) {
 //        _moviesNewReleaseUiState.value = MovieNewReleaseUiState.Loading
 //

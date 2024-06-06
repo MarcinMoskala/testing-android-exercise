@@ -32,7 +32,9 @@ object YoutubeNetworkModule {
     @Named("youtube_retrofit_builder")
     fun providesRetrofitBuilder(): Retrofit.Builder {
         return Retrofit.Builder().baseUrl(BuildConfig.YOUTUBE_BASE_URL)
-            .addConverterFactory(Json{ ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(Json {
+                ignoreUnknownKeys = true
+            }.asConverterFactory("application/json".toMediaType()))
     }
 
     @Provides
@@ -44,7 +46,10 @@ object YoutubeNetworkModule {
 
     @Provides
     @Singleton
-    fun providesYoutubeApi(@Named("youtube_http_client") okHttpClient: OkHttpClient, @Named("youtube_retrofit_builder") retrofitBuilder: Retrofit.Builder): YoutubeApi {
+    fun providesYoutubeApi(
+        @Named("youtube_http_client") okHttpClient: OkHttpClient,
+        @Named("youtube_retrofit_builder") retrofitBuilder: Retrofit.Builder
+    ): YoutubeApi {
         return retrofitBuilder.client(okHttpClient).build().create(YoutubeApi::class.java)
     }
 }

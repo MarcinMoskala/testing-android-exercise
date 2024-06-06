@@ -28,51 +28,55 @@ import com.application.moviesapp.R
 import com.application.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
-fun NotificationScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
-    Box(modifier = modifier
-        .fillMaxSize()
-        .padding(
-            top = paddingValues.calculateTopPadding(),
-            bottom = paddingValues.calculateBottomPadding()
-        )
+fun NotificationScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues()
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Column() {
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center)
+                    .padding(32.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_empty_list),
+                    contentDescription = null,
                     modifier = modifier
-                        .fillMaxSize()
-                        .wrapContentSize(align = Alignment.Center)
-                        .padding(32.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_empty_list),
-                        contentDescription = null,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                            .size(200.dp),
-                        contentScale = ContentScale.Crop,
-                    )
+                        .fillMaxWidth()
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
+                        .size(200.dp),
+                    contentScale = ContentScale.Crop,
+                )
 
-                    Text(
-                        text = stringResource(R.string.empty),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                    )
+                Text(
+                    text = stringResource(R.string.empty),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
+                )
 
-                    Text(
-                        text = stringResource(R.string.you_did_not_receive_any_notification),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.you_did_not_receive_any_notification),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
+                )
             }
+        }
     }
 }
 

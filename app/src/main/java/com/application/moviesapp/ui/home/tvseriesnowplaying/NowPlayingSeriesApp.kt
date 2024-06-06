@@ -54,12 +54,14 @@ import com.application.moviesapp.ui.viewmodel.MovieNewReleaseUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NowPlayingSeriesApp(modifier: Modifier = Modifier,
-                   homeViewModel: HomeViewModel = hiltViewModel(),
-                   ) {
+fun NowPlayingSeriesApp(
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+) {
 
     val uiState: MovieNewReleaseUiState by homeViewModel.moviesNewReleaseUiState.collectAsState()
-    val moviesNewReleasePagingFlow = homeViewModel.nowPlayingSeriesPagingFlow().collectAsLazyPagingItems()
+    val moviesNewReleasePagingFlow =
+        homeViewModel.nowPlayingSeriesPagingFlow().collectAsLazyPagingItems()
 
     val newReleaseScrollState = rememberLazyGridState()
     val newReleaseHideTopAppBar by remember(newReleaseScrollState) {
@@ -72,7 +74,13 @@ fun NowPlayingSeriesApp(modifier: Modifier = Modifier,
         topBar = { NewReleasesTopAppbar(newReleaseHideTopAppBar) },
         containerColor = Color.Transparent
     ) { paddingValues ->
-        NowPlayingSeriesScreen(modifier = modifier, uiState = uiState, moviesFlow = moviesNewReleasePagingFlow, lazyGridState = newReleaseScrollState, bottomPadding = paddingValues)
+        NowPlayingSeriesScreen(
+            modifier = modifier,
+            uiState = uiState,
+            moviesFlow = moviesNewReleasePagingFlow,
+            lazyGridState = newReleaseScrollState,
+            bottomPadding = paddingValues
+        )
     }
 }
 
@@ -94,15 +102,20 @@ private fun NewReleasesTopAppbar(newReleaseHideTopAppBar: Boolean) {
     AnimatedVisibility(
         visible = newReleaseHideTopAppBar,
         enter = slideInVertically(animationSpec = tween(durationMillis = 200)),
-        exit = slideOutVertically(animationSpec = tween(durationMillis = 200))) {
+        exit = slideOutVertically(animationSpec = tween(durationMillis = 200))
+    ) {
 
         TopAppBar(
             title = {
                 if (!onSearchClick) {
-                    Text(text = stringResource(id = R.string.now_playing_series), fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = stringResource(id = R.string.now_playing_series),
+                        fontWeight = FontWeight.SemiBold
+                    )
                 } else {
-                    OutlinedTextField(value = "",
-                        onValueChange = {  },
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
                         modifier = Modifier
                             .height(64.dp)
                             .fillMaxWidth()
@@ -110,8 +123,16 @@ private fun NewReleasesTopAppbar(newReleaseHideTopAppBar: Boolean) {
                             .focusRequester(focusRequest),
                         interactionSource = interactionSource,
                         shape = RoundedCornerShape(30),
-                        textStyle = TextStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize, lineHeight = MaterialTheme.typography.bodyLarge.lineHeight),
-                        trailingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
+                        textStyle = TextStyle(
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                        ),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = null
+                            )
+                        },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() })
                     )
@@ -124,8 +145,10 @@ private fun NewReleasesTopAppbar(newReleaseHideTopAppBar: Boolean) {
             navigationIcon = {
                 if (!onSearchClick) {
                     IconButton(onClick = { (context as Activity).finish() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 }
             },

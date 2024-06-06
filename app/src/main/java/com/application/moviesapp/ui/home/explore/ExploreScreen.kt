@@ -61,16 +61,17 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ExploreScreen(modifier: Modifier = Modifier,
-                  uiState: ExploreUiState = ExploreUiState.Loading,
-                  categories: Categories = Categories.Movies,
-                  moviesDiscoverFlow: LazyPagingItems<MoviesDiscover>,
-                  tvSeriesDiscoverFlow: LazyPagingItems<TvSeriesDiscover>,
-                  movieSearchFlow: LazyPagingItems<MovieSearch>,
-                  searchClicked: Boolean = false,
-                  lazyGridState: LazyGridState = LazyGridState(),
-                  bottomPadding: PaddingValues = PaddingValues(),
-                  onGoToDownloadsClick: () -> Unit = {  }
+fun ExploreScreen(
+    modifier: Modifier = Modifier,
+    uiState: ExploreUiState = ExploreUiState.Loading,
+    categories: Categories = Categories.Movies,
+    moviesDiscoverFlow: LazyPagingItems<MoviesDiscover>,
+    tvSeriesDiscoverFlow: LazyPagingItems<TvSeriesDiscover>,
+    movieSearchFlow: LazyPagingItems<MovieSearch>,
+    searchClicked: Boolean = false,
+    lazyGridState: LazyGridState = LazyGridState(),
+    bottomPadding: PaddingValues = PaddingValues(),
+    onGoToDownloadsClick: () -> Unit = { }
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -100,13 +101,15 @@ fun ExploreScreen(modifier: Modifier = Modifier,
         }
     }
 
-    Box(modifier = modifier
-        .fillMaxSize()
-        .padding(
-            top = bottomPadding.calculateTopPadding(),
-            bottom = bottomPadding.calculateBottomPadding()
-        )
-        .pullRefresh(pullRefreshState)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                top = bottomPadding.calculateTopPadding(),
+                bottom = bottomPadding.calculateBottomPadding()
+            )
+            .pullRefresh(pullRefreshState)
+    ) {
         Column {
             if (moviesDiscoverFlow.itemCount == 0) {
                 Column(
@@ -177,7 +180,8 @@ fun ExploreScreen(modifier: Modifier = Modifier,
                             items(count = moviesDiscoverFlow.itemCount) { index ->
                                 MovieImageCard(
                                     imageUrl = moviesDiscoverFlow[index]?.posterPath ?: "",
-                                    rating = moviesDiscoverFlow[index]?.voteAverage.toString() ?: "",
+                                    rating = moviesDiscoverFlow[index]?.voteAverage.toString()
+                                        ?: "",
                                     movieId = moviesDiscoverFlow[index]?.id
                                 )
                             }
@@ -185,7 +189,8 @@ fun ExploreScreen(modifier: Modifier = Modifier,
                             items(count = tvSeriesDiscoverFlow.itemCount) { index ->
                                 MovieImageCard(
                                     imageUrl = tvSeriesDiscoverFlow[index]?.posterPath ?: "",
-                                    rating = tvSeriesDiscoverFlow[index]?.voteAverage.toString() ?: "",
+                                    rating = tvSeriesDiscoverFlow[index]?.voteAverage.toString()
+                                        ?: "",
                                     movieId = tvSeriesDiscoverFlow[index]?.id
                                 )
                             }
@@ -207,11 +212,18 @@ fun ExploreScreen(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "", rating: String = "", movieId: Int? = 0) {
+private fun MovieImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "",
+    rating: String = "",
+    movieId: Int? = 0
+) {
 
     val context = LocalContext.current
 
-    Card(shape = RoundedCornerShape(10), onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
+    Card(
+        shape = RoundedCornerShape(10),
+        onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -222,13 +234,22 @@ private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "",
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = modifier.height(250.dp))
+                modifier = modifier.height(250.dp)
+            )
 
-            Card(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.TopStart)
-                .padding(8.dp), shape = RoundedCornerShape(30), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(text = rating.toDoubleOrNull()?.toOneDecimal ?: "", modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            Card(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(30),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = rating.toDoubleOrNull()?.toOneDecimal ?: "",
+                    modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PrivacyPolicyActivity: BaseActivity() {
+class PrivacyPolicyActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, PrivacyPolicyActivity::class.java)

@@ -44,7 +44,7 @@ interface MoviesRepository {
 
     suspend fun getMoviesGenreList(): MovieGenreResponse
 
-    suspend fun  getNewReleasesList(): MovieNewReleasesDto
+    suspend fun getNewReleasesList(): MovieNewReleasesDto
 
     suspend fun getMoviesTopRated(): MovieTopRatedResponse
 
@@ -54,9 +54,17 @@ interface MoviesRepository {
 
     suspend fun getSearchResults(query: String): MovieSimpleResponse
 
-    fun getDiscoverMoviesPagingFlow(genre: String = "", sortBy: String = "", includeAdult: Boolean = false): Flow<PagingData<MoviesDiscoverDto.Result>>
+    fun getDiscoverMoviesPagingFlow(
+        genre: String = "",
+        sortBy: String = "",
+        includeAdult: Boolean = false
+    ): Flow<PagingData<MoviesDiscoverDto.Result>>
 
-    fun getDiscoverTvSeriesPagingFlow(genre: String = "", sortBy: String = "", includeAdult: Boolean = false): Flow<PagingData<TvSeriesDiscoverDto.Result>>
+    fun getDiscoverTvSeriesPagingFlow(
+        genre: String = "",
+        sortBy: String = "",
+        includeAdult: Boolean = false
+    ): Flow<PagingData<TvSeriesDiscoverDto.Result>>
 
     fun getMoviesNowPlayingPagingFlow(): Flow<PagingData<MovieNowPlayingDto.Result>>
 
@@ -98,62 +106,99 @@ interface MoviesRepository {
 
     suspend fun getTvSeriesNowPlayingList(): Response<TvSeriesNowPlayingDto>
 
-    suspend fun getTvSeriesEpisodes(seriesId: Int, seasonNumber: Int = 1): Response<TvSeriesEpisodesDto>
+    suspend fun getTvSeriesEpisodes(
+        seriesId: Int,
+        seasonNumber: Int = 1
+    ): Response<TvSeriesEpisodesDto>
 }
 
 @OptIn(ExperimentalPagingApi::class)
-class MoviesRepositoryImpl @Inject constructor(private val movies: MoviesApi,
-                                               private val database: MoviesDatabase): MoviesRepository {
+class MoviesRepositoryImpl @Inject constructor(
+    private val movies: MoviesApi,
+    private val database: MoviesDatabase
+) : MoviesRepository {
 
     companion object {
         const val PAGE_SIZE = 20
     }
 
 
-    override suspend fun getDiscoverMoviesList(page: Int): Response<MoviesDiscoverDto> = movies.getDiscoverMoviesList(page = page)
+    override suspend fun getDiscoverMoviesList(page: Int): Response<MoviesDiscoverDto> =
+        movies.getDiscoverMoviesList(page = page)
+
     override suspend fun getMoviesGenreList(): MovieGenreResponse = movies.getMoviesGenreList()
-    override suspend fun getNewReleasesList(): MovieNewReleasesDto= movies.getNewReleasesList()
+    override suspend fun getNewReleasesList(): MovieNewReleasesDto = movies.getNewReleasesList()
     override suspend fun getMoviesTopRated(): MovieTopRatedResponse = movies.getMovieTopRated()
     override suspend fun getMovieTrending(): MovieSimpleResponse = movies.getMovieTrending()
     override suspend fun getCountries(): List<CountryResponse> = movies.getCountries()
-    override suspend fun getSearchResults(query: String): MovieSimpleResponse = movies.getSearch(query)
+    override suspend fun getSearchResults(query: String): MovieSimpleResponse =
+        movies.getSearch(query)
 
-    override fun getDiscoverMoviesPagingFlow(genre: String, sortBy: String, includeAdult: Boolean): Flow<PagingData<MoviesDiscoverDto.Result>> = Pager(
+    override fun getDiscoverMoviesPagingFlow(
+        genre: String,
+        sortBy: String,
+        includeAdult: Boolean
+    ): Flow<PagingData<MoviesDiscoverDto.Result>> = Pager(
         config = PagingConfig(pageSize = 20),
         pagingSourceFactory = {
-            MoviesDiscoverPagingSource(moviesApi = movies, genre = genre, sortBy = sortBy, includeAdult = includeAdult)
+            MoviesDiscoverPagingSource(
+                moviesApi = movies,
+                genre = genre,
+                sortBy = sortBy,
+                includeAdult = includeAdult
+            )
         }
     ).flow
 
-    override fun getDiscoverTvSeriesPagingFlow(genre: String, sortBy: String, includeAdult: Boolean): Flow<PagingData<TvSeriesDiscoverDto.Result>> = Pager(
+    override fun getDiscoverTvSeriesPagingFlow(
+        genre: String,
+        sortBy: String,
+        includeAdult: Boolean
+    ): Flow<PagingData<TvSeriesDiscoverDto.Result>> = Pager(
         config = PagingConfig(pageSize = 20),
         pagingSourceFactory = {
-            TvSeriesDiscoverPagingSource(moviesApi = movies, genre = genre, sortBy = sortBy, includeAdult = includeAdult)
+            TvSeriesDiscoverPagingSource(
+                moviesApi = movies,
+                genre = genre,
+                sortBy = sortBy,
+                includeAdult = includeAdult
+            )
         }
     ).flow
 
-    override fun getMoviesNowPlayingPagingFlow(): Flow<PagingData<MovieNowPlayingDto.Result>> = Pager(
-        config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 10, initialLoadSize = PAGE_SIZE),
-        pagingSourceFactory = {
-            MovieNowPlayingPagingSource(movies)
-        }
-    ).flow
+    override fun getMoviesNowPlayingPagingFlow(): Flow<PagingData<MovieNowPlayingDto.Result>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = 10,
+                initialLoadSize = PAGE_SIZE
+            ),
+            pagingSourceFactory = {
+                MovieNowPlayingPagingSource(movies)
+            }
+        ).flow
 
-    override fun getMovieBySearchPagingFlow(search: String): Flow<PagingData<MovieSearchDto.Result>> = Pager(
-        config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 10, initialLoadSize = PAGE_SIZE),
-        pagingSourceFactory = {
-            MovieSearchPagingSource(movies, search)
-        }
-    ).flow
+    override fun getMovieBySearchPagingFlow(search: String): Flow<PagingData<MovieSearchDto.Result>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = 10,
+                initialLoadSize = PAGE_SIZE
+            ),
+            pagingSourceFactory = {
+                MovieSearchPagingSource(movies, search)
+            }
+        ).flow
 
     override suspend fun getMoviesUpcoming(): MovieUpcomingDto = movies.getMovieUpcomingList()
 
-    override fun getTvSeriesNowPlayingPagingFlow(): Flow<PagingData<TvSeriesNowPlayingDto.Result>> = Pager(
-        config = PagingConfig(pageSize = 20),
-        pagingSourceFactory = {
-            TvSeriesNowPlayingPagingSource(movies)
-        }
-    ).flow
+    override fun getTvSeriesNowPlayingPagingFlow(): Flow<PagingData<TvSeriesNowPlayingDto.Result>> =
+        Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = {
+                TvSeriesNowPlayingPagingSource(movies)
+            }
+        ).flow
 
     override fun getFavouriteMoviesPagingFlow(): Flow<PagingData<MovieFavouriteDto.Result>> = Pager(
         config = PagingConfig(pageSize = 20),
@@ -162,35 +207,53 @@ class MoviesRepositoryImpl @Inject constructor(private val movies: MoviesApi,
         }
     ).flow
 
-    override suspend fun getMoviesDetailById(movieId: Int): Response<MovieDetailsDto> = movies.getMovieDetailsById(movieId)
+    override suspend fun getMoviesDetailById(movieId: Int): Response<MovieDetailsDto> =
+        movies.getMovieDetailsById(movieId)
 
-    override suspend fun getTvSeriesDetailById(tvSeriesId: Int): Response<TvSeriesDetailsDto> = movies.getTvSeriesDetailsId(tvSeriesId)
+    override suspend fun getTvSeriesDetailById(tvSeriesId: Int): Response<TvSeriesDetailsDto> =
+        movies.getTvSeriesDetailsId(tvSeriesId)
 
-    override suspend fun getMovieDetailsCast(movieId: Int): Response<MovieDetailsCastDto> = movies.getMovieDetailsCast(movieId)
+    override suspend fun getMovieDetailsCast(movieId: Int): Response<MovieDetailsCastDto> =
+        movies.getMovieDetailsCast(movieId)
 
-    override suspend fun getTvSeriesDetailsCast(seriesId: Int): Response<TvSeriesDetailsCastDto> = movies.getTvSeriesDetailsCast(seriesId)
+    override suspend fun getTvSeriesDetailsCast(seriesId: Int): Response<TvSeriesDetailsCastDto> =
+        movies.getTvSeriesDetailsCast(seriesId)
 
-    override suspend fun getMovieTrailer(movieId: Int): Response<MovieTrailerDto> = movies.getMovieTrailer(movieId)
+    override suspend fun getMovieTrailer(movieId: Int): Response<MovieTrailerDto> =
+        movies.getMovieTrailer(movieId)
 
-    override suspend fun getTvSeriesTrailer(seriesId: Int): Response<TvSeriesTrailerDto> = movies.getTvSeriesTrailer(seriesId)
+    override suspend fun getTvSeriesTrailer(seriesId: Int): Response<TvSeriesTrailerDto> =
+        movies.getTvSeriesTrailer(seriesId)
 
-    override suspend fun updateMovieFavourite(body: RequestBody): Response<MovieUpdateFavouriteDto> = movies.updateMovieFavourite(body = body)
+    override suspend fun updateMovieFavourite(body: RequestBody): Response<MovieUpdateFavouriteDto> =
+        movies.updateMovieFavourite(body = body)
 
-    override suspend fun getMovieState(movieId: Int): Response<MovieStateDto> = movies.getMovieState(movieId)
+    override suspend fun getMovieState(movieId: Int): Response<MovieStateDto> =
+        movies.getMovieState(movieId)
 
     override suspend fun getMovieGenres(): Response<MovieGenreResponse> = movies.getMovieGenres()
 
-    override suspend fun getTvSeriesGenres(): Response<MovieGenreResponse> = movies.getTVSeriesGenres()
+    override suspend fun getTvSeriesGenres(): Response<MovieGenreResponse> =
+        movies.getTVSeriesGenres()
 
-    override fun readMovieDownload(search: String): Flow<List<MovieDownloadEntity>> = database.movieDownloadDao.getAllDownloads(search)
+    override fun readMovieDownload(search: String): Flow<List<MovieDownloadEntity>> =
+        database.movieDownloadDao.getAllDownloads(search)
 
-    override suspend fun insertMovieDownload(download: MovieDownloadEntity) =  database.movieDownloadDao.insertDownload(download)
+    override suspend fun insertMovieDownload(download: MovieDownloadEntity) =
+        database.movieDownloadDao.insertDownload(download)
 
-    override suspend fun deleteMovieDownload(download: MovieDownloadEntity) = database.movieDownloadDao.deleteDownload(download)
+    override suspend fun deleteMovieDownload(download: MovieDownloadEntity) =
+        database.movieDownloadDao.deleteDownload(download)
 
-    override suspend fun getMovieNowPlayingList(page: Int): Response<MovieNowPlayingDto> = movies.getNowPlayingMovieList(page = page)
+    override suspend fun getMovieNowPlayingList(page: Int): Response<MovieNowPlayingDto> =
+        movies.getNowPlayingMovieList(page = page)
 
-    override suspend fun getTvSeriesNowPlayingList(): Response<TvSeriesNowPlayingDto> = movies.getNowPlayingSeriesList()
+    override suspend fun getTvSeriesNowPlayingList(): Response<TvSeriesNowPlayingDto> =
+        movies.getNowPlayingSeriesList()
 
-    override suspend fun getTvSeriesEpisodes(seriesId: Int, seasonNumber: Int): Response<TvSeriesEpisodesDto> = movies.getTvSeriesEpisodes(seriesId = seriesId, seasonNumber = seasonNumber)
+    override suspend fun getTvSeriesEpisodes(
+        seriesId: Int,
+        seasonNumber: Int
+    ): Response<TvSeriesEpisodesDto> =
+        movies.getTvSeriesEpisodes(seriesId = seriesId, seasonNumber = seasonNumber)
 }

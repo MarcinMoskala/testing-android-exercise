@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyListViewModel @Inject constructor(private val useCase: MovieFavouriteUseCase): ViewModel() {
+class MyListViewModel @Inject constructor(private val useCase: MovieFavouriteUseCase) :
+    ViewModel() {
 
     val getMovieFavouritePagingFlow = useCase().cachedIn(viewModelScope)
 }

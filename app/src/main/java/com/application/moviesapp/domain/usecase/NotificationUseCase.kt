@@ -14,14 +14,17 @@ interface NotificationUseCase {
     suspend fun updateAppUpdatesPreference(value: Boolean)
 }
 
-class GetNotificationInteractor(private val notificationPreferenceRepository: NotificationPreferenceRepository): NotificationUseCase {
+class GetNotificationInteractor(private val notificationPreferenceRepository: NotificationPreferenceRepository) :
+    NotificationUseCase {
     override val readGeneralNotificationPreference: Flow<GeneralNotificationPreference>
         get() = notificationPreferenceRepository.readGeneralNotificationPreference
     override val readAppUpdatesPreference: Flow<AppUpdatesPreference>
         get() = notificationPreferenceRepository.readAppUpdatesPreference
 
-    override suspend fun updateGeneralNotificationPreference(value: Boolean) = notificationPreferenceRepository.updateGeneralNotificationPreference(value)
+    override suspend fun updateGeneralNotificationPreference(value: Boolean) =
+        notificationPreferenceRepository.updateGeneralNotificationPreference(value)
 
-    override suspend fun updateAppUpdatesPreference(value: Boolean) = notificationPreferenceRepository.updateAppUpdatesPreference(value)
+    override suspend fun updateAppUpdatesPreference(value: Boolean) =
+        notificationPreferenceRepository.updateAppUpdatesPreference(value)
 
 }

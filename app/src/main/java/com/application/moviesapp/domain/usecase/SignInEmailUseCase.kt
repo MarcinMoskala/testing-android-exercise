@@ -12,7 +12,8 @@ interface SignInEmailUseCase {
     operator fun invoke(email: String?, password: String?): Flow<Resource<AuthResult>>
 }
 
-class SignInEmailInteractor @Inject constructor(private val repo: AuthRepository): SignInEmailUseCase {
+class SignInEmailInteractor @Inject constructor(private val repo: AuthRepository) :
+    SignInEmailUseCase {
 
     private companion object {
         const val TAG = "SignInEmailInteractor"

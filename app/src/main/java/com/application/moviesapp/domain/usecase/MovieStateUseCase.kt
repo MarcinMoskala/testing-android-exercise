@@ -11,7 +11,8 @@ interface MovieStateUseCase {
     suspend operator fun invoke(movieId: Int): Resource<MovieState>
 }
 
-class GetMovieStateInteractor @Inject constructor(private val moviesRepository: MoviesRepository): MovieStateUseCase {
+class GetMovieStateInteractor @Inject constructor(private val moviesRepository: MoviesRepository) :
+    MovieStateUseCase {
 
     private companion object {
         const val TAG = "GetMovieFavoriteInteractor"

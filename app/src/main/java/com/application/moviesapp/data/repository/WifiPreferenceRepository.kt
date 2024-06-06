@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
-class WifiPreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>): SettingsPreferenceRepository {
+class WifiPreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>) :
+    SettingsPreferenceRepository {
     private object PreferenceKeys {
         val IS_WIFI = booleanPreferencesKey("is_wifi")
     }
@@ -26,7 +27,7 @@ class WifiPreferenceImpl @Inject constructor(private val datastore: DataStore<Pr
                     throw exception
                 }
             }
-            .map {  preference ->
+            .map { preference ->
                 val isWifiEnabled = preference[PreferenceKeys.IS_WIFI] ?: false
                 SettingsPreference(isWifiEnabled)
             }

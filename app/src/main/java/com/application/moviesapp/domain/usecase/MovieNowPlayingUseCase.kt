@@ -13,7 +13,7 @@ interface MovieNowPlayingUseCase {
 
 class GetMovieNowPlayingInteractor @Inject constructor(
     private val repository: MoviesRepository,
-): MovieNowPlayingUseCase {
+) : MovieNowPlayingUseCase {
 
     private companion object {
         const val TAG = "GetMovieNowPlayingInteractor"
@@ -26,7 +26,8 @@ class GetMovieNowPlayingInteractor @Inject constructor(
             val result = repository.getMovieNowPlayingList()
             if (result.isSuccessful) {
 
-                val movies = result.body()?.results?.map { it?.toMovies() } ?: listOf(MovieNowPlaying())
+                val movies =
+                    result.body()?.results?.map { it?.toMovies() } ?: listOf(MovieNowPlaying())
                 Timber.tag(TAG).d(movies.toString())
                 Resource.Success(data = movies)
             } else {

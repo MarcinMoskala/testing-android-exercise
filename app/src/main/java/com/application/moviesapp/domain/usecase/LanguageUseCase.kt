@@ -9,7 +9,8 @@ interface LanguageUseCase {
     suspend fun updatePreference(value: String)
 }
 
-class GetLanguageInteractor(private val repository: LanguagePreferenceRepository): LanguageUseCase {
+class GetLanguageInteractor(private val repository: LanguagePreferenceRepository) :
+    LanguageUseCase {
     override val readFlow: Flow<LanguagePreference>
         get() = repository.readPreference
 

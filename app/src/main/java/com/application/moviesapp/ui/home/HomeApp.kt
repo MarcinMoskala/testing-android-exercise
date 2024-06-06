@@ -147,15 +147,16 @@ import java.io.File
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun HomeApp(modifier: Modifier = Modifier,
-            navController: NavHostController = rememberNavController(),
-            homeViewModel: HomeViewModel = hiltViewModel(),
-            exploreViewModel: ExploreViewModel = hiltViewModel(),
-            myListViewModel: MyListViewModel = hiltViewModel(),
-            profileViewModel: ProfileViewModel = hiltViewModel(),
-            downloadViewModel: DownloadViewModel = hiltViewModel(),
-            onboardingViewModel: OnboardingViewModel = hiltViewModel(),
-            detailsViewModel: DetailsViewModel = hiltViewModel(),
+fun HomeApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    exploreViewModel: ExploreViewModel = hiltViewModel(),
+    myListViewModel: MyListViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    downloadViewModel: DownloadViewModel = hiltViewModel(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+    detailsViewModel: DetailsViewModel = hiltViewModel(),
 ) {
 
     val searchUiState by exploreViewModel.searchInputUiState.collectAsState()
@@ -165,7 +166,11 @@ fun HomeApp(modifier: Modifier = Modifier,
 
     val exploreUiState: ExploreUiState by exploreViewModel.exploreUiState.collectAsState()
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
-    val darkModeUiState by profileViewModel.isDarkMode.collectAsState(initial = SettingsPreference(false))
+    val darkModeUiState by profileViewModel.isDarkMode.collectAsState(
+        initial = SettingsPreference(
+            false
+        )
+    )
 
 
     var searchValue by remember {
@@ -188,25 +193,38 @@ fun HomeApp(modifier: Modifier = Modifier,
         includeAdult = sortAndFilterUiState.includeAdult
     ).collectAsLazyPagingItems()
 
-    val moviesSearchFlowState = exploreViewModel.getMovieBySearch(searchUiState.search).collectAsLazyPagingItems()
+    val moviesSearchFlowState =
+        exploreViewModel.getMovieBySearch(searchUiState.search).collectAsLazyPagingItems()
 
     val myListFlowState = myListViewModel.getMovieFavouritePagingFlow.collectAsLazyPagingItems()
 
     val coroutineScope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
 
-    var downloadEntity by remember { mutableStateOf(MovieDownloadEntity(backdropPath = "", title = "", runtime = "", filePath = "")) }
+    var downloadEntity by remember {
+        mutableStateOf(
+            MovieDownloadEntity(
+                backdropPath = "",
+                title = "",
+                runtime = "",
+                filePath = ""
+            )
+        )
+    }
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
 
-    val permissionState = rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.POST_NOTIFICATIONS))
+    val permissionState =
+        rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.POST_NOTIFICATIONS))
 
     val profileUIState by onboardingViewModel.profilePhotoUIState.collectAsState()
 
-    val languageUIState by profileViewModel.selectLanguage.collectAsState(initial = LanguagePreference(
-        language[0].language[0])
+    val languageUIState by profileViewModel.selectLanguage.collectAsState(
+        initial = LanguagePreference(
+            language[0].language[0]
+        )
     )
 
     var selectedCategories by remember { mutableStateOf<Categories>(Categories.Movies) }
@@ -222,14 +240,22 @@ fun HomeApp(modifier: Modifier = Modifier,
 //                                            snackbarHostState.showSnackbar(message = "Notification permission granted!", duration = SnackbarDuration.Short)
 //                                        }
                     }
+
                     it.shouldShowRationale -> {
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar(message = "Notification permission is needed", duration = SnackbarDuration.Long)
+                            snackbarHostState.showSnackbar(
+                                message = "Notification permission is needed",
+                                duration = SnackbarDuration.Long
+                            )
                         }
                     }
+
                     it.hasPermission.not() && it.shouldShowRationale.not() -> {
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar(message = "Notification permission was permanently denied, You can enable it on app settings!", duration = SnackbarDuration.Long)
+                            snackbarHostState.showSnackbar(
+                                message = "Notification permission was permanently denied, You can enable it on app settings!",
+                                duration = SnackbarDuration.Long
+                            )
                         }
                     }
                 }
@@ -243,31 +269,38 @@ fun HomeApp(modifier: Modifier = Modifier,
     }
 
     when (showBottomSheet) {
-        BottomSheet.Default -> { }
+        BottomSheet.Default -> {}
         BottomSheet.Filter -> {
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
                 onNegativeClick = { showBottomSheet = BottomSheet.Default },
                 onPositiveClick = { showBottomSheet = BottomSheet.Default },
-                contentSheet = {
-                    onNegativeClick, onPositiveClick ->
+                contentSheet = { onNegativeClick, onPositiveClick ->
 
                     BottomSheetFilterContent(
                         onNegativeClick = onNegativeClick,
-                        onPositiveClick = {
-                                categories, genres, sortBy, includeAdult ->
-                            exploreViewModel.setSortAndFilter(genre = genres, sortBy = sortBy, includeAdult = includeAdult)
+                        onPositiveClick = { categories, genres, sortBy, includeAdult ->
+                            exploreViewModel.setSortAndFilter(
+                                genre = genres,
+                                sortBy = sortBy,
+                                includeAdult = includeAdult
+                            )
                             selectedCategories = categories
                             onPositiveClick()
-                                          },
+                        },
                         onFilterCalled = { exploreViewModel.getGenre(it) },
                         uiState = genreUiState,
                         readUserPreferences = accountSetupUiCase,
                         onCategoryClick = { exploreViewModel.getGenre(it) },
-                        onGenreUpdate = { exploreViewModel.updateGenre(it ?: return@BottomSheetFilterContent) }
+                        onGenreUpdate = {
+                            exploreViewModel.updateGenre(
+                                it ?: return@BottomSheetFilterContent
+                            )
+                        }
                     )
                 })
         }
+
         BottomSheet.Logout -> {
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
@@ -277,8 +310,7 @@ fun HomeApp(modifier: Modifier = Modifier,
                     (context as Activity).finish()
                     OnboardingActivity.startActivity(context as Activity)
                 },
-                contentSheet = {
-                        onNegativeClick, onPositiveClick ->
+                contentSheet = { onNegativeClick, onPositiveClick ->
 
                     BottomSheetContent(
                         onNegativeClick = onNegativeClick,
@@ -286,6 +318,7 @@ fun HomeApp(modifier: Modifier = Modifier,
                     )
                 })
         }
+
         BottomSheet.DownloadDelete -> {
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
@@ -348,17 +381,20 @@ fun HomeApp(modifier: Modifier = Modifier,
         bottomBar = {
             HomeBottomBarNavigation(navController)
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) {
-            androidx.compose.material3.Snackbar(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Text(text = it.visuals.message, fontWeight = FontWeight.SemiBold)
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) {
+                androidx.compose.material3.Snackbar(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Text(text = it.visuals.message, fontWeight = FontWeight.SemiBold)
+                }
             }
-        } }
+        }
     ) { paddingValues ->
         NavHost(
-            navController = navController, startDestination = BottomNavigationScreens.Home.route) {
+            navController = navController, startDestination = BottomNavigationScreens.Home.route
+        ) {
             composable(route = BottomNavigationScreens.Home.route) {
                 HomeScreen(
                     modifier = modifier,
@@ -368,11 +404,15 @@ fun HomeApp(modifier: Modifier = Modifier,
                         navController.popBackStack()
                         navController.navigate(BottomNavigationScreens.Download.route)
                     },
-                    goToMyListClick = {  movieType: String, movieId: Int, isFavorite ->
+                    goToMyListClick = { movieType: String, movieId: Int, isFavorite ->
                         coroutineScope.launch {
                             detailsViewModel.updateMovieFavourite(movieType, movieId, isFavorite)
-                            snackbarHostState.showSnackbar(message = "Movie added to list", duration = SnackbarDuration.Short)
-                        } },
+                            snackbarHostState.showSnackbar(
+                                message = "Movie added to list",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    },
                     onMovieWithTvSeries = homeViewModel::getMovieWithTvSeries
                 )
             }
@@ -397,7 +437,8 @@ fun HomeApp(modifier: Modifier = Modifier,
                     modifier = modifier,
                     moviesFavouriteFlow = myListFlowState,
                     lazyGridState = myListScrollState,
-                    bottomPadding = paddingValues)
+                    bottomPadding = paddingValues
+                )
             }
             composable(route = BottomNavigationScreens.Download.route) {
                 DownloadScreen(
@@ -420,7 +461,8 @@ fun HomeApp(modifier: Modifier = Modifier,
                     darkModeUiState = darkModeUiState,
                     onModeClick = profileViewModel::updateMode,
                     onProfileClick = onboardingViewModel::uploadProfilePhoto,
-                    profileUIState = profileUIState)
+                    profileUIState = profileUIState
+                )
             }
         }
     }
@@ -428,12 +470,13 @@ fun HomeApp(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomSheet(modifier: Modifier = Modifier,
-                        onDismiss: () -> Unit = {},
-                        onNegativeClick: () -> Unit = {},
-                        onPositiveClick: () -> Unit = {},
-                        contentSheet: @Composable (onNegativeClick: () -> Unit, onPositiveClick: () -> Unit) -> Unit = { _, _ -> }
-                        ) {
+private fun BottomSheet(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    onNegativeClick: () -> Unit = {},
+    onPositiveClick: () -> Unit = {},
+    contentSheet: @Composable (onNegativeClick: () -> Unit, onPositiveClick: () -> Unit) -> Unit = { _, _ -> }
+) {
 
     val bottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -460,14 +503,16 @@ private fun BottomSheet(modifier: Modifier = Modifier,
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
-                                     onNegativeClick: () -> Unit = { },
-                                     onPositiveClick: (categories: Categories, genres: List<MovieGenre.Genre>, sortBy: SORT_BY, includeAdult: Boolean) -> Unit = { _, _, _, _ ->  },
-                                     onFilterCalled: (Categories) -> Unit = { _ -> },
-                                     uiState: Resource<MovieGenre> = Resource.Loading,
-                                     readUserPreferences: UserPreferences? = null,
-                                     onCategoryClick: (Categories) -> Unit = { _ -> },
-                                     onGenreUpdate: (MovieGenre.Genre?) -> Unit = {  _ -> }) {
+private fun BottomSheetFilterContent(
+    modifier: Modifier = Modifier,
+    onNegativeClick: () -> Unit = { },
+    onPositiveClick: (categories: Categories, genres: List<MovieGenre.Genre>, sortBy: SORT_BY, includeAdult: Boolean) -> Unit = { _, _, _, _ -> },
+    onFilterCalled: (Categories) -> Unit = { _ -> },
+    uiState: Resource<MovieGenre> = Resource.Loading,
+    readUserPreferences: UserPreferences? = null,
+    onCategoryClick: (Categories) -> Unit = { _ -> },
+    onGenreUpdate: (MovieGenre.Genre?) -> Unit = { _ -> }
+) {
 
     val itemsListCategories = listOf(Categories.Movies, Categories.TV)
 
@@ -507,28 +552,36 @@ private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
         }
 
         is Resource.Success -> {
-            Column(modifier = modifier
-                .padding(vertical = 16.dp)
-                .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = stringResource(R.string.sort_filter),
+            Column(
+                modifier = modifier
+                    .padding(vertical = 16.dp)
+                    .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.sort_filter),
                     style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center,
                     modifier = modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
 
                 Divider()
 
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                    Text(text = stringResource(R.string.categories),
+                    Text(
+                        text = stringResource(R.string.categories),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
-                        modifier = modifier.padding(horizontal = 16.dp))
+                        modifier = modifier.padding(horizontal = 16.dp)
+                    )
 
-                    Row(modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)) {
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
                         itemsListCategories.forEach { item ->
                             FilterChip(
                                 modifier = modifier
@@ -539,48 +592,73 @@ private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
                                 onClick = {
                                     selectedItemCategories = item
                                     onCategoryClick(item)
-                                          },
-                                label = { Text(text = item.title, modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                                },
+                                label = {
+                                    Text(
+                                        text = item.title,
+                                        modifier = modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
                                 shape = RoundedCornerShape(50),
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = Color.White)
+                                    selectedLabelColor = Color.White
                                 )
+                            )
                         }
                     }
 
-                    Text(text = stringResource(R.string.genres),
+                    Text(
+                        text = stringResource(R.string.genres),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
-                        modifier = modifier.padding(horizontal = 16.dp))
+                        modifier = modifier.padding(horizontal = 16.dp)
+                    )
 
 
-                    LazyRow(modifier = modifier.fillMaxWidth(), contentPadding = PaddingValues(horizontal = 16.dp)) {
+                    LazyRow(
+                        modifier = modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    ) {
 
                         items(uiState.data.genres ?: return@LazyRow) { item ->
                             FilterChip(
                                 modifier = modifier
                                     .requiredHeight(36.dp)
                                     .padding(horizontal = 6.dp),
-                                selected = readUserPreferences?.genreList?.any { it.id == item?.id } ?: false,
+                                selected = readUserPreferences?.genreList?.any { it.id == item?.id }
+                                    ?: false,
                                 onClick = {
                                     onGenreUpdate(item)
-                                          },
-                                label = { Text(text = item?.name ?: "", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                                },
+                                label = {
+                                    Text(
+                                        text = item?.name ?: "",
+                                        modifier = modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
                                 shape = RoundedCornerShape(50),
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = Color.White)
+                                    selectedLabelColor = Color.White
+                                )
                             )
                         }
                     }
 
-                    Text(text = stringResource(R.string.sort),
+                    Text(
+                        text = stringResource(R.string.sort),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
-                        modifier = modifier.padding(horizontal = 16.dp))
+                        modifier = modifier.padding(horizontal = 16.dp)
+                    )
 
-                    LazyRow(modifier = modifier.fillMaxWidth(), contentPadding = PaddingValues(horizontal = 16.dp)) {
+                    LazyRow(
+                        modifier = modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    ) {
                         items(itemsListSort) { item ->
                             FilterChip(
                                 modifier = modifier
@@ -588,19 +666,28 @@ private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
                                     .padding(horizontal = 6.dp),
                                 selected = (item == selectedItemSort),
                                 onClick = { selectedItemSort = item },
-                                label = { Text(text = item.first, modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+                                label = {
+                                    Text(
+                                        text = item.first,
+                                        modifier = modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
                                 shape = RoundedCornerShape(50),
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = Color.White)
+                                    selectedLabelColor = Color.White
                                 )
+                            )
                         }
                     }
 
-                    Text(text = stringResource(R.string.include_adult),
+                    Text(
+                        text = stringResource(R.string.include_adult),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
-                        modifier = modifier.padding(horizontal = 16.dp))
+                        modifier = modifier.padding(horizontal = 16.dp)
+                    )
 
                     FilterChip(
                         modifier = modifier
@@ -608,31 +695,55 @@ private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
                             .padding(horizontal = 16.dp),
                         selected = includeAdult,
                         onClick = { includeAdult = !includeAdult },
-                        label = { Text(text = stringResource(R.string.no), modifier = modifier, textAlign = TextAlign.Center) },
+                        label = {
+                            Text(
+                                text = stringResource(R.string.no),
+                                modifier = modifier,
+                                textAlign = TextAlign.Center
+                            )
+                        },
                         shape = RoundedCornerShape(50),
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.primary,
-                            selectedLabelColor = Color.White)
+                            selectedLabelColor = Color.White
+                        )
                     )
                 }
 
                 Divider()
 
-                Row(modifier = modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                    OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                        .weight(1f)
-                        .requiredHeight(50.dp)) {
+                    OutlinedButton(
+                        onClick = onNegativeClick, modifier = modifier
+                            .weight(1f)
+                            .requiredHeight(50.dp)
+                    ) {
                         Text(text = stringResource(R.string.reset))
                     }
 
-                    Button(onClick = { onPositiveClick(selectedItemCategories, readUserPreferences?.genreList?.map { MovieGenre.Genre(id = it.id, name = it.name) } ?: return@Button, selectedItemSort.second, includeAdult) }, modifier = modifier
-                        .weight(1f)
-                        .requiredHeight(50.dp)) {
+                    Button(
+                        onClick = {
+                            onPositiveClick(
+                                selectedItemCategories,
+                                readUserPreferences?.genreList?.map {
+                                    MovieGenre.Genre(
+                                        id = it.id,
+                                        name = it.name
+                                    )
+                                } ?: return@Button,
+                                selectedItemSort.second,
+                                includeAdult)
+                        }, modifier = modifier
+                            .weight(1f)
+                            .requiredHeight(50.dp)
+                    ) {
                         Text(text = stringResource(R.string.apply))
                     }
                 }
@@ -643,38 +754,54 @@ private fun BottomSheetFilterContent(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}) {
-    Column(modifier = modifier
-        .padding(16.dp)
-        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = stringResource(R.string.logout),
+private fun BottomSheetContent(
+    modifier: Modifier = Modifier,
+    onNegativeClick: () -> Unit = { },
+    onPositiveClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.logout),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
 
         Divider()
 
-        Text(text = stringResource(R.string.are_you_sure_you_want_to_log_out),
+        Text(
+            text = stringResource(R.string.are_you_sure_you_want_to_log_out),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth())
+            modifier = modifier.fillMaxWidth()
+        )
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            OutlinedButton(
+                onClick = onNegativeClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(id = R.string.cancel))
             }
 
-            Button(onClick = onPositiveClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            Button(
+                onClick = onPositiveClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(R.string.yes_logout))
             }
         }
@@ -683,54 +810,76 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetContentDownloadDelete(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}, movieDownloadEntity: MovieDownloadEntity? = null) {
+private fun BottomSheetContentDownloadDelete(
+    modifier: Modifier = Modifier,
+    onNegativeClick: () -> Unit = { },
+    onPositiveClick: () -> Unit = {},
+    movieDownloadEntity: MovieDownloadEntity? = null
+) {
 
     val context = LocalContext.current
 
-    Column(modifier = modifier
-        .padding(16.dp)
-        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = stringResource(R.string.delete),
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.delete),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
 
         Divider()
 
-        Text(text = stringResource(R.string.are_you_sure_you_want_to_delete_this_downloaded_content),
+        Text(
+            text = stringResource(R.string.are_you_sure_you_want_to_delete_this_downloaded_content),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth())
+            modifier = modifier.fillMaxWidth()
+        )
 
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Card(modifier = modifier.size(height = 100.dp, width = 130.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Card(
+                modifier = modifier.size(height = 100.dp, width = 130.dp),
                 shape = RoundedCornerShape(20)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(movieDownloadEntity?.backdropPath ?: "")
-                        .crossfade(true)
-                        .build(),
+                    AsyncImage(
+                        model = ImageRequest.Builder(context = LocalContext.current)
+                            .data(movieDownloadEntity?.backdropPath ?: "")
+                            .crossfade(true)
+                            .build(),
                         placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxSize(),
-                        contentScale = ContentScale.Crop)
-                    Icon(imageVector = Icons.Rounded.PlayCircle, contentDescription = null, tint = Color.White)
+                        contentScale = ContentScale.Crop
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.PlayCircle,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
                 }
             }
 
-            Column(modifier = modifier
-                .weight(1f)
-                .requiredHeight(100.dp)
-                .padding(vertical = 8.dp),
-                verticalArrangement = Arrangement.SpaceBetween) {
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(100.dp)
+                    .padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = movieDownloadEntity?.title ?: "",
                     style = MaterialTheme.typography.titleSmall,
@@ -739,38 +888,48 @@ private fun BottomSheetContentDownloadDelete(modifier: Modifier = Modifier, onNe
                 )
 
                 Text(
-                    text = movieDownloadEntity?.runtime ?: movieDownloadEntity?.filePath?.getVideoDuration(context as Activity) ?: "",
+                    text = movieDownloadEntity?.runtime
+                        ?: movieDownloadEntity?.filePath?.getVideoDuration(context as Activity)
+                        ?: "",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Spacer(modifier = modifier.weight(1f))
 
                 Card {
-                    Text(text = "${movieDownloadEntity?.filePath?.getFileSize(context)} MB",
+                    Text(
+                        text = "${movieDownloadEntity?.filePath?.getFileSize(context)} MB",
                         style = MaterialTheme.typography.bodySmall,
                         modifier = modifier.padding(8.dp),
-                        color = MaterialTheme.colorScheme.onSecondary)
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
                 }
             }
         }
 
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            OutlinedButton(
+                onClick = onNegativeClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(id = R.string.cancel))
             }
 
-            Button(onClick = {
-                File(context.filesDir, "/output/${movieDownloadEntity?.filePath}").delete()
-                onPositiveClick()
-            }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            Button(
+                onClick = {
+                    File(context.filesDir, "/output/${movieDownloadEntity?.filePath}").delete()
+                    onPositiveClick()
+                }, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(R.string.yes_delete))
             }
         }
@@ -779,17 +938,18 @@ private fun BottomSheetContentDownloadDelete(modifier: Modifier = Modifier, onNe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeTopAppbar(navController: NavHostController,
-                          exploreViewModel: ExploreViewModel = viewModel(),
-                          exploreHideTopAppBar: Boolean,
-                          mylistHideTopAppBar: Boolean,
-                          downloadHideTopAppBar: Boolean,
-                          onFilterClick: () -> Unit = {},
-                          search: String = "",
-                          onHomeSearchClick: () -> Unit = {  },
-                          searchValue: String = "",
-                          onDownloadSearch: (String) -> Unit = { _ -> }
-                          ) {
+private fun HomeTopAppbar(
+    navController: NavHostController,
+    exploreViewModel: ExploreViewModel = viewModel(),
+    exploreHideTopAppBar: Boolean,
+    mylistHideTopAppBar: Boolean,
+    downloadHideTopAppBar: Boolean,
+    onFilterClick: () -> Unit = {},
+    search: String = "",
+    onHomeSearchClick: () -> Unit = { },
+    searchValue: String = "",
+    onDownloadSearch: (String) -> Unit = { _ -> }
+) {
 
     val context = LocalContext.current
 
@@ -807,7 +967,8 @@ private fun HomeTopAppbar(navController: NavHostController,
             AnimatedVisibility(
                 visible = exploreHideTopAppBar,
                 enter = slideInVertically(animationSpec = tween(durationMillis = 200)),
-                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))) {
+                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))
+            ) {
 
                 TopAppBar(
                     title = {
@@ -825,7 +986,10 @@ private fun HomeTopAppbar(navController: NavHostController,
                                 .fillMaxWidth()
                                 .padding(end = 20.dp),
                             shape = RoundedCornerShape(30),
-                            textStyle = TextStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize, lineHeight = MaterialTheme.typography.bodyLarge.lineHeight),
+                            textStyle = TextStyle(
+                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                            ),
                             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                         )
@@ -836,14 +1000,22 @@ private fun HomeTopAppbar(navController: NavHostController,
                                 .requiredHeight(64.dp)
                                 .padding(top = 8.dp, end = 4.dp),
                             onClick = onFilterClick,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(defaultElevation = 0.dp),
-                            containerColor = MaterialTheme.colorScheme.primaryContainer) {
-                            Icon(imageVector = Icons.Outlined.Tune, contentDescription = null, tint = MaterialTheme.colorScheme.background)
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(
+                                defaultElevation = 0.dp
+                            ),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Tune,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.background
+                            )
                         }
                     },
                 )
             }
         }
+
         BottomNavigationScreens.MyList.route -> {
 
             val focusManager = LocalFocusManager.current
@@ -860,14 +1032,19 @@ private fun HomeTopAppbar(navController: NavHostController,
             AnimatedVisibility(
                 visible = mylistHideTopAppBar,
                 enter = slideInVertically(animationSpec = tween(durationMillis = 200)),
-                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))) {
+                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))
+            ) {
 
                 TopAppBar(
                     title = {
                         if (!onSearchClick) {
-                            Text(text = stringResource(id = R.string.my_list), fontWeight = FontWeight.SemiBold)
+                            Text(
+                                text = stringResource(id = R.string.my_list),
+                                fontWeight = FontWeight.SemiBold
+                            )
                         } else {
-                            OutlinedTextField(value = searchValue,
+                            OutlinedTextField(
+                                value = searchValue,
                                 onValueChange = onDownloadSearch,
                                 modifier = Modifier
                                     .height(64.dp)
@@ -876,8 +1053,16 @@ private fun HomeTopAppbar(navController: NavHostController,
                                     .focusRequester(focusRequest),
                                 interactionSource = interactionSource,
                                 shape = RoundedCornerShape(30),
-                                textStyle = TextStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize, lineHeight = MaterialTheme.typography.bodyLarge.lineHeight),
-                                trailingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
+                                textStyle = TextStyle(
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                                ),
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Search,
+                                        contentDescription = null
+                                    )
+                                },
                                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                                 keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() })
                             )
@@ -886,13 +1071,15 @@ private fun HomeTopAppbar(navController: NavHostController,
                                 focusRequest.requestFocus()
                             }
                         }
-                            },
+                    },
                     navigationIcon = {
                         if (!onSearchClick) {
-                            IconButton(onClick = {   }) {
-                                Icon(painter = painterResource(id = R.drawable.ic_movie),
+                            IconButton(onClick = { }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_movie),
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary)
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
                     },
@@ -909,6 +1096,7 @@ private fun HomeTopAppbar(navController: NavHostController,
                 )
             }
         }
+
         BottomNavigationScreens.Download.route -> {
 
             val focusManager = LocalFocusManager.current
@@ -925,14 +1113,19 @@ private fun HomeTopAppbar(navController: NavHostController,
             AnimatedVisibility(
                 visible = downloadHideTopAppBar,
                 enter = slideInVertically(animationSpec = tween(durationMillis = 200)),
-                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))) {
+                exit = slideOutVertically(animationSpec = tween(durationMillis = 200))
+            ) {
 
                 TopAppBar(
                     title = {
                         if (!onSearchClick) {
-                            Text(text = stringResource(id = R.string.download), fontWeight = FontWeight.SemiBold)
+                            Text(
+                                text = stringResource(id = R.string.download),
+                                fontWeight = FontWeight.SemiBold
+                            )
                         } else {
-                            OutlinedTextField(value = searchValue,
+                            OutlinedTextField(
+                                value = searchValue,
                                 onValueChange = onDownloadSearch,
                                 modifier = Modifier
                                     .height(64.dp)
@@ -941,8 +1134,16 @@ private fun HomeTopAppbar(navController: NavHostController,
                                     .focusRequester(focusRequest),
                                 interactionSource = interactionSource,
                                 shape = RoundedCornerShape(30),
-                                textStyle = TextStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize, lineHeight = MaterialTheme.typography.bodyLarge.lineHeight),
-                                trailingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
+                                textStyle = TextStyle(
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                                ),
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Search,
+                                        contentDescription = null
+                                    )
+                                },
                                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                                 keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() })
                             )
@@ -951,13 +1152,15 @@ private fun HomeTopAppbar(navController: NavHostController,
                                 focusRequest.requestFocus()
                             }
                         }
-                            },
+                    },
                     navigationIcon = {
                         if (!onSearchClick) {
-                            IconButton(onClick = {   }) {
-                                Icon(painter = painterResource(id = R.drawable.ic_movie),
+                            IconButton(onClick = { }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_movie),
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary)
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
                     },
@@ -974,36 +1177,55 @@ private fun HomeTopAppbar(navController: NavHostController,
                 )
             }
         }
+
         BottomNavigationScreens.Profile.route -> {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.profile), fontWeight = FontWeight.SemiBold) },
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.profile),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                },
                 navigationIcon = {
-                    IconButton(onClick = {   }) {
-                        Icon(painter = painterResource(id = R.drawable.ic_movie),
+                    IconButton(onClick = { }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_movie),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary)
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent)
             )
         }
+
         BottomNavigationScreens.Home.route -> {
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = {   }) {
-                        Icon(painter = painterResource(id = R.drawable.ic_movie),
+                    IconButton(onClick = { }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_movie),
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary)
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = onHomeSearchClick) {
-                        Icon(imageVector = Icons.Rounded.Search, contentDescription = null, tint = Color.White)
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     }
 
                     IconButton(onClick = { NotificationActivity.startActivity(context as Activity) }) {
-                        Icon(imageVector = Icons.Rounded.NotificationsNone, contentDescription = null, tint = Color.White)
+                        Icon(
+                            imageVector = Icons.Rounded.NotificationsNone,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -1013,36 +1235,44 @@ private fun HomeTopAppbar(navController: NavHostController,
 }
 
 @Composable
-private fun HomeBottomBarNavigation(navController: NavHostController,
-                                    homeViewModel: HomeViewModel = viewModel(),
-                                    exploreViewModel: ExploreViewModel = viewModel()) {
+private fun HomeBottomBarNavigation(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel = viewModel(),
+    exploreViewModel: ExploreViewModel = viewModel()
+) {
 
     val navigationBarItems = listOf(
         BottomNavigationScreens.Home,
         BottomNavigationScreens.Explore,
         BottomNavigationScreens.MyList,
         BottomNavigationScreens.Download,
-        BottomNavigationScreens.Profile)
+        BottomNavigationScreens.Profile
+    )
 
-    NavigationBar(modifier = Modifier.clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-     containerColor = Color.Transparent,
+    NavigationBar(
+        modifier = Modifier.clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+        containerColor = Color.Transparent,
         tonalElevation = 3.dp
-        ) {
-        navigationBarItems.forEach { 
+    ) {
+        navigationBarItems.forEach {
             NavigationBarItem(
                 selected = navController.currentBackStackEntryAsState().value?.destination?.route == it.route,
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(it.route)
-                          },
+                },
                 icon = { Icon(imageVector = it.vectorResource, contentDescription = null) },
                 label = { Text(text = stringResource(id = it.stringResource)) },
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = Color.Gray, selectedIconColor = MaterialTheme.colorScheme.primary,
-                    unselectedTextColor = Color.Gray, selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(LocalAbsoluteTonalElevation.current)
+                    unselectedIconColor = Color.Gray,
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    unselectedTextColor = Color.Gray,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        LocalAbsoluteTonalElevation.current
+                    )
                 ),
-                )
+            )
         }
     }
 }
@@ -1062,10 +1292,38 @@ enum class Categories(val title: String) {
     Movies("Movies"), TV("TV series")
 }
 
-sealed class BottomNavigationScreens(val route: String, @StringRes val stringResource: Int, val vectorResource: ImageVector) {
-    object Home: BottomNavigationScreens(route = "Home", stringResource = R.string.home, vectorResource = Icons.Rounded.Home)
-    object Explore: BottomNavigationScreens(route = "Explore", stringResource = R.string.explore, vectorResource = Icons.Rounded.Explore)
-    object MyList: BottomNavigationScreens(route = "MyList", stringResource = R.string.mylist, vectorResource = Icons.Rounded.Bookmark)
-    object Download: BottomNavigationScreens(route = "Download", stringResource = R.string.download, vectorResource = Icons.Rounded.FileDownload)
-    object Profile: BottomNavigationScreens(route = "Profile", stringResource = R.string.profile, vectorResource = Icons.Rounded.Person)
+sealed class BottomNavigationScreens(
+    val route: String,
+    @StringRes val stringResource: Int,
+    val vectorResource: ImageVector
+) {
+    object Home : BottomNavigationScreens(
+        route = "Home",
+        stringResource = R.string.home,
+        vectorResource = Icons.Rounded.Home
+    )
+
+    object Explore : BottomNavigationScreens(
+        route = "Explore",
+        stringResource = R.string.explore,
+        vectorResource = Icons.Rounded.Explore
+    )
+
+    object MyList : BottomNavigationScreens(
+        route = "MyList",
+        stringResource = R.string.mylist,
+        vectorResource = Icons.Rounded.Bookmark
+    )
+
+    object Download : BottomNavigationScreens(
+        route = "Download",
+        stringResource = R.string.download,
+        vectorResource = Icons.Rounded.FileDownload
+    )
+
+    object Profile : BottomNavigationScreens(
+        route = "Profile",
+        stringResource = R.string.profile,
+        vectorResource = Icons.Rounded.Person
+    )
 }

@@ -56,10 +56,13 @@ import kotlinx.coroutines.delay
 import timber.log.Timber
 
 private const val TAG = "AccountSetupApp"
+
 @Composable
-fun AccountSetupApp(modifier: Modifier = Modifier,
-                    navController: NavHostController = rememberNavController(),
-                    onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
+fun AccountSetupApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
+) {
 
     val context = LocalContext.current
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -87,10 +90,17 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
 
     Scaffold(
         topBar = {
-            AccountSetupAppBar(currentScreen = backStackEntry?.destination?.route ?: AccountSetupScreen.ChooseYourInterest.title) { navController.navigateUp() }
+            AccountSetupAppBar(
+                currentScreen = backStackEntry?.destination?.route
+                    ?: AccountSetupScreen.ChooseYourInterest.title
+            ) { navController.navigateUp() }
         }
     ) { paddingValues ->
-        NavHost(modifier = modifier.padding(paddingValues), navController = navController, startDestination = AccountSetupScreen.ChooseYourInterest.title) {
+        NavHost(
+            modifier = modifier.padding(paddingValues),
+            navController = navController,
+            startDestination = AccountSetupScreen.ChooseYourInterest.title
+        ) {
 
             composable(route = AccountSetupScreen.ChooseYourInterest.title) {
                 ChooseYourInterestScreen(
@@ -99,7 +109,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     onContinueClick = {
                         onboardingViewModel.saveMovieGenre()
                         navController.navigate(AccountSetupScreen.FillYourProfile.title)
-                                      },
+                    },
                     onGenreClick = { onboardingViewModel.updateMovieGenre(it) }
                 )
             }
@@ -108,7 +118,13 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                 FillYourProfileScreen(
                     modifier = modifier,
                     onContinueClick = {
-                        onboardingViewModel.updateProfile(it.fullName, it.nickName, it.email, it.phoneNumber, it.gender)
+                        onboardingViewModel.updateProfile(
+                            it.fullName,
+                            it.nickName,
+                            it.email,
+                            it.phoneNumber,
+                            it.gender
+                        )
                         showSetupCompleteDialog = true
                     },
                     onProfileClick = onboardingViewModel::uploadProfilePhoto,
@@ -150,9 +166,11 @@ fun AccountSetupAppBar(currentScreen: String, onNavigateUp: () -> Unit) {
         title = { Text(text = screen, fontWeight = FontWeight.Bold) },
         navigationIcon = {
             IconButton(onClick = onNavigateUp) {
-                Icon(imageVector = Icons.Outlined.ArrowBack,
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSecondary)
+                    tint = MaterialTheme.colorScheme.onSecondary
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -163,24 +181,40 @@ fun AccountSetupAppBar(currentScreen: String, onNavigateUp: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun AccountSetupCompleteDialog() {
-    AlertDialog(onDismissRequest = { /*TODO*/ }, modifier = Modifier.background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(10))) {
+    AlertDialog(
+        onDismissRequest = { /*TODO*/ },
+        modifier = Modifier.background(
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(10)
+        )
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(150.dp)) {
-                Icon(imageVector = Icons.Rounded.AccountCircle, contentDescription = null, modifier = Modifier.size(150.dp), tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    imageVector = Icons.Rounded.AccountCircle,
+                    contentDescription = null,
+                    modifier = Modifier.size(150.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
 
-            Text(text = stringResource(R.string.congratulations),
+            Text(
+                text = stringResource(R.string.congratulations),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold)
+                fontWeight = FontWeight.SemiBold
+            )
 
-            Text(text = stringResource(R.string.your_account_is_ready_to_use_you_will_be_redirected_to_the_home_page_in_a_few_seconds),
+            Text(
+                text = stringResource(R.string.your_account_is_ready_to_use_you_will_be_redirected_to_the_home_page_in_a_few_seconds),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center)
+                textAlign = TextAlign.Center
+            )
 
             CircularProgressIndicator()
         }

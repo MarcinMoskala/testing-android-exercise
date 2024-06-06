@@ -15,7 +15,8 @@ interface MovieWithTvSeriesUseCase {
     suspend operator fun invoke(): Resource<MovieWithTvSeries>
 }
 
-class GetMovieWithTvSeriesInteractor @Inject constructor(private val moviesRepository: MoviesRepository): MovieWithTvSeriesUseCase {
+class GetMovieWithTvSeriesInteractor @Inject constructor(private val moviesRepository: MoviesRepository) :
+    MovieWithTvSeriesUseCase {
 
     private companion object {
         const val TAG = "GetMovieWithTvSeriesInteractor"
@@ -39,13 +40,25 @@ class GetMovieWithTvSeriesInteractor @Inject constructor(private val moviesRepos
                         )
                     )
                 } else if (movies.code() == 401 && tvSeries.code() == 401 && genres.code() == 401) {
-                    Timber.tag(TAG).e("${movies.errorBody().toString()}\n${tvSeries.errorBody().toString()}\n${genres.errorBody().toString()}")
+                    Timber.tag(TAG).e(
+                        "${movies.errorBody().toString()}\n${
+                            tvSeries.errorBody().toString()
+                        }\n${genres.errorBody().toString()}"
+                    )
                     Resource.Failure(Throwable())
                 } else if (movies.code() == 404 && tvSeries.code() == 404 && genres.code() == 404) {
-                    Timber.tag(TAG).e("${movies.errorBody().toString()}\n${tvSeries.errorBody().toString()}\n${genres.errorBody().toString()}")
+                    Timber.tag(TAG).e(
+                        "${movies.errorBody().toString()}\n${
+                            tvSeries.errorBody().toString()
+                        }\n${genres.errorBody().toString()}"
+                    )
                     Resource.Failure(Throwable())
                 } else {
-                    Timber.tag(TAG).e("${movies.errorBody().toString()}\n${tvSeries.errorBody().toString()}\n${genres.errorBody().toString()}")
+                    Timber.tag(TAG).e(
+                        "${movies.errorBody().toString()}\n${
+                            tvSeries.errorBody().toString()
+                        }\n${genres.errorBody().toString()}"
+                    )
                     Resource.Failure(Throwable())
                 }
             }

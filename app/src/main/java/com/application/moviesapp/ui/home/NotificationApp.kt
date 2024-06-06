@@ -41,7 +41,8 @@ private fun NotificationTopAppbar() {
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
-            }},
+            }
+        },
         actions = {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null)

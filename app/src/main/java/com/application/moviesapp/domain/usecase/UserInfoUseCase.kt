@@ -13,7 +13,7 @@ interface UserInfoUseCase {
     operator fun invoke(): UserData?
 }
 
-class GetUserInfoInteractor @Inject constructor(): UserInfoUseCase {
+class GetUserInfoInteractor @Inject constructor() : UserInfoUseCase {
     override fun invoke(): UserData? {
         TODO()
     }

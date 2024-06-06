@@ -17,14 +17,16 @@ object CommentRepository {
                 userName = "Sheikh",
                 comment = "Excellent movie",
                 likes = 100,
-                postedDate = "2 days ago"),
+                postedDate = "2 days ago"
+            ),
 
             Comment(
                 imageUrl = "https://storage.googleapis.com/yogazzz.appspot.com/app_config/yoga_recommendation/recommendation3/Screenshot%20from%202024-02-21%2016-29-47.png",
                 userName = "Gamora",
                 comment = "Good film",
                 likes = 120,
-                postedDate = "2 days ago")
+                postedDate = "2 days ago"
+            )
         )
     }
 }

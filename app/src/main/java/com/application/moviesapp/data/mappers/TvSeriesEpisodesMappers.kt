@@ -11,19 +11,19 @@ fun TvSeriesEpisodesDto.toTvSeries(): TvSeriesEpisodes {
                 episodeNumber = it?.episodeNumber,
                 episodeType = it?.episodeType,
                 guestStars = it?.guestStars?.map { guestStar ->
-                                 TvSeriesEpisodes.Episode.GuestStar(
-                                     adult = guestStar?.adult,
-                                     character = guestStar?.character,
-                                     creditId = guestStar?.creditId,
-                                     gender = guestStar?.gender,
-                                     id = guestStar?.id,
-                                     knownForDepartment = guestStar?.knownForDepartment,
-                                     name = guestStar?.name,
-                                     originalName = guestStar?.originalName,
-                                     order = guestStar?.order,
-                                     popularity = guestStar?.popularity,
-                                     profilePath = guestStar?.profilePath
-                                 )
+                    TvSeriesEpisodes.Episode.GuestStar(
+                        adult = guestStar?.adult,
+                        character = guestStar?.character,
+                        creditId = guestStar?.creditId,
+                        gender = guestStar?.gender,
+                        id = guestStar?.id,
+                        knownForDepartment = guestStar?.knownForDepartment,
+                        name = guestStar?.name,
+                        originalName = guestStar?.originalName,
+                        order = guestStar?.order,
+                        popularity = guestStar?.popularity,
+                        profilePath = guestStar?.profilePath
+                    )
                 },
                 id = it?.id,
                 name = it?.name,

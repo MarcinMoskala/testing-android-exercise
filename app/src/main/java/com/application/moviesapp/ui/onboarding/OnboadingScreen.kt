@@ -44,7 +44,8 @@ import com.application.moviesapp.ui.theme.MoviesAppTheme
 @Composable
 fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     Box(modifier = modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = R.drawable.onboarding_background),
+        Image(
+            painter = painterResource(id = R.drawable.onboarding_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier
@@ -63,35 +64,43 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
                 .rotate(10f)
                 .scale(1.5f, 1.5f)
                 .background(color = MaterialTheme.colorScheme.background),
-           )
-        Column(modifier = modifier
-            .fillMaxHeight()
-            .wrapContentHeight(align = Alignment.Bottom)
-            .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),) {
+        )
+        Column(
+            modifier = modifier
+                .fillMaxHeight()
+                .wrapContentHeight(align = Alignment.Bottom)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
 
-            Text(text = stringResource(id = R.string.welcome_to_mflix),
+            Text(
+                text = stringResource(id = R.string.welcome_to_mflix),
                 style = MaterialTheme.typography.displaySmall,
                 color = colorResource(id = R.color.white),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = modifier.fillMaxWidth())
+                modifier = modifier.fillMaxWidth()
+            )
 
-            Text(text = stringResource(id = R.string.mflix_description),
+            Text(
+                text = stringResource(id = R.string.mflix_description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = colorResource(id = R.color.light_gray),
                 textAlign = TextAlign.Center,
                 modifier = modifier.fillMaxWidth()
-                )
+            )
 
-            Button(onClick = onClick,
+            Button(
+                onClick = onClick,
                 modifier = modifier
                     .shadow(
                         elevation = 4.dp,
                         ambientColor = MaterialTheme.colorScheme.outlineVariant,
                         spotColor = MaterialTheme.colorScheme.outlineVariant,
-                        shape = RoundedCornerShape(50))
-                    .fillMaxWidth()) {
+                        shape = RoundedCornerShape(50)
+                    )
+                    .fillMaxWidth()
+            ) {
                 Text(
                     text = stringResource(id = R.string.get_started),
                     modifier = modifier.padding(4.dp)

@@ -14,7 +14,8 @@ interface PasswordResetRepository {
     suspend fun sendOtp(email: String)
 }
 
-class PasswordResetRepositoryImpl @Inject constructor(private val auth: FirebaseAuth): PasswordResetRepository {
+class PasswordResetRepositoryImpl @Inject constructor(private val auth: FirebaseAuth) :
+    PasswordResetRepository {
 
     private companion object {
         const val TAG = "PasswordResetRepositoryImpl"

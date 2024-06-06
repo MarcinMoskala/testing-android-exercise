@@ -5,7 +5,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 
-open class BaseActivity: ComponentActivity() {
+open class BaseActivity : ComponentActivity() {
     fun setTransparentStatusBar() {
         this.let {
             it.window?.let {

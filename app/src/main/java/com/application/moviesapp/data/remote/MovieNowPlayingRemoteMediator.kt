@@ -17,8 +17,10 @@ import java.io.IOException
 import javax.inject.Inject
 
 @ExperimentalPagingApi
-class MovieNowPlayingRemoteMediator @Inject constructor(private val moviesApi: MoviesApi,
-                                                        private val database: MoviesDatabase): RemoteMediator<Int, MovieNowPlayingEntity>() {
+class MovieNowPlayingRemoteMediator @Inject constructor(
+    private val moviesApi: MoviesApi,
+    private val database: MoviesDatabase
+) : RemoteMediator<Int, MovieNowPlayingEntity>() {
 
     private companion object {
         const val TAG = "MoviesNowPlayingRemoteMediator"
@@ -109,15 +111,15 @@ class MovieNowPlayingRemoteMediator @Inject constructor(private val moviesApi: M
 
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MovieNowPlayingEntity>): MovieNowPlayingRemoteKeyEntity? {
-        return state.anchorPosition?.let {  position ->
-            state.closestItemToPosition(position)?.movieId?.let {  id ->
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.movieId?.let { id ->
                 database.movieNowPlayingRemoteKeyDao.getRemoteKeys(id)
             }
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, MovieNowPlayingEntity>): MovieNowPlayingRemoteKeyEntity? {
-        return state.pages.firstOrNull {  it.data.isNotEmpty() }?.data?.firstOrNull()
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { moviesEntity ->
                 database.movieNowPlayingRemoteKeyDao.getRemoteKeys(moviesEntity.movieId ?: 0)
             }

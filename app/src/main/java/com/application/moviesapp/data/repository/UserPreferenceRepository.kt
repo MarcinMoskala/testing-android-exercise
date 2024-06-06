@@ -14,10 +14,17 @@ interface UserPreferenceRepository {
 
     suspend fun updateMovieGenre(genre: Set<MoviesDetail.Genre>)
 
-    suspend fun updateProfile(fullName: String, nickName: String, email: String, phoneNumber: Long, gender: String)
+    suspend fun updateProfile(
+        fullName: String,
+        nickName: String,
+        email: String,
+        phoneNumber: Long,
+        gender: String
+    )
 }
 
-class UserPreferenceRepoImpl @Inject constructor(private val userPreference: DataStore<UserPreferences>): UserPreferenceRepository {
+class UserPreferenceRepoImpl @Inject constructor(private val userPreference: DataStore<UserPreferences>) :
+    UserPreferenceRepository {
     override val userPreferenceFlow: Flow<UserPreferences>
         get() = userPreference.data
             .catch { exception ->
@@ -35,7 +42,8 @@ class UserPreferenceRepoImpl @Inject constructor(private val userPreference: Dat
                 .clearGenre()
                 .addAllGenre(
                     genre.map {
-                        UserPreferences.MovieGenre.newBuilder().setId(it.id ?: 0).setName(it.name ?: "").build()
+                        UserPreferences.MovieGenre.newBuilder().setId(it.id ?: 0)
+                            .setName(it.name ?: "").build()
                     }).build()
         }
     }
@@ -49,12 +57,12 @@ class UserPreferenceRepoImpl @Inject constructor(private val userPreference: Dat
     ) {
 
         userPreference.updateData { currentPrefrence ->
-             currentPrefrence.toBuilder()
-                 .setName(fullName)
-                 .setNickname(nickName)
-                 .setEmail(email)
-                 .setPhoneNumber(phoneNumber)
-                 .build()
+            currentPrefrence.toBuilder()
+                .setName(fullName)
+                .setNickname(nickName)
+                .setEmail(email)
+                .setPhoneNumber(phoneNumber)
+                .build()
         }
     }
 }

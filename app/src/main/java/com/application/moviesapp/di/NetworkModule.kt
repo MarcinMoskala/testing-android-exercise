@@ -39,7 +39,9 @@ object NetworkModule {
     @Named("movies_retrofit_builder")
     fun providesRetrofitBuilder(): Retrofit.Builder {
         return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(Json{ ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(Json {
+                ignoreUnknownKeys = true
+            }.asConverterFactory("application/json".toMediaType()))
     }
 
     @Provides
@@ -51,7 +53,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesMoviesApi(@Named("movies_http_client") okHttpClient: OkHttpClient, @Named("movies_retrofit_builder") retrofitBuilder: Retrofit.Builder): MoviesApi {
+    fun providesMoviesApi(
+        @Named("movies_http_client") okHttpClient: OkHttpClient,
+        @Named("movies_retrofit_builder") retrofitBuilder: Retrofit.Builder
+    ): MoviesApi {
         return retrofitBuilder.client(okHttpClient).build().create(MoviesApi::class.java)
     }
 

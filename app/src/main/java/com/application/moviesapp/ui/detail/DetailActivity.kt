@@ -14,11 +14,11 @@ import com.application.moviesapp.base.BaseActivity
 import com.application.moviesapp.ui.theme.MoviesAppTheme
 import com.application.moviesapp.ui.viewmodel.DetailsViewModel
 import com.application.moviesapp.ui.viewmodel.ProfileViewModel
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 enum class IS_TYPE { Movie, TvSeries }
+
 @AndroidEntryPoint
 class DetailActivity : BaseActivity() {
 
@@ -48,6 +48,7 @@ class DetailActivity : BaseActivity() {
                 viewModel.getMovieDetail(intent.getIntExtra(ID, 0))
                 viewModel.getMovieTrailer(intent.getIntExtra(ID, 0))
             }
+
             IS_TYPE.TvSeries.name -> {
                 viewModel.getTvSeriesDetail(intent.getIntExtra(ID, 0))
                 viewModel.getTvSeriesTrailer(intent.getIntExtra(ID, 0))

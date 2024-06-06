@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EditProfileActivity: BaseActivity() {
+class EditProfileActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, EditProfileActivity::class.java)

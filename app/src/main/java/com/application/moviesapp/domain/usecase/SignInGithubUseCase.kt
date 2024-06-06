@@ -11,6 +11,8 @@ interface SignInGithubUseCase {
     operator fun invoke(activity: Activity?): Flow<Resource<AuthResult>>
 }
 
-class SignInGithubInteractor @Inject constructor(private val authRepository: AuthRepository): SignInGithubUseCase {
-    override operator fun invoke(activity: Activity?): Flow<Resource<AuthResult>> = authRepository.signIn(activity = activity)
+class SignInGithubInteractor @Inject constructor(private val authRepository: AuthRepository) :
+    SignInGithubUseCase {
+    override operator fun invoke(activity: Activity?): Flow<Resource<AuthResult>> =
+        authRepository.signIn(activity = activity)
 }

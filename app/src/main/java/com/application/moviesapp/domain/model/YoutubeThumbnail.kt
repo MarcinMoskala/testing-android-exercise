@@ -63,6 +63,7 @@ data class YoutubeThumbnail(
                     val url: String?,
                     val width: Int?
                 )
+
                 data class Medium(
                     val height: Int?,
                     val url: String?,

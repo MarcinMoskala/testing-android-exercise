@@ -69,11 +69,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NowPlayingMoviesScreen(modifier: Modifier = Modifier,
-                    uiState: MovieTopRatedUiState = MovieTopRatedUiState.Loading,
-                    moviesFlow: LazyPagingItems<MovieNowPlaying>,
-                    lazyGridState: LazyGridState = LazyGridState(),
-                    bottomPadding: PaddingValues = PaddingValues()
+fun NowPlayingMoviesScreen(
+    modifier: Modifier = Modifier,
+    uiState: MovieTopRatedUiState = MovieTopRatedUiState.Loading,
+    moviesFlow: LazyPagingItems<MovieNowPlaying>,
+    lazyGridState: LazyGridState = LazyGridState(),
+    bottomPadding: PaddingValues = PaddingValues()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -95,49 +96,69 @@ fun NowPlayingMoviesScreen(modifier: Modifier = Modifier,
         moviesFlow.refresh()
     }
 
-    Box(modifier = modifier
-        .fillMaxSize()
-        .padding(
-            top = bottomPadding.calculateTopPadding(),
-            bottom = bottomPadding.calculateBottomPadding()
-        ).pullRefresh(pullRefreshState)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                top = bottomPadding.calculateTopPadding(),
+                bottom = bottomPadding.calculateBottomPadding()
+            )
+            .pullRefresh(pullRefreshState)
+    ) {
         Column {
             if (moviesFlow.itemCount == 0) {
-                Column(modifier = modifier
-                    .fillMaxSize()
-                    .wrapContentSize(align = Alignment.Center),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .wrapContentSize(align = Alignment.Center),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
 
-                    Text(text = "Not found",
+                    Text(
+                        text = "Not found",
                         style = MaterialTheme.typography.displayMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                         modifier = modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center)
+                        textAlign = TextAlign.Center
+                    )
 
-                    Text(text = "Check you internet connection",
+                    Text(
+                        text = "Check you internet connection",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center)
+                        textAlign = TextAlign.Center
+                    )
 
-                    TextButton(onClick = {  }, modifier = modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally),) {
-                        Text(text = "Go to Downloads",
+                    TextButton(
+                        onClick = { },
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.CenterHorizontally),
+                    ) {
+                        Text(
+                            text = "Go to Downloads",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold)
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             } else {
-                LazyVerticalGrid(columns = GridCells.Fixed(2),
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     state = lazyGridState,
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)) {
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+                ) {
 
                     items(moviesFlow.itemCount) { index ->
-                        MovieImageCard(imageUrl = moviesFlow[index]?.posterPath ?: "", rating = moviesFlow[index]?.voteAverage.toString() ?: "", movieId = moviesFlow[index]?.id ?: 0)
+                        MovieImageCard(
+                            imageUrl = moviesFlow[index]?.posterPath ?: "",
+                            rating = moviesFlow[index]?.voteAverage.toString() ?: "",
+                            movieId = moviesFlow[index]?.id ?: 0
+                        )
                     }
                 }
             }
@@ -155,11 +176,18 @@ fun NowPlayingMoviesScreen(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "", rating: String = "", movieId: Int = 0) {
+private fun MovieImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "",
+    rating: String = "",
+    movieId: Int = 0
+) {
 
     val context = LocalContext.current
 
-    Card(shape = RoundedCornerShape(10), onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
+    Card(
+        shape = RoundedCornerShape(10),
+        onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -170,13 +198,22 @@ private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "",
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = modifier.height(250.dp))
+                modifier = modifier.height(250.dp)
+            )
 
-            Card(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.TopStart)
-                .padding(8.dp), shape = RoundedCornerShape(30), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(text = rating.toDoubleOrNull()?.toOneDecimal ?: "", modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            Card(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(30),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = rating.toDoubleOrNull()?.toOneDecimal ?: "",
+                    modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

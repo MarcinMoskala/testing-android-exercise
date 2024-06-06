@@ -67,17 +67,19 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
-                            onSignupClick: () -> Unit = {},
-                            onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
-                            onGithubSignInClick: () -> Unit = {},
-                            onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
-                            onSignInClick: (String?, String?) -> Unit = { _, _ ->},
-                            snackbarHostState: SnackbarHostState = SnackbarHostState(),
-                            onForgotPasswordClick: () -> Unit = { },
-                            email: String = "",
-                            onEmailChange: (String) -> Unit = { _ -> },
-                            loginUIState: OnboardUIState = OnboardUIState()) {
+fun LoginWithPasswordScreen(
+    modifier: Modifier = Modifier,
+    onSignupClick: () -> Unit = {},
+    onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ -> },
+    onGithubSignInClick: () -> Unit = {},
+    onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
+    onSignInClick: (String?, String?) -> Unit = { _, _ -> },
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    onForgotPasswordClick: () -> Unit = { },
+    email: String = "",
+    onEmailChange: (String) -> Unit = { _ -> },
+    loginUIState: OnboardUIState = OnboardUIState()
+) {
 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -104,10 +106,11 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
 
     LaunchedEffect(key1 = Unit) {
         onSocialSignIn?.collectLatest {
-            when(it) {
+            when (it) {
                 is Resource.Loading -> {
                     isLoading = true
                 }
+
                 is Resource.Failure -> {
                     isLoading = false
                     if (it.throwable is FirebaseAuthInvalidUserException) {
@@ -117,6 +120,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                         Timber.tag("Login").e(it.throwable)
                     }
                 }
+
                 is Resource.Success -> {
                     isLoading = false
                     Timber.tag("Login").d("Google Success")
@@ -133,11 +137,13 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
         }
     }
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween) {
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
         Image(
             painter = painterResource(id = R.drawable.ic_movie),
@@ -158,10 +164,11 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 email = email,
                 onEmailUpdate = onEmailChange,
                 focusManager = focusManager,
-                emailError = loginUIState.isEmailError)
+                emailError = loginUIState.isEmailError
+            )
 
             PasswordComponent(
-                password = password, 
+                password = password,
                 onPasswordUpdate = { password = it },
                 focusManager = focusManager,
                 passwordError = loginUIState.isPasswordError
@@ -169,10 +176,14 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = false, onCheckedChange = {})
-                Text(text = stringResource(id = R.string.remember_me), style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = stringResource(id = R.string.remember_me),
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
 
-            Button(onClick = { onSignInClick(email, password) },
+            Button(
+                onClick = { onSignInClick(email, password) },
                 modifier = modifier
                     .shadow(
                         elevation = 4.dp,
@@ -181,12 +192,21 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                         shape = RoundedCornerShape(50)
                     )
                     .fillMaxWidth(),
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)) {
+                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)
+            ) {
 
                 if (isLoading) {
-                    CircularProgressIndicator(modifier = modifier.size(30.dp), strokeWidth = 2.dp, trackColor = Color.White)
+                    CircularProgressIndicator(
+                        modifier = modifier.size(30.dp),
+                        strokeWidth = 2.dp,
+                        trackColor = Color.White
+                    )
                 } else {
-                    Text(text = stringResource(id = R.string.signin), color = colorResource(id = R.color.white), modifier = modifier.padding(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.signin),
+                        color = colorResource(id = R.color.white),
+                        modifier = modifier.padding(4.dp)
+                    )
                 }
             }
         }
@@ -195,39 +215,41 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
             Text(text = stringResource(R.string.forgot_the_password), fontWeight = FontWeight.Bold)
         }
 
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .wrapContentWidth(align = Alignment.CenterHorizontally),
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentWidth(align = Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Divider(modifier = modifier.weight(1f), color = Color.LightGray)
             Text(text = stringResource(id = R.string.or_continue_with))
             Divider(modifier = modifier.weight(1f), color = Color.LightGray)
         }
 
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .wrapContentWidth(align = Alignment.CenterHorizontally),
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentWidth(align = Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            SocialLoginComponent(
-                icon = R.drawable.ic_facebook,
-                onClick = {
-                    OnboardingActivity.loginManager.logInWithReadPermissions(context as ActivityResultRegistryOwner, OnboardingActivity.callbackManager, mutableListOf("email", "public_profile"))
-                })
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
 
             SocialLoginComponent(
                 icon = R.drawable.ic_google,
                 onClick = {
                     coroutineScope.launch {
                         val result = SignInGoogleInteractor.signIn(context)
-                        launcher.launch(IntentSenderRequest.Builder(result ?: return@launch).build())
+                        launcher.launch(
+                            IntentSenderRequest.Builder(result ?: return@launch).build()
+                        )
                     }
                 })
 
             SocialLoginComponent(
                 icon = R.drawable.ic_github,
-                onClick = onGithubSignInClick)
+                onClick = onGithubSignInClick
+            )
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {

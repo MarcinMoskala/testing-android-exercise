@@ -80,12 +80,13 @@ import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier,
-               uiState: Resource<MovieWithTvSeries> = Resource.Loading,
-               bottomPadding: PaddingValues = PaddingValues(),
-               goToDownloadClick: () -> Unit = {  }, 
-               goToMyListClick: (String, Int, Boolean) -> Unit = { _, _, _ ->  },
-               onMovieWithTvSeries: () -> Unit = {  },
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    uiState: Resource<MovieWithTvSeries> = Resource.Loading,
+    bottomPadding: PaddingValues = PaddingValues(),
+    goToDownloadClick: () -> Unit = { },
+    goToMyListClick: (String, Int, Boolean) -> Unit = { _, _, _ -> },
+    onMovieWithTvSeries: () -> Unit = { },
 ) {
 
     val context = LocalContext.current
@@ -111,54 +112,74 @@ fun HomeScreen(modifier: Modifier = Modifier,
     when (uiState) {
         is Resource.Loading -> {
             Column(modifier = modifier.fillMaxSize()) {
-                CircularProgressIndicator(modifier = modifier
-                    .fillMaxSize()
-                    .wrapContentSize(align = Alignment.Center))
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .wrapContentSize(align = Alignment.Center)
+                )
             }
         }
-        is Resource.Failure -> {
-            Column(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                Text(text = stringResource(R.string.not_found),
+        is Resource.Failure -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                Text(
+                    text = stringResource(R.string.not_found),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                     modifier = modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center
+                )
 
-                Text(text = stringResource(R.string.check_you_internet_connection),
+                Text(
+                    text = stringResource(R.string.check_you_internet_connection),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center
+                )
 
-                TextButton(onClick = goToDownloadClick, modifier = modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(align = Alignment.CenterHorizontally),) {
-                    Text(text = stringResource(R.string.go_to_downloads),
+                TextButton(
+                    onClick = goToDownloadClick,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(align = Alignment.CenterHorizontally),
+                ) {
+                    Text(
+                        text = stringResource(R.string.go_to_downloads),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold)
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }
+
         is Resource.Success -> {
 
             val pagerState = rememberPagerState { uiState.data.movies?.size ?: 0 }
 
             LaunchedEffect(pagerState) {
-                while(true) {
+                while (true) {
                     delay(5_000L)
-                    pagerState.animateScrollToPage(page = pagerState.currentPage.inc() % pagerState.pageCount, animationSpec = tween(2000))
+                    pagerState.animateScrollToPage(
+                        page = pagerState.currentPage.inc() % pagerState.pageCount,
+                        animationSpec = tween(2000)
+                    )
                 }
             }
 
-            Box(modifier = modifier
-                .fillMaxSize()
-                .padding(bottom = bottomPadding.calculateBottomPadding())
-                .pullRefresh(pullRefreshState)) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(bottom = bottomPadding.calculateBottomPadding())
+                    .pullRefresh(pullRefreshState)
+            ) {
                 Column {
                     HorizontalPager(state = pagerState) { index ->
 
@@ -194,7 +215,8 @@ fun HomeScreen(modifier: Modifier = Modifier,
                                 modifier = modifier
                                     .fillMaxSize()
                                     .wrapContentSize(align = Alignment.BottomStart)
-                                    .padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Text(
                                     text = titleImage?.title ?: "",
@@ -221,8 +243,17 @@ fun HomeScreen(modifier: Modifier = Modifier,
                                         )
                                         Text(text = stringResource(R.string.play))
                                     }
-                                    OutlinedButton(onClick = { goToMyListClick("movie", titleImage?.id ?: 0, true) }) {
-                                        Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+                                    OutlinedButton(onClick = {
+                                        goToMyListClick(
+                                            "movie",
+                                            titleImage?.id ?: 0,
+                                            true
+                                        )
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Add,
+                                            contentDescription = null
+                                        )
                                         Text(text = stringResource(R.string.my_list))
                                     }
                                 }
@@ -230,13 +261,19 @@ fun HomeScreen(modifier: Modifier = Modifier,
                         }
                     }
 
-                    Column(modifier = modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Row(modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Column(
+                        modifier = modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
                                 text = stringResource(R.string.now_playing_movies),
                                 style = MaterialTheme.typography.titleLarge,
@@ -252,15 +289,26 @@ fun HomeScreen(modifier: Modifier = Modifier,
                             }
                         }
 
-                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             items(uiState.data.movies ?: emptyList()) {
-                                MovieImageCard(imageUrl = it?.posterPath ?: "", rating = it?.voteAverage.toString() ?: "", movieId = it?.id)
+                                MovieImageCard(
+                                    imageUrl = it?.posterPath ?: "",
+                                    rating = it?.voteAverage.toString() ?: "",
+                                    movieId = it?.id
+                                )
                             }
                         }
 
-                        Row(modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
                                 text = stringResource(R.string.now_playing_series),
                                 style = MaterialTheme.typography.titleLarge,
@@ -276,9 +324,16 @@ fun HomeScreen(modifier: Modifier = Modifier,
                             }
                         }
 
-                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             items(uiState.data.tvSeries ?: emptyList()) {
-                                TvSeriesImageCard(imageUrl = it?.posterPath ?: "", rating = it?.voteAverage.toString() ?: "", tvSeriesId = it?.id)
+                                TvSeriesImageCard(
+                                    imageUrl = it?.posterPath ?: "",
+                                    rating = it?.voteAverage.toString() ?: "",
+                                    tvSeriesId = it?.id
+                                )
                             }
                         }
 
@@ -291,13 +346,20 @@ fun HomeScreen(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "", rating: String = "", movieId: Int? = null) {
+private fun MovieImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "",
+    rating: String = "",
+    movieId: Int? = null
+) {
 
     val context = LocalContext.current
 
     Timber.tag("Card").d(movieId.toString())
 
-    Card(shape = RoundedCornerShape(10), onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
+    Card(
+        shape = RoundedCornerShape(10),
+        onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.Movie, movieId) }) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -311,11 +373,19 @@ private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "",
                 modifier = modifier.size(height = 200.dp, width = 150.dp),
             )
 
-            Card(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.TopStart)
-                .padding(8.dp), shape = RoundedCornerShape(30), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(text = rating.toDoubleOrNull()?.toOneDecimal ?: "", modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            Card(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(30),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = rating.toDoubleOrNull()?.toOneDecimal ?: "",
+                    modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
@@ -323,13 +393,26 @@ private fun MovieImageCard(modifier: Modifier = Modifier, imageUrl: String = "",
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TvSeriesImageCard(modifier: Modifier = Modifier, imageUrl: String = "", rating: String = "", tvSeriesId: Int? = null) {
+private fun TvSeriesImageCard(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "",
+    rating: String = "",
+    tvSeriesId: Int? = null
+) {
 
     val context = LocalContext.current
 
     Timber.tag("Card").d(tvSeriesId.toString())
 
-    Card(shape = RoundedCornerShape(10), onClick = { DetailActivity.startActivity(context as Activity, IS_TYPE.TvSeries, tvSeriesId) }) {
+    Card(
+        shape = RoundedCornerShape(10),
+        onClick = {
+            DetailActivity.startActivity(
+                context as Activity,
+                IS_TYPE.TvSeries,
+                tvSeriesId
+            )
+        }) {
         Box {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -343,16 +426,23 @@ private fun TvSeriesImageCard(modifier: Modifier = Modifier, imageUrl: String = 
                 modifier = modifier.size(height = 200.dp, width = 150.dp),
             )
 
-            Card(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.TopStart)
-                .padding(8.dp), shape = RoundedCornerShape(30), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                Text(text = rating.toDoubleOrNull()?.toOneDecimal ?: "", modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            Card(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(30),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = rating.toDoubleOrNull()?.toOneDecimal ?: "",
+                    modifier = modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
 }
-
 
 
 @Preview(showBackground = true, showSystemUi = true)

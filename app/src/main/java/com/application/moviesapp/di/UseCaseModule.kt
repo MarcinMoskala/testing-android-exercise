@@ -23,7 +23,6 @@ import com.application.moviesapp.domain.usecase.GetMovieFavouriteInteractor
 import com.application.moviesapp.domain.usecase.GetAccountSetupInteractor
 import com.application.moviesapp.domain.usecase.GetMovieStateInteractor
 import com.application.moviesapp.domain.usecase.GetMovieTrailerInteractor
-import com.application.moviesapp.domain.usecase.GetSignInFacebookInteractor
 import com.application.moviesapp.domain.usecase.MovieDetailsUseCase
 import com.application.moviesapp.domain.usecase.MovieFavouriteUseCase
 import com.application.moviesapp.domain.usecase.AccountSetupUseCase
@@ -57,7 +56,6 @@ import com.application.moviesapp.domain.usecase.PasswordResetUseCase
 import com.application.moviesapp.domain.usecase.SettingsUseCase
 import com.application.moviesapp.domain.usecase.SignInEmailInteractor
 import com.application.moviesapp.domain.usecase.SignInEmailUseCase
-import com.application.moviesapp.domain.usecase.SignInFacebookUseCase
 import com.application.moviesapp.domain.usecase.SignInGithubInteractor
 import com.application.moviesapp.domain.usecase.SignInGithubUseCase
 import com.application.moviesapp.domain.usecase.SignInGoogleInteractor
@@ -121,7 +119,10 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun providesSignInGoogleUseCase(@Named("GoogleRepo") authRepository: AuthRepository, oneTapClient: SignInClient): SignInGoogleUseCase {
+    fun providesSignInGoogleUseCase(
+        @Named("GoogleRepo") authRepository: AuthRepository,
+        oneTapClient: SignInClient
+    ): SignInGoogleUseCase {
         return SignInGoogleInteractor(authRepository, oneTapClient)
     }
 
@@ -129,12 +130,6 @@ class UseCaseModule {
     @Singleton
     fun providesSignInGithubUseCase(@Named("GithubRepo") authRepository: AuthRepository): SignInGithubUseCase {
         return SignInGithubInteractor(authRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun providesSignInFacebookUseCase(@Named("FacebookRepo") authRepository: AuthRepository): SignInFacebookUseCase {
-        return GetSignInFacebookInteractor(authRepository)
     }
 
     @Provides
@@ -169,13 +164,19 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun providesMovieTrailerUseCase(moviesRepository: MoviesRepository, youtubeRepository: YoutubeRepository): MovieTrailerUseCase {
+    fun providesMovieTrailerUseCase(
+        moviesRepository: MoviesRepository,
+        youtubeRepository: YoutubeRepository
+    ): MovieTrailerUseCase {
         return GetMovieTrailerInteractor(moviesRepository, youtubeRepository)
     }
 
     @Provides
     @Singleton
-    fun providesTvSeriesTrailerUseCase(moviesRepository: MoviesRepository, youtubeRepository: YoutubeRepository): TvSeriesTrailerUseCase {
+    fun providesTvSeriesTrailerUseCase(
+        moviesRepository: MoviesRepository,
+        youtubeRepository: YoutubeRepository
+    ): TvSeriesTrailerUseCase {
         return GetTvSeriesTrailerInteractor(moviesRepository, youtubeRepository)
     }
 
@@ -200,8 +201,10 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun providesSetAccountSetupUseCase(userPreferenceRepository: UserPreferenceRepository,
-                                       accountSetupRepository: AccountSetupRepository): AccountSetupUseCase {
+    fun providesSetAccountSetupUseCase(
+        userPreferenceRepository: UserPreferenceRepository,
+        accountSetupRepository: AccountSetupRepository
+    ): AccountSetupUseCase {
         return GetAccountSetupInteractor(userPreferenceRepository, accountSetupRepository)
     }
 

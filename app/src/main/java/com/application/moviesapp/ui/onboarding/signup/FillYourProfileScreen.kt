@@ -70,12 +70,15 @@ import com.application.moviesapp.ui.utility.toImageUrl
 import timber.log.Timber
 
 private const val TAG = "FillYourProfileScreen"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FillYourProfileScreen(modifier: Modifier = Modifier,
-                          onContinueClick: (UserProfile) -> Unit = {  },
-                          onProfileClick: (Uri) -> Unit = { _ -> },
-                          profileUIState: Resource<Uri> = Resource.Loading) {
+fun FillYourProfileScreen(
+    modifier: Modifier = Modifier,
+    onContinueClick: (UserProfile) -> Unit = { },
+    onProfileClick: (Uri) -> Unit = { _ -> },
+    profileUIState: Resource<Uri> = Resource.Loading
+) {
 
     var fullName by remember { mutableStateOf("") }
     var nickName by remember { mutableStateOf("") }
@@ -101,21 +104,26 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         IconButton(onClick = { getContent.launch("image/*") }, modifier = modifier.size(200.dp)) {
 
             when (profileUIState) {
                 is Resource.Loading -> {
-                    Icon(imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = null,
-                    modifier = modifier.size(200.dp))
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = null,
+                        modifier = modifier.size(200.dp)
+                    )
                 }
 
                 is Resource.Failure -> {
-                    Icon(imageVector = Icons.Outlined.AccountCircle,
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
                         contentDescription = null,
-                        modifier = modifier.size(200.dp))
+                        modifier = modifier.size(200.dp)
+                    )
                 }
 
                 is Resource.Success -> {
@@ -134,8 +142,10 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
             }
         }
 
-        Column(modifier = modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             OutlinedTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
@@ -160,13 +170,18 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
                     keyboardType = KeyboardType.Text
                 ),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
-                )
+            )
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = stringResource(id = R.string.email)) },
-                trailingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = null) },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Email,
+                        contentDescription = null
+                    )
+                },
                 modifier = modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(30),
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -192,12 +207,14 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
             Box {
                 OutlinedTextField(
                     value = gender,
-                    onValueChange = {  },
+                    onValueChange = { },
                     label = { Text(text = stringResource(id = R.string.gender)) },
-                    trailingIcon = { Icon(
-                        imageVector = Icons.Rounded.ArrowDropDown,
-                        contentDescription = null
-                    ) },
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowDropDown,
+                            contentDescription = null
+                        )
+                    },
                     modifier = modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(30),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -210,8 +227,9 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
 
                 DropdownMenu(
                     expanded = interactionSource.collectIsFocusedAsState().value,
-                    onDismissRequest = {  },
-                    modifier = modifier) {
+                    onDismissRequest = { },
+                    modifier = modifier
+                ) {
 
                     DropdownMenuItem(
                         text = { Text(text = "Male") },
@@ -229,20 +247,35 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
             }
         }
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier
-                .shadow(
-                    elevation = 4.dp,
-                    ambientColor = MaterialTheme.colorScheme.outlineVariant,
-                    spotColor = MaterialTheme.colorScheme.outlineVariant,
-                    shape = RoundedCornerShape(50)
-                )
-                .weight(1f)) {
-                Text(text = stringResource(id = R.string.skip),  modifier = modifier.padding(4.dp))
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedButton(
+                onClick = { /*TODO*/ }, modifier = modifier
+                    .shadow(
+                        elevation = 4.dp,
+                        ambientColor = MaterialTheme.colorScheme.outlineVariant,
+                        spotColor = MaterialTheme.colorScheme.outlineVariant,
+                        shape = RoundedCornerShape(50)
+                    )
+                    .weight(1f)
+            ) {
+                Text(text = stringResource(id = R.string.skip), modifier = modifier.padding(4.dp))
             }
-            Button(onClick = { onContinueClick(UserProfile(fullName, nickName, email, phoneNumber.toLongOrNull() ?: 0L, gender)) },
+            Button(
+                onClick = {
+                    onContinueClick(
+                        UserProfile(
+                            fullName,
+                            nickName,
+                            email,
+                            phoneNumber.toLongOrNull() ?: 0L,
+                            gender
+                        )
+                    )
+                },
                 modifier = modifier
                     .shadow(
                         elevation = 4.dp,
@@ -250,8 +283,12 @@ fun FillYourProfileScreen(modifier: Modifier = Modifier,
                         spotColor = MaterialTheme.colorScheme.outlineVariant,
                         shape = RoundedCornerShape(50)
                     )
-                    .weight(1f)) {
-                Text(text = stringResource(id = R.string.continue_text),  modifier = modifier.padding(4.dp))
+                    .weight(1f)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.continue_text),
+                    modifier = modifier.padding(4.dp)
+                )
             }
         }
     }

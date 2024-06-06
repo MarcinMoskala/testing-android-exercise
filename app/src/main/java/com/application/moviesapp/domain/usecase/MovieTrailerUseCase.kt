@@ -13,8 +13,10 @@ interface MovieTrailerUseCase {
     suspend operator fun invoke(movieId: Int): Resource<List<MovieTrailerWithYoutube>>
 }
 
-class GetMovieTrailerInteractor @Inject constructor(private val moviesRepository: MoviesRepository,
-                                                    private val youtubeRepository: YoutubeRepository): MovieTrailerUseCase {
+class GetMovieTrailerInteractor @Inject constructor(
+    private val moviesRepository: MoviesRepository,
+    private val youtubeRepository: YoutubeRepository
+) : MovieTrailerUseCase {
 
     private companion object {
         const val TAG = "GetMovieTrailerInteractor"
@@ -40,7 +42,8 @@ class GetMovieTrailerInteractor @Inject constructor(private val moviesRepository
                             id = id,
                             title = snippet?.title,
                             duration = contentDetails?.duration,
-                            thumbnail = snippet?.thumbnails?.standard?.url)
+                            thumbnail = snippet?.thumbnails?.standard?.url
+                        )
                     }
 
                     trailer ?: MovieTrailerWithYoutube(null, null, null, null)

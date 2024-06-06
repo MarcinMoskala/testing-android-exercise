@@ -42,17 +42,25 @@ import com.application.moviesapp.ui.editprofile.EditProfileActivity
 import com.application.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
-fun DownloadScreen(modifier: Modifier = Modifier,
-                   paddingValues: PaddingValues = PaddingValues(),
-                   wifiRequired: SettingsPreference = SettingsPreference(true),
-                   updateWifiPreference: (Boolean) -> Unit = { _ -> },
-                   onDeleteDownloads: () -> Unit = { },
-                   onDeleteCache: () -> Unit = { }) {
+fun DownloadScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    wifiRequired: SettingsPreference = SettingsPreference(true),
+    updateWifiPreference: (Boolean) -> Unit = { _ -> },
+    onDeleteDownloads: () -> Unit = { },
+    onDeleteCache: () -> Unit = { }
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),) {
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            ),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         Row(
             modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -76,7 +84,7 @@ fun DownloadScreen(modifier: Modifier = Modifier,
 
             Text(text = "Smart Downloads", modifier = modifier.weight(1f))
 
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { }) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
@@ -91,7 +99,7 @@ fun DownloadScreen(modifier: Modifier = Modifier,
 
             Text(text = "Video Quality", modifier = modifier.weight(1f))
 
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { }) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
@@ -106,31 +114,63 @@ fun DownloadScreen(modifier: Modifier = Modifier,
 
             Text(text = "Audio Quality", modifier = modifier.weight(1f))
 
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { }) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
 
         Row(
-            modifier = modifier.fillMaxWidth().clickable(onClick = onDeleteDownloads, interactionSource = remember { MutableInteractionSource() }, indication = null).padding(vertical = 8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable(
+                    onClick = onDeleteDownloads,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                )
+                .padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Rounded.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
 
             Spacer(modifier = modifier.width(10.dp))
 
-            Text(text = "Delete All Downloads", modifier = modifier.weight(1f), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Delete All Downloads",
+                modifier = modifier.weight(1f),
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
+            )
         }
 
         Row(
-            modifier = modifier.fillMaxWidth().clickable(onClick = onDeleteCache, interactionSource = remember { MutableInteractionSource() }, indication = null).padding(vertical = 8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable(
+                    onClick = onDeleteCache,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                )
+                .padding(vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Rounded.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
 
             Spacer(modifier = modifier.width(10.dp))
 
-            Text(text = "Delete Cache", modifier = modifier.weight(1f), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Delete Cache",
+                modifier = modifier.weight(1f),
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
+            )
         }
 
     }

@@ -18,7 +18,8 @@ interface SettingsPreferenceRepository {
     suspend fun updatePreference(value: Boolean)
 }
 
-class SettingsPreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>): SettingsPreferenceRepository {
+class SettingsPreferenceImpl @Inject constructor(private val datastore: DataStore<Preferences>) :
+    SettingsPreferenceRepository {
     private object PreferenceKeys {
         val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
     }
@@ -32,7 +33,7 @@ class SettingsPreferenceImpl @Inject constructor(private val datastore: DataStor
                     throw exception
                 }
             }
-            .map {  preference ->
+            .map { preference ->
                 val isDarkMode = preference[PreferenceKeys.IS_DARK_MODE] ?: true
                 SettingsPreference(isDarkMode)
             }

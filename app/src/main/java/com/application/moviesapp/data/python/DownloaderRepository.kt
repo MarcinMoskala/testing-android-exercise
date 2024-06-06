@@ -14,13 +14,15 @@ interface DownloaderRepository {
     suspend fun mergeAudioVideo(videoUrl: String)
 }
 
-class DownloaderRepositoryImpl @Inject constructor(private val python: Python): DownloaderRepository {
+class DownloaderRepositoryImpl @Inject constructor(private val python: Python) :
+    DownloaderRepository {
     override suspend fun getTitle(videoUrl: String): String {
         return python.getModule("YoutubeDownloader").callAttr("video_title", videoUrl).toString()
     }
 
     override suspend fun getThumbnail(videoUrl: String): String {
-        return python.getModule("YoutubeDownloader").callAttr("video_thumbnail", videoUrl).toString()
+        return python.getModule("YoutubeDownloader").callAttr("video_thumbnail", videoUrl)
+            .toString()
     }
 
     override suspend fun getVideoStreams(videoUrl: String): String {

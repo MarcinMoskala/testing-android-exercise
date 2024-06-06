@@ -6,7 +6,8 @@ import okhttp3.Response
 import javax.inject.Inject
 import javax.inject.Named
 
-class NetworkInterceptor @Inject constructor(@Named("movies_api_key") private val apiKey: String): Interceptor {
+class NetworkInterceptor @Inject constructor(@Named("movies_api_key") private val apiKey: String) :
+    Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
         request.addHeader(name = "Authorization", value = "Bearer $apiKey")
@@ -14,7 +15,8 @@ class NetworkInterceptor @Inject constructor(@Named("movies_api_key") private va
     }
 }
 
-class YoutubeNetworkInterceptor @Inject constructor(@Named("youtube_api_key") private val apiKey: String): Interceptor {
+class YoutubeNetworkInterceptor @Inject constructor(@Named("youtube_api_key") private val apiKey: String) :
+    Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().url.newBuilder()
         request.addQueryParameter(name = "key", value = apiKey)

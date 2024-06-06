@@ -21,8 +21,10 @@ interface SignInGoogleUseCase {
     operator fun invoke(activity: Activity?, intent: Intent?): Flow<Resource<AuthResult>>
 }
 
-class SignInGoogleInteractor @Inject constructor(private val repository: AuthRepository,
-                                                 private val oneTapClient: SignInClient): SignInGoogleUseCase {
+class SignInGoogleInteractor @Inject constructor(
+    private val repository: AuthRepository,
+    private val oneTapClient: SignInClient
+) : SignInGoogleUseCase {
 
     companion object {
         private const val TAG = "SignInGoogleUse"
@@ -49,7 +51,8 @@ class SignInGoogleInteractor @Inject constructor(private val repository: AuthRep
                         .setSupported(true)
                         .setFilterByAuthorizedAccounts(false)
                         .setServerClientId(context.getString(R.string.web_client_id))
-                        .build())
+                        .build()
+                )
                 .setAutoSelectEnabled(true)
                 .build()
         }

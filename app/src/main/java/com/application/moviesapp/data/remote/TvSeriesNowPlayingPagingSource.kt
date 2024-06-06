@@ -7,7 +7,8 @@ import com.application.moviesapp.data.api.response.MovieNowPlayingDto
 import com.application.moviesapp.data.api.response.TvSeriesNowPlayingDto
 import com.application.moviesapp.domain.model.TvSeriesNowPlaying
 
-class TvSeriesNowPlayingPagingSource(private val moviesApi: MoviesApi): PagingSource<Int, TvSeriesNowPlayingDto.Result>() {
+class TvSeriesNowPlayingPagingSource(private val moviesApi: MoviesApi) :
+    PagingSource<Int, TvSeriesNowPlayingDto.Result>() {
     override fun getRefreshKey(state: PagingState<Int, TvSeriesNowPlayingDto.Result>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -29,7 +30,24 @@ class TvSeriesNowPlayingPagingSource(private val moviesApi: MoviesApi): PagingSo
             }
 
             LoadResult.Page(
-                data = movies?.results?.map { it ?: TvSeriesNowPlayingDto.Result(null, null, null, null, null, null, null, null, null, null, null, null, null, null)} ?: listOf(),
+                data = movies?.results?.map {
+                    it ?: TvSeriesNowPlayingDto.Result(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
+                } ?: listOf(),
                 prevKey = if (page == 1) null else page.minus(1),
                 nextKey = if (movies?.results?.isEmpty() == true) null else page.plus(1),
             )

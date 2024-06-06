@@ -62,15 +62,18 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private const val TAG = "EditProfileScreen"
+
 @Composable
-fun EditProfileScreen(modifier: Modifier = Modifier,
-                      paddingValues: PaddingValues = PaddingValues(),
-                      onContinueClick: (UserProfile) -> Unit = {  },
-                      onProfileClick: (Uri) -> Unit = { _ -> },
-                      profileUIState: Resource<Uri> = Resource.Loading,
-                      onProfileUpdated: () -> Unit = { },
-                      userDetailUIState: Resource<Member> = Resource.Loading,
-                      snackbarHostState: SnackbarHostState = SnackbarHostState()) {
+fun EditProfileScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    onContinueClick: (UserProfile) -> Unit = { },
+    onProfileClick: (Uri) -> Unit = { _ -> },
+    profileUIState: Resource<Uri> = Resource.Loading,
+    onProfileUpdated: () -> Unit = { },
+    userDetailUIState: Resource<Member> = Resource.Loading,
+    snackbarHostState: SnackbarHostState = SnackbarHostState()
+) {
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -117,10 +120,13 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
 
     when (userDetailUIState) {
         is Resource.Loading -> {
-            CircularProgressIndicator(modifier = modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center))
+            CircularProgressIndicator(
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center)
+            )
         }
+
         is Resource.Failure -> {
             Column(
                 modifier = modifier
@@ -132,21 +138,29 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                         bottom = 16.dp
                     ),
                 verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                IconButton(onClick = { getContent.launch("image/*") }, modifier = modifier.size(200.dp)) {
+                IconButton(
+                    onClick = { getContent.launch("image/*") },
+                    modifier = modifier.size(200.dp)
+                ) {
 
                     when (profileUIState) {
                         is Resource.Loading -> {
-                            Icon(painterResource(id = R.drawable.ic_image_placeholder),
+                            Icon(
+                                painterResource(id = R.drawable.ic_image_placeholder),
                                 contentDescription = null,
-                                modifier = modifier.size(200.dp))
+                                modifier = modifier.size(200.dp)
+                            )
                         }
 
                         is Resource.Failure -> {
-                            Icon(imageVector = Icons.Outlined.AccountCircle,
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
                                 contentDescription = null,
-                                modifier = modifier.size(200.dp))
+                                modifier = modifier.size(200.dp)
+                            )
                         }
 
                         is Resource.Success -> {
@@ -165,8 +179,10 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                     }
                 }
 
-                Column(modifier = modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     OutlinedTextField(
                         value = fullName,
                         onValueChange = { fullName = it },
@@ -177,7 +193,11 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Text
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = fullNameInteractionSource
                     )
 
@@ -191,7 +211,11 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Text
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = nickNameInteractionSource
                     )
 
@@ -199,14 +223,23 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                         value = email,
                         onValueChange = { email = it },
                         label = { Text(text = stringResource(id = R.string.email)) },
-                        trailingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = null) },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Email,
+                                contentDescription = null
+                            )
+                        },
                         modifier = modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(30),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = emailInteractionSource
                     )
 
@@ -220,19 +253,25 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Phone
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = phoneNumberInteractionSource
                     )
 
                     Box {
                         OutlinedTextField(
                             value = gender,
-                            onValueChange = {  },
+                            onValueChange = { },
                             label = { Text(text = stringResource(R.string.gender)) },
-                            trailingIcon = { Icon(
-                                imageVector = Icons.Rounded.ArrowDropDown,
-                                contentDescription = null
-                            ) },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            },
                             modifier = modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(30),
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -245,8 +284,9 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
 
                         DropdownMenu(
                             expanded = interactionSource.collectIsFocusedAsState().value,
-                            onDismissRequest = {  },
-                            modifier = modifier) {
+                            onDismissRequest = { },
+                            modifier = modifier
+                        ) {
 
                             DropdownMenuItem(
                                 text = { Text(text = "Male") },
@@ -264,24 +304,45 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                     }
                 }
 
-                Row(modifier = modifier.fillMaxWidth(),
+                Row(
+                    modifier = modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Button(onClick = { onContinueClick(UserProfile(fullName, nickName, email, phoneNumber.toLongOrNull() ?: 0L, gender)) }, modifier = modifier.weight(1f)) {
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Button(onClick = {
+                        onContinueClick(
+                            UserProfile(
+                                fullName,
+                                nickName,
+                                email,
+                                phoneNumber.toLongOrNull() ?: 0L,
+                                gender
+                            )
+                        )
+                    }, modifier = modifier.weight(1f)) {
                         Text(text = stringResource(R.string.update))
                     }
                 }
             }
         }
+
         is Resource.Success -> {
 
-            when  {
-                fullNameInteractionSource.collectIsFocusedAsState().value -> fullNameInteractionSourceClicked = true
-                nickNameInteractionSource.collectIsFocusedAsState().value -> nickNameInteractionSourceClicked = true
-                emailInteractionSource.collectIsFocusedAsState().value -> emailInteractionSourceClicked = true
-                phoneNumberInteractionSource.collectIsFocusedAsState().value -> phoneNumberInteractionSourceClicked = true
+            when {
+                fullNameInteractionSource.collectIsFocusedAsState().value -> fullNameInteractionSourceClicked =
+                    true
+
+                nickNameInteractionSource.collectIsFocusedAsState().value -> nickNameInteractionSourceClicked =
+                    true
+
+                emailInteractionSource.collectIsFocusedAsState().value -> emailInteractionSourceClicked =
+                    true
+
+                phoneNumberInteractionSource.collectIsFocusedAsState().value -> phoneNumberInteractionSourceClicked =
+                    true
+
                 else -> {
-                    when  {
+                    when {
                         !fullNameInteractionSourceClicked || !nickNameInteractionSourceClicked || !emailInteractionSourceClicked || !phoneNumberInteractionSourceClicked || !genderInteractionSourceClicked -> {
                             fullName = userDetailUIState.data.fullName
                             nickName = userDetailUIState.data.nickName
@@ -303,21 +364,29 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                         bottom = 16.dp
                     ),
                 verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                IconButton(onClick = { getContent.launch("image/*") }, modifier = modifier.size(200.dp)) {
+                IconButton(
+                    onClick = { getContent.launch("image/*") },
+                    modifier = modifier.size(200.dp)
+                ) {
 
                     when (profileUIState) {
                         is Resource.Loading -> {
-                            Icon(painterResource(id = R.drawable.ic_image_placeholder),
+                            Icon(
+                                painterResource(id = R.drawable.ic_image_placeholder),
                                 contentDescription = null,
-                                modifier = modifier.size(200.dp))
+                                modifier = modifier.size(200.dp)
+                            )
                         }
 
                         is Resource.Failure -> {
-                            Icon(imageVector = Icons.Outlined.AccountCircle,
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
                                 contentDescription = null,
-                                modifier = modifier.size(200.dp))
+                                modifier = modifier.size(200.dp)
+                            )
                         }
 
                         is Resource.Success -> {
@@ -336,8 +405,10 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                     }
                 }
 
-                Column(modifier = modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     OutlinedTextField(
                         value = fullName,
                         onValueChange = { fullName = it },
@@ -348,7 +419,11 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Text
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = fullNameInteractionSource
                     )
 
@@ -362,7 +437,11 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Text
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = nickNameInteractionSource
                     )
 
@@ -370,14 +449,23 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                         value = email,
                         onValueChange = { email = it },
                         label = { Text(text = stringResource(id = R.string.email)) },
-                        trailingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = null) },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Email,
+                                contentDescription = null
+                            )
+                        },
                         modifier = modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(30),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = emailInteractionSource
                     )
 
@@ -391,19 +479,25 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Phone
                         ),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                         interactionSource = phoneNumberInteractionSource
                     )
 
                     Box {
                         OutlinedTextField(
                             value = gender,
-                            onValueChange = {  },
+                            onValueChange = { },
                             label = { Text(text = stringResource(id = R.string.gender)) },
-                            trailingIcon = { Icon(
-                                imageVector = Icons.Rounded.ArrowDropDown,
-                                contentDescription = null
-                            ) },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            },
                             modifier = modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(30),
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -416,8 +510,9 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
 
                         DropdownMenu(
                             expanded = interactionSource.collectIsFocusedAsState().value,
-                            onDismissRequest = {  },
-                            modifier = modifier) {
+                            onDismissRequest = { },
+                            modifier = modifier
+                        ) {
 
                             DropdownMenuItem(
                                 text = { Text(text = "Male") },
@@ -435,17 +530,31 @@ fun EditProfileScreen(modifier: Modifier = Modifier,
                     }
                 }
 
-                Row(modifier = modifier.fillMaxWidth(),
+                Row(
+                    modifier = modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Button(onClick = {
-                        onContinueClick(UserProfile(fullName, nickName, email, phoneNumber.toLongOrNull() ?: 0L, gender))
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(message = context.getString(R.string.profile_updated), duration = SnackbarDuration.Short)
-                            focusManager.clearFocus()
-                            onProfileUpdated()
-                        }
-                                     },
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            onContinueClick(
+                                UserProfile(
+                                    fullName,
+                                    nickName,
+                                    email,
+                                    phoneNumber.toLongOrNull() ?: 0L,
+                                    gender
+                                )
+                            )
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.profile_updated),
+                                    duration = SnackbarDuration.Short
+                                )
+                                focusManager.clearFocus()
+                                onProfileUpdated()
+                            }
+                        },
                         modifier = modifier.weight(1f)
                     ) {
                         Text(text = stringResource(id = R.string.update))

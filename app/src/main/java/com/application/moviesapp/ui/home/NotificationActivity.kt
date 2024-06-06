@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NotificationActivity: BaseActivity() {
+class NotificationActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, NotificationActivity::class.java)

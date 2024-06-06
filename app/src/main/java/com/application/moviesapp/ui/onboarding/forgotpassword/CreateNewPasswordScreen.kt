@@ -44,11 +44,13 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
 
     val focusManager = LocalFocusManager.current
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween) {
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
         Image(
             painter = painterResource(id = R.drawable.ic_reset_password_two),
@@ -69,7 +71,7 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
 
             OutlinedTextField(
                 value = "",
-                onValueChange = {  },
+                onValueChange = { },
                 label = { Text(text = "Password") },
                 leadingIcon = {
                     Icon(imageVector = Icons.Rounded.Lock, contentDescription = null)
@@ -79,7 +81,8 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = modifier.size(24.dp),
                         imageVector = Icons.Rounded.VisibilityOff,
-                        contentDescription = null)
+                        contentDescription = null
+                    )
                 },
                 shape = RoundedCornerShape(30),
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -87,12 +90,15 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
                     keyboardType = KeyboardType.Password
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = Color.LightGray)
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = Color.LightGray
+                )
             )
 
             OutlinedTextField(
                 value = "",
-                onValueChange = {  },
+                onValueChange = { },
                 label = { Text(text = "Password") },
                 leadingIcon = {
                     Icon(imageVector = Icons.Rounded.Lock, contentDescription = null)
@@ -102,7 +108,8 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = modifier.size(24.dp),
                         imageVector = Icons.Rounded.VisibilityOff,
-                        contentDescription = null)
+                        contentDescription = null
+                    )
                 },
                 shape = RoundedCornerShape(30),
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -110,16 +117,24 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
                     keyboardType = KeyboardType.Password
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = Color.LightGray)
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = Color.LightGray
+                )
             )
 
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Checkbox(checked = false, onCheckedChange = {})
                 Text(text = "Remember me", style = MaterialTheme.typography.labelLarge)
             }
         }
 
-        Button(onClick = {  },
+        Button(
+            onClick = { },
             modifier = modifier
                 .shadow(
                     elevation = 4.dp,
@@ -128,10 +143,13 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier) {
                     shape = RoundedCornerShape(50)
                 )
                 .fillMaxWidth()
-                .requiredHeight(50.dp)) {
+                .requiredHeight(50.dp)
+        ) {
 
-            Text(text = "Continue",
-                modifier = modifier.padding(4.dp))
+            Text(
+                text = "Continue",
+                modifier = modifier.padding(4.dp)
+            )
         }
     }
 }

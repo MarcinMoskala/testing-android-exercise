@@ -49,9 +49,16 @@ import com.application.moviesapp.ui.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun DownloadApp(modifier: Modifier = Modifier, profileViewModel: ProfileViewModel = hiltViewModel()) {
+fun DownloadApp(
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
 
-    val wifiRequiredUIState by profileViewModel.isWifiRequired.collectAsState(initial = SettingsPreference(true))
+    val wifiRequiredUIState by profileViewModel.isWifiRequired.collectAsState(
+        initial = SettingsPreference(
+            true
+        )
+    )
 
     val coroutineScope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
@@ -62,7 +69,7 @@ fun DownloadApp(modifier: Modifier = Modifier, profileViewModel: ProfileViewMode
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
                 onNegativeClick = { showBottomSheet = BottomSheet.Default },
-                onPositiveClick = {   },
+                onPositiveClick = { },
                 contentSheet = { onNegativeClick, onPositiveClick ->
 
                     BottomSheetDeleteDownloadsContent(
@@ -71,11 +78,12 @@ fun DownloadApp(modifier: Modifier = Modifier, profileViewModel: ProfileViewMode
                     )
                 })
         }
+
         BottomSheet.DeleteCache -> {
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
                 onNegativeClick = { showBottomSheet = BottomSheet.Default },
-                onPositiveClick = {  },
+                onPositiveClick = { },
                 contentSheet = { onNegativeClick, onPositiveClick ->
 
                     BottomSheetDeleteCacheContent(
@@ -106,11 +114,12 @@ enum class BottomSheet {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomSheet(modifier: Modifier = Modifier,
-                        onDismiss: () -> Unit = {},
-                        onNegativeClick: () -> Unit = {},
-                        onPositiveClick: () -> Unit = {},
-                        contentSheet: @Composable (onNegativeClick: () -> Unit, onPositiveClick: () -> Unit) -> Unit = { _, _ -> }
+private fun BottomSheet(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    onNegativeClick: () -> Unit = {},
+    onPositiveClick: () -> Unit = {},
+    contentSheet: @Composable (onNegativeClick: () -> Unit, onPositiveClick: () -> Unit) -> Unit = { _, _ -> }
 ) {
 
     val bottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -136,38 +145,54 @@ private fun BottomSheet(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetDeleteDownloadsContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}) {
-    Column(modifier = modifier
-        .padding(16.dp)
-        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Delete All Downloads",
+private fun BottomSheetDeleteDownloadsContent(
+    modifier: Modifier = Modifier,
+    onNegativeClick: () -> Unit = { },
+    onPositiveClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "Delete All Downloads",
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
 
         Divider()
 
-        Text(text = "Are you sure you want to delete all downloads?",
+        Text(
+            text = "Are you sure you want to delete all downloads?",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth())
+            modifier = modifier.fillMaxWidth()
+        )
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            OutlinedButton(
+                onClick = onNegativeClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(id = R.string.cancel))
             }
 
-            Button(onClick = onPositiveClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            Button(
+                onClick = onPositiveClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = "Yes")
             }
         }
@@ -177,45 +202,59 @@ private fun BottomSheetDeleteDownloadsContent(modifier: Modifier = Modifier, onN
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetDeleteCacheContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}) {
-    Column(modifier = modifier
-        .padding(16.dp)
-        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Delete cache",
+private fun BottomSheetDeleteCacheContent(
+    modifier: Modifier = Modifier,
+    onNegativeClick: () -> Unit = { },
+    onPositiveClick: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "Delete cache",
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
 
         Divider()
 
-        Text(text = "Are you sure you want to delete cache?",
+        Text(
+            text = "Are you sure you want to delete cache?",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth())
+            modifier = modifier.fillMaxWidth()
+        )
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            OutlinedButton(
+                onClick = onNegativeClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = stringResource(id = R.string.cancel))
             }
 
-            Button(onClick = onPositiveClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            Button(
+                onClick = onPositiveClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp)
+            ) {
                 Text(text = "Yes")
             }
         }
     }
 }
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -228,8 +267,13 @@ private fun DownloadTopAppbar(modifier: Modifier = Modifier) {
         title = { Text(text = "Download") },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
 }

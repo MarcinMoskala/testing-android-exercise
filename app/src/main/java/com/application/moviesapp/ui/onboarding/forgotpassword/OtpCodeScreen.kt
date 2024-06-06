@@ -45,11 +45,16 @@ fun OtpCodeScreen(modifier: Modifier = Modifier) {
     var smsCode by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        Column(modifier = modifier.fillMaxSize()
-            .wrapContentSize(align = Alignment.Center),
+    Box(modifier = modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp)) {
+            verticalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
 
             Text(
                 text = "Code has been sent to 9180******",
@@ -58,7 +63,10 @@ fun OtpCodeScreen(modifier: Modifier = Modifier) {
                 modifier = modifier.fillMaxWidth()
             )
 
-            Row(modifier = modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = modifier.padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 BasicTextField(
                     value = smsCode,
                     onValueChange = {
@@ -99,7 +107,8 @@ fun OtpCodeScreen(modifier: Modifier = Modifier) {
                                         )
                                         .padding(2.dp),
                                     style = androidx.compose.material.MaterialTheme.typography.h4,
-                                    textAlign = TextAlign.Center)
+                                    textAlign = TextAlign.Center
+                                )
 
                                 Spacer(modifier = modifier.width(16.dp))
                             }
@@ -116,19 +125,27 @@ fun OtpCodeScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        Button(onClick = {  },
-            modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.BottomCenter)
+        Button(
+            onClick = { },
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.BottomCenter)
                 .shadow(
                     elevation = 4.dp,
                     ambientColor = MaterialTheme.colorScheme.outlineVariant,
                     spotColor = MaterialTheme.colorScheme.outlineVariant,
                     shape = RoundedCornerShape(50)
                 )
-                .requiredHeight(50.dp)) {
+                .requiredHeight(50.dp)
+        ) {
 
-            Text(text = "Verify",
-                modifier = modifier.fillMaxWidth().padding(4.dp),
-                textAlign = TextAlign.Center)
+            Text(
+                text = "Verify",
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

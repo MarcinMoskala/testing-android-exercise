@@ -32,10 +32,12 @@ import com.application.moviesapp.ui.theme.MoviesAppTheme
 import java.util.Locale
 
 @Composable
-fun LanguageScreen(modifier: Modifier = Modifier,
-                   paddingValues: PaddingValues = PaddingValues(),
-                   languageUIState: LanguagePreference = LanguagePreference(""),
-                   onLanguageClick: (String) -> Unit = { _ -> }) {
+fun LanguageScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    languageUIState: LanguagePreference = LanguagePreference(""),
+    onLanguageClick: (String) -> Unit = { _ -> }
+) {
 
     var languageChanged by remember {
         mutableStateOf(false)
@@ -50,11 +52,16 @@ fun LanguageScreen(modifier: Modifier = Modifier,
                 end = 16.dp,
                 bottom = 16.dp
             ),
-        verticalArrangement = Arrangement.spacedBy(8.dp),) {
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             itemsIndexed(language) { index, it ->
-                Text(text = it.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = it.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
 
                 it.language.forEachIndexed { lanIndex, lan ->
                     Row(
@@ -62,14 +69,18 @@ fun LanguageScreen(modifier: Modifier = Modifier,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        Text(text = lan, modifier = modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = lan,
+                            modifier = modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
 
                         RadioButton(
-                            selected = languageUIState.language ==  lan,
+                            selected = languageUIState.language == lan,
                             onClick = {
                                 onLanguageClick(lan)
                                 languageChanged = true
-                        })
+                            })
                     }
                 }
 

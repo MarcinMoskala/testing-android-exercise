@@ -71,25 +71,31 @@ import timber.log.Timber
 import java.io.File
 
 @Composable
-fun DownloadScreen(modifier: Modifier = Modifier,
-                   downloadUiState: DownloadsUiState = DownloadsUiState(),
-                   lazyListState: LazyListState = LazyListState(),
-                   bottomPadding: PaddingValues = PaddingValues(),
-                   onDeleteClick: (MovieDownloadEntity) -> Unit = { _ ->  }) {
+fun DownloadScreen(
+    modifier: Modifier = Modifier,
+    downloadUiState: DownloadsUiState = DownloadsUiState(),
+    lazyListState: LazyListState = LazyListState(),
+    bottomPadding: PaddingValues = PaddingValues(),
+    onDeleteClick: (MovieDownloadEntity) -> Unit = { _ -> }
+) {
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .wrapContentSize(align = Alignment.Center)
-        .padding(
-            top = bottomPadding.calculateTopPadding(),
-            bottom = bottomPadding.calculateBottomPadding()
-        ),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(align = Alignment.Center)
+            .padding(
+                top = bottomPadding.calculateTopPadding(),
+                bottom = bottomPadding.calculateBottomPadding()
+            ),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         if (downloadUiState.data.isEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = modifier.padding(32.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier.padding(32.dp)
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_download_empty),
                     contentDescription = null,
@@ -100,25 +106,30 @@ fun DownloadScreen(modifier: Modifier = Modifier,
                     contentScale = ContentScale.Crop,
                 )
 
-                Text(text = stringResource(R.string.you_downloaded_nothing),
+                Text(
+                    text = stringResource(R.string.you_downloaded_nothing),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = modifier
                         .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally))
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
+                )
 
-                Text(text = stringResource(R.string.it_seems_you_haven_t_downloaded_any_movies_or_series),
+                Text(
+                    text = stringResource(R.string.it_seems_you_haven_t_downloaded_any_movies_or_series),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = modifier
                         .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally))
+                        .wrapContentWidth(align = Alignment.CenterHorizontally)
+                )
             }
         } else {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 state = lazyListState,
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp)) {
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+            ) {
 
                 items(downloadUiState.data) {
                     DownloadCard(movie = it, onDeleteClick = onDeleteClick)
@@ -131,39 +142,60 @@ fun DownloadScreen(modifier: Modifier = Modifier,
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun DownloadCard(modifier: Modifier = Modifier,
-                         movie: MovieDownloadEntity? = null,
-                         onDeleteClick: (MovieDownloadEntity) -> Unit = { _ -> }
+private fun DownloadCard(
+    modifier: Modifier = Modifier,
+    movie: MovieDownloadEntity? = null,
+    onDeleteClick: (MovieDownloadEntity) -> Unit = { _ -> }
 ) {
 
     val context = LocalContext.current
 
-    Card(onClick = { PlayActivity.startActivity(activity = context as Activity, videoTitle = movie?.title, filePath = movie?.filePath, videoId = null, fromScreen = Screen.Download) },
+    Card(
+        onClick = {
+            PlayActivity.startActivity(
+                activity = context as Activity,
+                videoTitle = movie?.title,
+                filePath = movie?.filePath,
+                videoId = null,
+                fromScreen = Screen.Download
+            )
+        },
         shape = RoundedCornerShape(20),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Card(modifier = modifier.size(height = 110.dp, width = 140.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Card(
+                modifier = modifier.size(height = 110.dp, width = 140.dp),
                 shape = RoundedCornerShape(20)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    AsyncImage(model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(movie?.backdropPath ?: "")
-                        .crossfade(true)
-                        .build(),
+                    AsyncImage(
+                        model = ImageRequest.Builder(context = LocalContext.current)
+                            .data(movie?.backdropPath ?: "")
+                            .crossfade(true)
+                            .build(),
                         placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxSize(),
-                        contentScale = ContentScale.Crop)
-                    Icon(imageVector = Icons.Rounded.PlayCircle, contentDescription = null, tint = Color.White)
+                        contentScale = ContentScale.Crop
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.PlayCircle,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
                 }
             }
 
-            Column(modifier = modifier.weight(1f),
-                verticalArrangement = Arrangement.SpaceEvenly) {
+            Column(
+                modifier = modifier.weight(1f),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
                 Text(
                     text = movie?.title ?: "",
                     style = MaterialTheme.typography.titleSmall,
@@ -172,23 +204,39 @@ private fun DownloadCard(modifier: Modifier = Modifier,
                 )
 
                 Text(
-                    text = movie?.runtime ?: movie?.filePath?.getVideoDuration(context as Activity) ?: "",
+                    text = movie?.runtime ?: movie?.filePath?.getVideoDuration(context as Activity)
+                    ?: "",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                    Card(modifier = modifier.border(width = 1.dp, color = MaterialTheme.colorScheme.primary, shape = CardDefaults.shape)) {
-                        Text(text = "${movie?.filePath?.getFileSize(context)} MB",
+                    Card(
+                        modifier = modifier.border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = CardDefaults.shape
+                        )
+                    ) {
+                        Text(
+                            text = "${movie?.filePath?.getFileSize(context)} MB",
                             style = MaterialTheme.typography.bodySmall,
                             modifier = modifier.padding(8.dp),
-                            color = MaterialTheme.colorScheme.onSecondary)
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
                     }
 
                     Spacer(modifier = modifier.weight(1f))
 
                     IconButton(onClick = { onDeleteClick(movie ?: return@IconButton) }) {
-                        Icon(imageVector = Icons.Outlined.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
             }

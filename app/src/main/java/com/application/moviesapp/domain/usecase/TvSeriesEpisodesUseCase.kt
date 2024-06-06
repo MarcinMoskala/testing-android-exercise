@@ -12,7 +12,8 @@ interface TvSeriesEpisodesUseCase {
     suspend operator fun invoke(seriesId: Int, seasonNumber: Int): Resource<TvSeriesEpisodes>
 }
 
-class GetTvSeriesEpisodesUseCase(private val repository: MoviesRepository): TvSeriesEpisodesUseCase {
+class GetTvSeriesEpisodesUseCase(private val repository: MoviesRepository) :
+    TvSeriesEpisodesUseCase {
 
     private companion object {
         const val TAG = "GetTvSeriesEpisodesUseCase"
@@ -25,7 +26,7 @@ class GetTvSeriesEpisodesUseCase(private val repository: MoviesRepository): TvSe
             val result = repository.getTvSeriesEpisodes(seriesId, seasonNumber)
 
             if (result.isSuccessful) {
-                val episodes = result.body()?.toTvSeries()  ?: TvSeriesEpisodes(null)
+                val episodes = result.body()?.toTvSeries() ?: TvSeriesEpisodes(null)
                 Timber.tag(TAG).d(episodes.toString())
                 Resource.Success(data = episodes)
             } else if (result.code() == 400 || result.code() == 401 || result.code() == 404) {

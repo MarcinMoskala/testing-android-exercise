@@ -23,7 +23,8 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun providesSignInClient(@ApplicationContext context: Context) = Identity.getSignInClient(context)
+    fun providesSignInClient(@ApplicationContext context: Context) =
+        Identity.getSignInClient(context)
 
     @Provides
     @Singleton

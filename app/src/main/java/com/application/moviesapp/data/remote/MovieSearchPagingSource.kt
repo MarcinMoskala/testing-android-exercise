@@ -7,7 +7,8 @@ import com.application.moviesapp.data.api.response.MovieNowPlayingDto
 import com.application.moviesapp.data.api.response.MovieSearchDto
 import timber.log.Timber
 
-class MovieSearchPagingSource(private val moviesApi: MoviesApi, private val search: String): PagingSource<Int, MovieSearchDto.Result>() {
+class MovieSearchPagingSource(private val moviesApi: MoviesApi, private val search: String) :
+    PagingSource<Int, MovieSearchDto.Result>() {
 
     private companion object {
         const val TAG = "MovieSearchPagingSource"
@@ -34,7 +35,24 @@ class MovieSearchPagingSource(private val moviesApi: MoviesApi, private val sear
             }
 
             LoadResult.Page(
-                data = movies?.results?.map { it ?: MovieSearchDto.Result(null, null, null, null, null, null, null, null, null, null, null, null, null, null)} ?: listOf(),
+                data = movies?.results?.map {
+                    it ?: MovieSearchDto.Result(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
+                } ?: listOf(),
                 prevKey = if (page == 1) null else page.minus(1),
                 nextKey = if (movies?.results?.isEmpty() == true) null else page.plus(1),
             )

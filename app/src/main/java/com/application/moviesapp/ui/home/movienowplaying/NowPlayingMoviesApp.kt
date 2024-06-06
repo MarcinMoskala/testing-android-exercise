@@ -54,7 +54,10 @@ import com.application.moviesapp.ui.viewmodel.MovieTopRatedUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NowPlayingMoviesApp(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = hiltViewModel()) {
+fun NowPlayingMoviesApp(
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = hiltViewModel()
+) {
 
     val uiState: MovieTopRatedUiState by homeViewModel.movieTopRatedUiState.collectAsState()
     val moviesFlow = homeViewModel.nowPlayingMoviesPagingFlow().collectAsLazyPagingItems()
@@ -69,7 +72,13 @@ fun NowPlayingMoviesApp(modifier: Modifier = Modifier, homeViewModel: HomeViewMo
     Scaffold(
         topBar = { TopMoviesTopAppbar(upcomingHideTopAppBar) }
     ) { paddingValues ->
-        NowPlayingMoviesScreen(modifier = modifier, uiState = uiState, moviesFlow = moviesFlow, lazyGridState = upcomingScrollState, bottomPadding = paddingValues)
+        NowPlayingMoviesScreen(
+            modifier = modifier,
+            uiState = uiState,
+            moviesFlow = moviesFlow,
+            lazyGridState = upcomingScrollState,
+            bottomPadding = paddingValues
+        )
     }
 }
 
@@ -91,15 +100,20 @@ private fun TopMoviesTopAppbar(upcomingHideTopAppBar: Boolean) {
     AnimatedVisibility(
         visible = upcomingHideTopAppBar,
         enter = slideInVertically(animationSpec = tween(durationMillis = 200)),
-        exit = slideOutVertically(animationSpec = tween(durationMillis = 200))) {
+        exit = slideOutVertically(animationSpec = tween(durationMillis = 200))
+    ) {
 
         TopAppBar(
             title = {
                 if (!onSearchClick) {
-                    Text(text = stringResource(id = R.string.now_playing_movies), fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = stringResource(id = R.string.now_playing_movies),
+                        fontWeight = FontWeight.SemiBold
+                    )
                 } else {
-                    OutlinedTextField(value = "",
-                        onValueChange = {  },
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
                         modifier = Modifier
                             .height(64.dp)
                             .fillMaxWidth()
@@ -107,8 +121,16 @@ private fun TopMoviesTopAppbar(upcomingHideTopAppBar: Boolean) {
                             .focusRequester(focusRequest),
                         interactionSource = interactionSource,
                         shape = RoundedCornerShape(30),
-                        textStyle = TextStyle(fontSize = MaterialTheme.typography.bodyLarge.fontSize, lineHeight = MaterialTheme.typography.bodyLarge.lineHeight),
-                        trailingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
+                        textStyle = TextStyle(
+                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                        ),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = null
+                            )
+                        },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() })
                     )
@@ -121,8 +143,10 @@ private fun TopMoviesTopAppbar(upcomingHideTopAppBar: Boolean) {
             navigationIcon = {
                 if (!onSearchClick) {
                     IconButton(onClick = { (context as Activity).finish() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 }
             },

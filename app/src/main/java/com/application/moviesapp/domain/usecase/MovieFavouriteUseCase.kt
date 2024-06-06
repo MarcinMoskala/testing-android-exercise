@@ -13,15 +13,17 @@ interface MovieFavouriteUseCase {
     operator fun invoke(): Flow<PagingData<MovieFavourite>>
 }
 
-class GetMovieFavouriteInteractor @Inject constructor(private val repository: MoviesRepository): MovieFavouriteUseCase {
+class GetMovieFavouriteInteractor @Inject constructor(private val repository: MoviesRepository) :
+    MovieFavouriteUseCase {
 
     private companion object {
         const val TAG = "GetMovieFavouriteInteractor"
     }
 
-    override fun invoke(): Flow<PagingData<MovieFavourite>> = repository.getFavouriteMoviesPagingFlow().map {
-        it.map { movie ->
-            movie.toMovie()
+    override fun invoke(): Flow<PagingData<MovieFavourite>> =
+        repository.getFavouriteMoviesPagingFlow().map {
+            it.map { movie ->
+                movie.toMovie()
+            }
         }
-    }
 }

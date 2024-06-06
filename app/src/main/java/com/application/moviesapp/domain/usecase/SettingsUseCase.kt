@@ -10,7 +10,8 @@ interface SettingsUseCase {
     suspend fun updatePreference(value: Boolean)
 }
 
-class GetSettingsInteractor @Inject constructor(private val repository: SettingsPreferenceRepository): SettingsUseCase {
+class GetSettingsInteractor @Inject constructor(private val repository: SettingsPreferenceRepository) :
+    SettingsUseCase {
     override val readFlow: Flow<SettingsPreference>
         get() = repository.readPreference
 

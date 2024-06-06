@@ -10,7 +10,8 @@ interface WifiUseCase {
     suspend fun updatePreference(value: Boolean)
 }
 
-class GetWifiInteractor @Inject constructor(private val repository: SettingsPreferenceRepository): WifiUseCase {
+class GetWifiInteractor @Inject constructor(private val repository: SettingsPreferenceRepository) :
+    WifiUseCase {
     override val readFlow: Flow<SettingsPreference>
         get() = repository.readPreference
 

@@ -34,56 +34,72 @@ fun SetYourFingerprintScreen(modifier: Modifier = Modifier, onContinueClick: () 
 
     val context = LocalContext.current
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(50.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(50.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-        Text(text = "Add a fingerprint to make your account more secure",
+        Text(
+            text = "Add a fingerprint to make your account more secure",
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp),
-            textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center
+        )
 
         Spacer(modifier = modifier.weight(1f))
 
         IconButton(onClick = { /*TODO*/ }, modifier = modifier.size(250.dp)) {
-            Icon(imageVector = Icons.Outlined.Fingerprint,
+            Icon(
+                imageVector = Icons.Outlined.Fingerprint,
                 contentDescription = null,
                 modifier = modifier.size(250.dp),
-                tint = MaterialTheme.colorScheme.primary)
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
 
         Spacer(modifier = modifier.weight(1f))
 
-        Text(text = "Please put your finger on the fingerprint scanner to get started.",
+        Text(
+            text = "Please put your finger on the fingerprint scanner to get started.",
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp),
-            textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center
+        )
 
 
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            OutlinedButton(onClick = { /*TODO*/ },
-                modifier =  modifier
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OutlinedButton(
+                onClick = { /*TODO*/ },
+                modifier = modifier
                     .shadow(
                         elevation = 4.dp,
                         ambientColor = MaterialTheme.colorScheme.outlineVariant,
                         spotColor = MaterialTheme.colorScheme.outlineVariant,
                         shape = RoundedCornerShape(50)
                     )
-                    .weight(1f)) {
-                Text(text = "Skip",  modifier = modifier.padding(4.dp))
+                    .weight(1f)
+            ) {
+                Text(text = "Skip", modifier = modifier.padding(4.dp))
             }
-            Button(onClick = onContinueClick,
-                modifier =  modifier
+            Button(
+                onClick = onContinueClick,
+                modifier = modifier
                     .shadow(
                         elevation = 4.dp,
                         ambientColor = MaterialTheme.colorScheme.outlineVariant,
                         spotColor = MaterialTheme.colorScheme.outlineVariant,
                         shape = RoundedCornerShape(50)
-                    ).weight(1f)) {
-                Text(text = "Continue",  modifier = modifier.padding(4.dp))
+                    )
+                    .weight(1f)
+            ) {
+                Text(text = "Continue", modifier = modifier.padding(4.dp))
             }
         }
     }

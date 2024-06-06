@@ -32,10 +32,22 @@ import retrofit2.http.Query
 
 interface MoviesApi {
     @GET("/3/discover/movie")
-    suspend fun getDiscoverMoviesList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1, @Query("with_genres") genres: String = "", @Query("sort_by") sortBy: String = SORT_BY.POPULARITY.title, @Query("include_adult") includeAdult: Boolean = false): Response<MoviesDiscoverDto>
+    suspend fun getDiscoverMoviesList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("with_genres") genres: String = "",
+        @Query("sort_by") sortBy: String = SORT_BY.POPULARITY.title,
+        @Query("include_adult") includeAdult: Boolean = false
+    ): Response<MoviesDiscoverDto>
 
     @GET("/3/discover/tv")
-    suspend fun getDiscoverTvSeriesList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1, @Query("with_genres") genres: String = "", @Query("sort_by") sortBy: String = SORT_BY.POPULARITY.title, @Query("include_adult") includeAdult: Boolean = false): Response<TvSeriesDiscoverDto>
+    suspend fun getDiscoverTvSeriesList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("with_genres") genres: String = "",
+        @Query("sort_by") sortBy: String = SORT_BY.POPULARITY.title,
+        @Query("include_adult") includeAdult: Boolean = false
+    ): Response<TvSeriesDiscoverDto>
 
     @GET("/3/genre/movie/list")
     suspend fun getMoviesGenreList(): MovieGenreResponse
@@ -47,16 +59,28 @@ interface MoviesApi {
     suspend fun getTVSeriesGenres(): Response<MovieGenreResponse>
 
     @GET("/3/movie/now_playing")
-    suspend fun getNewReleasesList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1): MovieNewReleasesDto
+    suspend fun getNewReleasesList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): MovieNewReleasesDto
 
     @GET("/3/movie/now_playing")
-    suspend fun getNowPlayingMovieList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1): Response<MovieNowPlayingDto>
+    suspend fun getNowPlayingMovieList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<MovieNowPlayingDto>
 
     @GET("/3/tv/airing_today")
-    suspend fun getNowPlayingSeriesList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1): Response<TvSeriesNowPlayingDto>
+    suspend fun getNowPlayingSeriesList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<TvSeriesNowPlayingDto>
 
     @GET("/3/movie/upcoming")
-    suspend fun getMovieUpcomingList(@Query("language") language: String = "en-US", @Query("page") page: Int = 1): MovieUpcomingDto
+    suspend fun getMovieUpcomingList(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): MovieUpcomingDto
 
     @GET("/3/movie/top_rated")
     suspend fun getMovieTopRated(): MovieTopRatedResponse
@@ -68,22 +92,40 @@ interface MoviesApi {
     suspend fun getCountries(): List<CountryResponse>
 
     @GET("/3/search/movie")
-    suspend fun getSearch(@Query("query") query: String, @Query("include_adult") includeAdult: Boolean = false, @Query("language") language: String = "en-US", @Query("page") page: Int = 1): MovieSimpleResponse
+    suspend fun getSearch(
+        @Query("query") query: String,
+        @Query("include_adult") includeAdult: Boolean = false,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): MovieSimpleResponse
 
     @GET("/3/movie/{movie_id}")
-    suspend fun getMovieDetailsById(@Path("movie_id") movieId: Int, @Query("language") language: String = "en-US"): Response<MovieDetailsDto>
+    suspend fun getMovieDetailsById(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = "en-US"
+    ): Response<MovieDetailsDto>
 
     @GET("/3/tv/{series_id}")
-    suspend fun getTvSeriesDetailsId(@Path("series_id") seriesId: Int, @Query("language") language: String = "en-US"): Response<TvSeriesDetailsDto>
+    suspend fun getTvSeriesDetailsId(
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String = "en-US"
+    ): Response<TvSeriesDetailsDto>
 
     @GET("/3/movie/{movie_id}/credits")
     suspend fun getMovieDetailsCast(@Path("movie_id") movieId: Int): Response<MovieDetailsCastDto>
 
     @GET("/3/tv/{series_id}/aggregate_credits")
-    suspend fun getTvSeriesDetailsCast(@Path("series_id") seriesId: Int, @Query("language") language: String = "en-US"): Response<TvSeriesDetailsCastDto>
+    suspend fun getTvSeriesDetailsCast(
+        @Path("series_id") seriesId: Int,
+        @Query("language") language: String = "en-US"
+    ): Response<TvSeriesDetailsCastDto>
 
     @GET("/3/tv/{series_id}/season/{season_number}")
-    suspend fun getTvSeriesEpisodes(@Path("series_id") seriesId: Int, @Path("season_number") seasonNumber: Int = 1, @Query("language") language: String = "en-US",): Response<TvSeriesEpisodesDto>
+    suspend fun getTvSeriesEpisodes(
+        @Path("series_id") seriesId: Int,
+        @Path("season_number") seasonNumber: Int = 1,
+        @Query("language") language: String = "en-US",
+    ): Response<TvSeriesEpisodesDto>
 
     @GET("/3/movie/{movie_id}/videos")
     suspend fun getMovieTrailer(@Path("movie_id") movieId: Int): Response<MovieTrailerDto>
@@ -92,14 +134,25 @@ interface MoviesApi {
     suspend fun getTvSeriesTrailer(@Path("series_id") seriesId: Int): Response<TvSeriesTrailerDto>
 
     @GET("/3/account/{account_id}/favorite/movies")
-    suspend fun getMovieFavourite(@Path("account_id") accountId: Int = 20210857, @Query("language") language: String = "en-US", @Query("page") page: Int = 1): Response<MovieFavouriteDto>
+    suspend fun getMovieFavourite(
+        @Path("account_id") accountId: Int = 20210857,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<MovieFavouriteDto>
 
     @POST("/3/account/{account_id}/favorite")
-    suspend fun updateMovieFavourite(@Path("account_id") accountId: Int = 20210857, @Body body: RequestBody): Response<MovieUpdateFavouriteDto>
+    suspend fun updateMovieFavourite(
+        @Path("account_id") accountId: Int = 20210857,
+        @Body body: RequestBody
+    ): Response<MovieUpdateFavouriteDto>
 
     @GET("/3/movie/{movie_id}/account_states")
     suspend fun getMovieState(@Path("movie_id") movieId: Int): Response<MovieStateDto>
 
     @GET("/3/search/movie")
-    suspend fun getMovieBySearch(@Query("language") language: String = "en-US", @Query("query") query: String = "", @Query("page") page: Int = 1): Response<MovieSearchDto>
+    suspend fun getMovieBySearch(
+        @Query("language") language: String = "en-US",
+        @Query("query") query: String = "",
+        @Query("page") page: Int = 1
+    ): Response<MovieSearchDto>
 }

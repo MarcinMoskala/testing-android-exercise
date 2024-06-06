@@ -24,8 +24,10 @@ interface AccountSetupRepository {
     fun getUserDetail(userId: String): Flow<Resource<Member>>
 }
 
-class AccountSetupRepositoryImpl @Inject constructor(private val database: FirebaseDatabase,
-                                                     private val storage: FirebaseStorage): AccountSetupRepository {
+class AccountSetupRepositoryImpl @Inject constructor(
+    private val database: FirebaseDatabase,
+    private val storage: FirebaseStorage
+) : AccountSetupRepository {
 
     private companion object {
         const val TAG = "AccountSetupRepositoryImpl"

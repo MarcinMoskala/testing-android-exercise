@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NowPlayingSeriesActivity: BaseActivity() {
+class NowPlayingSeriesActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, NowPlayingSeriesActivity::class.java)

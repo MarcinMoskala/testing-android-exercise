@@ -28,10 +28,11 @@ import com.application.moviesapp.data.local.entity.MoviesEntity
         MovieUpcomingEntity::class,
         MovieUpcomingRemoteKeyEntity::class,
         MovieDownloadEntity::class
-               ],
+    ],
     version = 18,
-    exportSchema = false)
-abstract class MoviesDatabase: RoomDatabase() {
+    exportSchema = false
+)
+abstract class MoviesDatabase : RoomDatabase() {
 
     abstract val moviesDao: MoviesDao
     abstract val remoteKeyDao: RemoteKeyDao

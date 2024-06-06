@@ -11,7 +11,8 @@ interface YoutubeThumbnailUseCase {
     suspend operator fun invoke(vararg part: String, id: String): Resource<YoutubeThumbnail>
 }
 
-class YoutubeThumbnailInteractor @Inject constructor(private val repository: YoutubeRepository): YoutubeThumbnailUseCase {
+class YoutubeThumbnailInteractor @Inject constructor(private val repository: YoutubeRepository) :
+    YoutubeThumbnailUseCase {
 
     private companion object {
         const val TAG = "YoutubeDetailsInteractor"

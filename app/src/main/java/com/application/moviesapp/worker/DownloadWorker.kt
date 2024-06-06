@@ -18,9 +18,11 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @HiltWorker
-class DownloadWorker @AssistedInject constructor(@Assisted ctx: Context,
-                                                 @Assisted params: WorkerParameters,
-                                                 private val repository: DownloaderRepository): CoroutineWorker(ctx, params) {
+class DownloadWorker @AssistedInject constructor(
+    @Assisted ctx: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: DownloaderRepository
+) : CoroutineWorker(ctx, params) {
 
     companion object {
         private const val TAG = "DownloadWorker"
@@ -38,15 +40,16 @@ class DownloadWorker @AssistedInject constructor(@Assisted ctx: Context,
 
         makeStatusNotification(
             message = "Downloading files",
-            context = applicationContext)
+            context = applicationContext
+        )
 
         return withContext(Dispatchers.IO) {
 
             return@withContext try {
 
                 val task = listOf(
-                    async {  repository.videoDownload(videoUrl, videoItag) },
-                    async {  repository.audioDownload(videoUrl, audioItag) }
+                    async { repository.videoDownload(videoUrl, videoItag) },
+                    async { repository.audioDownload(videoUrl, audioItag) }
                 )
 
                 task.awaitAll()

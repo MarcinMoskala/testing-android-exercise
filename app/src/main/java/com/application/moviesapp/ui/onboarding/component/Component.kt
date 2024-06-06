@@ -42,36 +42,47 @@ import androidx.compose.ui.unit.dp
 import com.application.moviesapp.R
 
 @Composable
-fun SocialLoginComponent(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
+fun SocialLoginComponent(
+    modifier: Modifier = Modifier,
+    @DrawableRes icon: Int,
+    onClick: () -> Unit
+) {
     OutlinedIconButton(
         modifier = modifier
             .size(height = 50.dp, width = 70.dp)
             .padding(4.dp),
         onClick = onClick,
         shape = RoundedCornerShape(30),
-        border = BorderStroke(width = .5.dp, color =  Color.LightGray)) {
+        border = BorderStroke(width = .5.dp, color = Color.LightGray)
+    ) {
 
         Icon(
             modifier = modifier.padding(4.dp),
             painter = painterResource(id = icon),
             contentDescription = null,
             tint = Color.Unspecified
-           )
+        )
     }
 }
 
 @Composable
-fun EmailComponent(modifier: Modifier = Modifier,
-                   email: String = "",
-                   onEmailUpdate: (String) -> Unit = {},
-                   focusManager: FocusManager,
-                   emailError: Boolean = false) {
+fun EmailComponent(
+    modifier: Modifier = Modifier,
+    email: String = "",
+    onEmailUpdate: (String) -> Unit = {},
+    focusManager: FocusManager,
+    emailError: Boolean = false
+) {
     OutlinedTextField(
         value = email,
         onValueChange = onEmailUpdate,
         label = {
-            if (!emailError) Text(text = stringResource(R.string.email)) else Text(text = stringResource(R.string.enter_email_address))
-                },
+            if (!emailError) Text(text = stringResource(R.string.email)) else Text(
+                text = stringResource(
+                    R.string.enter_email_address
+                )
+            )
+        },
         leadingIcon = {
             Icon(imageVector = Icons.Rounded.Email, contentDescription = null)
         },
@@ -82,17 +93,22 @@ fun EmailComponent(modifier: Modifier = Modifier,
             keyboardType = KeyboardType.Email
         ),
         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
-        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = Color.LightGray),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = Color.LightGray
+        ),
         isError = emailError
     )
 }
 
 @Composable
-fun PasswordComponent(modifier: Modifier = Modifier,
-                      password: String = "",
-                      onPasswordUpdate: (String) -> Unit = {},
-                      focusManager: FocusManager,
-                      passwordError: Boolean = false) {
+fun PasswordComponent(
+    modifier: Modifier = Modifier,
+    password: String = "",
+    onPasswordUpdate: (String) -> Unit = {},
+    focusManager: FocusManager,
+    passwordError: Boolean = false
+) {
 
     var passwordMask by remember {
         mutableStateOf(true)
@@ -102,11 +118,12 @@ fun PasswordComponent(modifier: Modifier = Modifier,
         value = password,
         onValueChange = onPasswordUpdate,
         label = {
-            if (!passwordError) Text(text = stringResource(R.string.password)) else Text(text = stringResource(
-                R.string.enter_password
+            if (!passwordError) Text(text = stringResource(R.string.password)) else Text(
+                text = stringResource(
+                    R.string.enter_password
+                )
             )
-            )
-                },
+        },
         leadingIcon = {
             Icon(imageVector = Icons.Rounded.Lock, contentDescription = null)
         },
@@ -116,7 +133,8 @@ fun PasswordComponent(modifier: Modifier = Modifier,
                 Icon(
                     modifier = modifier.size(24.dp),
                     imageVector = if (passwordMask) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
-                    contentDescription = null)
+                    contentDescription = null
+                )
             }
         },
         shape = RoundedCornerShape(30),
@@ -125,7 +143,10 @@ fun PasswordComponent(modifier: Modifier = Modifier,
             keyboardType = KeyboardType.Password
         ),
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = Color.LightGray),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = Color.LightGray
+        ),
         isError = passwordError,
         visualTransformation = if (passwordMask) PasswordVisualTransformation() else VisualTransformation.None
     )

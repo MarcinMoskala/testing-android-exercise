@@ -21,10 +21,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PushNotificationService: FirebaseMessagingService() {
+class PushNotificationService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var  repository: NotificationPreferenceRepository
+    lateinit var repository: NotificationPreferenceRepository
 
     @Inject
     lateinit var coroutineScope: CoroutineScope
@@ -48,13 +48,23 @@ class PushNotificationService: FirebaseMessagingService() {
         coroutineScope.launch {
             repository.readGeneralNotificationPreference.collect {
                 if (it.data) {
-                    showNotification(channelId = CHANNEL_ID.GENERAL_NOTIFICATION.name, title = title, text = text, notificationId = 1)
+                    showNotification(
+                        channelId = CHANNEL_ID.GENERAL_NOTIFICATION.name,
+                        title = title,
+                        text = text,
+                        notificationId = 1
+                    )
                 }
             }
 
             repository.readAppUpdatesPreference.collect {
                 if (it.data) {
-                    showNotification(channelId = CHANNEL_ID.APP_UPDATES.name, title = title, text = text, notificationId = 2)
+                    showNotification(
+                        channelId = CHANNEL_ID.APP_UPDATES.name,
+                        title = title,
+                        text = text,
+                        notificationId = 2
+                    )
                 }
             }
         }
@@ -63,7 +73,12 @@ class PushNotificationService: FirebaseMessagingService() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun showNotification(channelId: String, title: String = "", text: String = "", notificationId: Int) {
+    private fun showNotification(
+        channelId: String,
+        title: String = "",
+        text: String = "",
+        notificationId: Int
+    ) {
 
         val channel = NotificationChannel(
             channelId,

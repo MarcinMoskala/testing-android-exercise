@@ -38,7 +38,11 @@ import androidx.compose.ui.unit.dp
 import com.application.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
-fun CreateNewPinScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues(), onContinueClick: () -> Unit = {}) {
+fun CreateNewPinScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    onContinueClick: () -> Unit = {}
+) {
 
     val focusManager = LocalFocusManager.current
 
@@ -47,16 +51,25 @@ fun CreateNewPinScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
     }
     var isChecked by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier
-        .fillMaxSize().wrapContentSize(align = Alignment.Center)
-        .padding(start = 16.dp, end = 16.dp, top = 100.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(50.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(align = Alignment.Center)
+            .padding(start = 16.dp, end = 16.dp, top = 100.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(50.dp)
+    ) {
 
-        Text(text = "Add a PIN number to make your account more secure",
+        Text(
+            text = "Add a PIN number to make your account more secure",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = modifier.padding(horizontal = 16.dp), 
-            textAlign = TextAlign.Center)
+            modifier = modifier.padding(horizontal = 16.dp),
+            textAlign = TextAlign.Center
+        )
 
-        Row(modifier = modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = modifier.padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             BasicTextField(
                 value = pinCode,
                 onValueChange = {
@@ -97,7 +110,8 @@ fun CreateNewPinScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
                                     )
                                     .padding(2.dp),
                                 style = MaterialTheme.typography.headlineMedium,
-                                textAlign = TextAlign.Center)
+                                textAlign = TextAlign.Center
+                            )
 
                             Spacer(modifier = modifier.width(16.dp))
                         }
@@ -108,14 +122,16 @@ fun CreateNewPinScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
 
         Spacer(modifier = modifier.weight(1f))
 
-        Button(onClick = onContinueClick, modifier =  modifier
-            .shadow(
-                elevation = 4.dp,
-                ambientColor = MaterialTheme.colorScheme.outlineVariant,
-                spotColor = MaterialTheme.colorScheme.outlineVariant,
-                shape = RoundedCornerShape(50)
-            )
-            .fillMaxWidth()) {
+        Button(
+            onClick = onContinueClick, modifier = modifier
+                .shadow(
+                    elevation = 4.dp,
+                    ambientColor = MaterialTheme.colorScheme.outlineVariant,
+                    spotColor = MaterialTheme.colorScheme.outlineVariant,
+                    shape = RoundedCornerShape(50)
+                )
+                .fillMaxWidth()
+        ) {
             Text(text = "Continue", modifier = modifier.padding(4.dp))
         }
     }

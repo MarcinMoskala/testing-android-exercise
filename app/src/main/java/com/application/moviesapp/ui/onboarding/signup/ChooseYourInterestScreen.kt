@@ -45,10 +45,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ChooseYourInterestScreen(modifier: Modifier = Modifier,
-                             uiState: Resource<MovieGenre> = Resource.Loading,
-                             onContinueClick: () -> Unit = {},
-                             onGenreClick: (MoviesDetail.Genre) -> Unit = { }) {
+fun ChooseYourInterestScreen(
+    modifier: Modifier = Modifier,
+    uiState: Resource<MovieGenre> = Resource.Loading,
+    onContinueClick: () -> Unit = {},
+    onGenreClick: (MoviesDetail.Genre) -> Unit = { }
+) {
 
     Column(
         modifier = modifier
@@ -59,17 +61,23 @@ fun ChooseYourInterestScreen(modifier: Modifier = Modifier,
 
         when (uiState) {
             is Resource.Loading -> {
-                CircularProgressIndicator(modifier = modifier
-                    .fillMaxSize()
-                    .wrapContentSize(align = Alignment.Center))
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .wrapContentSize(align = Alignment.Center)
+                )
             }
+
             is Resource.Failure -> {
-                Text(text = "404",
+                Text(
+                    text = "404",
                     style = MaterialTheme.typography.displayLarge,
                     modifier = modifier
                         .fillMaxSize()
-                        .wrapContentSize(align = Alignment.Center))
+                        .wrapContentSize(align = Alignment.Center)
+                )
             }
+
             is Resource.Success -> {
                 Text(
                     text = stringResource(R.string.choose_your_interests_description),
@@ -79,35 +87,48 @@ fun ChooseYourInterestScreen(modifier: Modifier = Modifier,
                 FlowRow(
                     modifier = modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
 
                     uiState.data.genres?.forEachIndexed { index, genre ->
                         ChipContent(onGenreClick = onGenreClick, genre = genre)
                     }
                 }
 
-                Row(modifier = modifier.fillMaxWidth(),
+                Row(
+                    modifier = modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier
-                        .shadow(
-                            elevation = 4.dp,
-                            ambientColor = MaterialTheme.colorScheme.outlineVariant,
-                            spotColor = MaterialTheme.colorScheme.outlineVariant,
-                            shape = RoundedCornerShape(50)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = { /*TODO*/ }, modifier = modifier
+                            .shadow(
+                                elevation = 4.dp,
+                                ambientColor = MaterialTheme.colorScheme.outlineVariant,
+                                spotColor = MaterialTheme.colorScheme.outlineVariant,
+                                shape = RoundedCornerShape(50)
+                            )
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.skip),
+                            modifier = modifier.padding(4.dp)
                         )
-                        .weight(1f)) {
-                        Text(text = stringResource(id = R.string.skip),  modifier = modifier.padding(4.dp))
                     }
-                    Button(onClick = onContinueClick, modifier = modifier
-                        .shadow(
-                            elevation = 4.dp,
-                            ambientColor = MaterialTheme.colorScheme.outlineVariant,
-                            spotColor = MaterialTheme.colorScheme.outlineVariant,
-                            shape = RoundedCornerShape(50)
+                    Button(
+                        onClick = onContinueClick, modifier = modifier
+                            .shadow(
+                                elevation = 4.dp,
+                                ambientColor = MaterialTheme.colorScheme.outlineVariant,
+                                spotColor = MaterialTheme.colorScheme.outlineVariant,
+                                shape = RoundedCornerShape(50)
+                            )
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.continue_text),
+                            modifier = modifier.padding(4.dp)
                         )
-                        .weight(1f)) {
-                        Text(text = stringResource(id = R.string.continue_text), modifier = modifier.padding(4.dp))
                     }
                 }
             }
@@ -117,7 +138,11 @@ fun ChooseYourInterestScreen(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ChipContent(modifier: Modifier = Modifier, onGenreClick: (MoviesDetail.Genre) -> Unit = { _ ->  }, genre: MovieGenre.Genre? = null) {
+private fun ChipContent(
+    modifier: Modifier = Modifier,
+    onGenreClick: (MoviesDetail.Genre) -> Unit = { _ -> },
+    genre: MovieGenre.Genre? = null
+) {
 
     var selected by remember { mutableStateOf(false) }
 

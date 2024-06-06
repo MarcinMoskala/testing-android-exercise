@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NowPlayingMoviesActivity: BaseActivity() {
+class NowPlayingMoviesActivity : BaseActivity() {
     companion object {
         fun startActivity(activity: Activity?) {
             val intent = Intent(activity, NowPlayingMoviesActivity::class.java)
@@ -34,7 +34,7 @@ class NowPlayingMoviesActivity: BaseActivity() {
         lifecycle.coroutineScope.launch {
             profileViewModel.isDarkMode.collect {
                 setContent {
-                    MoviesAppTheme(it.data){
+                    MoviesAppTheme(it.data) {
                         // A surface container using the 'background' color from the theme
                         Surface(
                             modifier = Modifier.fillMaxSize(),

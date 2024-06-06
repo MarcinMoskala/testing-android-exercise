@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SecurityActivity: BaseActivity() {
+class SecurityActivity : BaseActivity() {
 
     companion object {
         fun startActivity(activity: Activity?) {

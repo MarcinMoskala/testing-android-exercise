@@ -27,9 +27,11 @@ import java.io.FileOutputStream
 import java.util.UUID
 
 @HiltWorker
-class MergeWorker @AssistedInject constructor(@Assisted ctx: Context,
-                                              @Assisted params: WorkerParameters,
-                                              private val repository: MoviesRepository): CoroutineWorker(ctx, params){
+class MergeWorker @AssistedInject constructor(
+    @Assisted ctx: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: MoviesRepository
+) : CoroutineWorker(ctx, params) {
 
     companion object {
         private const val TAG = "MergeWorker"
@@ -44,7 +46,8 @@ class MergeWorker @AssistedInject constructor(@Assisted ctx: Context,
 
         makeStatusNotification(
             message = "Merging files",
-            context = applicationContext)
+            context = applicationContext
+        )
 
         return withContext(Dispatchers.IO) {
             return@withContext try {
@@ -60,7 +63,7 @@ class MergeWorker @AssistedInject constructor(@Assisted ctx: Context,
                 repository.insertMovieDownload(gson)
 
                 Result.success()
-            }catch (throwable: Throwable) {
+            } catch (throwable: Throwable) {
                 makeStatusNotification("Merging failed", applicationContext)
                 Timber.tag(TAG).e(throwable, "Merge failed")
                 Result.failure()

@@ -31,7 +31,7 @@ data class MoviesDetail(
     //cast
     val cast: List<Cast?>?,
     val crew: List<Crew?>?,
-    ) {
+) {
 
     data class Collection(
         val id: Int?,

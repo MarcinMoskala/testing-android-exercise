@@ -7,7 +7,7 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
-object UserPreferencesSerializer: Serializer<UserPreferences> {
+object UserPreferencesSerializer : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences get() = UserPreferences.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): UserPreferences {

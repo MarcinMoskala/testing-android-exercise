@@ -17,7 +17,6 @@ import com.application.moviesapp.domain.usecase.AccountSetupUseCase
 import com.application.moviesapp.domain.usecase.MovieGenresUseCase
 import com.application.moviesapp.domain.usecase.PasswordResetUseCase
 import com.application.moviesapp.domain.usecase.SignInEmailUseCase
-import com.application.moviesapp.domain.usecase.SignInFacebookUseCase
 import com.application.moviesapp.domain.usecase.SignInGithubUseCase
 import com.application.moviesapp.domain.usecase.SignInGoogleUseCase
 import com.application.moviesapp.domain.usecase.SignUpEmailUseCase
@@ -41,16 +40,17 @@ import java.io.IOException
 import javax.inject.Inject
 
 data class OnboardUIState(val isEmailError: Boolean = false, val isPasswordError: Boolean = false)
+
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: MovieGenresUseCase,
-                                              private val signInGoogleUseCase: SignInGoogleUseCase,
-                                              private val signInGithubUseCase: SignInGithubUseCase,
-                                              private val signInFacebookUseCase: SignInFacebookUseCase,
-                                              private val accountSetupUseCase: AccountSetupUseCase,
-                                              private val signInEmailUseCase: SignInEmailUseCase,
-                                              private val signUpEmailUseCase: SignUpEmailUseCase,
+class OnboardingViewModel @Inject constructor(
+    private val movieGenresUseCase: MovieGenresUseCase,
+    private val signInGoogleUseCase: SignInGoogleUseCase,
+    private val signInGithubUseCase: SignInGithubUseCase,
+    private val accountSetupUseCase: AccountSetupUseCase,
+    private val signInEmailUseCase: SignInEmailUseCase,
+    private val signUpEmailUseCase: SignUpEmailUseCase,
     private val passwordResetUseCase: PasswordResetUseCase
-    ): ViewModel() {
+) : ViewModel() {
 
     private companion object {
         const val TAG = "OnboardingViewModel"
@@ -100,7 +100,8 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
     val readUserPreference = accountSetupUseCase.readUserPreference.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = UserPreferences.getDefaultInstance())
+        initialValue = UserPreferences.getDefaultInstance()
+    )
 
     private val movieGenreSelectedList = mutableSetOf<MoviesDetail.Genre>()
 
@@ -116,10 +117,19 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
         }
     }
 
-    fun updateProfile(fullName: String, nickName: String, email: String, phoneNumber: Long, gender: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateProfile(
+        fullName: String,
+        nickName: String,
+        email: String,
+        phoneNumber: Long,
+        gender: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
         try {
 //            accountSetupUseCase.updateProfile(fullName, nickName, email, phoneNumber, gender)
-            accountSetupUseCase.updateInfo(auth.currentUser?.uid ?: return@launch, Member(fullName, nickName, email, phoneNumber.toString(), gender))
+            accountSetupUseCase.updateInfo(
+                auth.currentUser?.uid ?: return@launch,
+                Member(fullName, nickName, email, phoneNumber.toString(), gender)
+            )
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
@@ -127,15 +137,16 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
 
     fun uploadProfilePhoto(uri: Uri) = viewModelScope.launch {
         try {
-            accountSetupUseCase.uploadProfilePhoto(auth.currentUser?.uid ?: return@launch, uri).collectLatest {
-                when (it) {
-                    is Resource.Loading -> {  }
-                    is Resource.Failure -> {  }
-                    is Resource.Success -> {
-                        getProfilePhoto()
+            accountSetupUseCase.uploadProfilePhoto(auth.currentUser?.uid ?: return@launch, uri)
+                .collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {}
+                        is Resource.Failure -> {}
+                        is Resource.Success -> {
+                            getProfilePhoto()
+                        }
                     }
                 }
-            }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
@@ -153,9 +164,10 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
 
     fun getProfile() = viewModelScope.launch {
         try {
-            accountSetupUseCase.getUserDetail(auth.currentUser?.uid ?: return@launch).collectLatest {
-                _profileUIState.value = it
-            }
+            accountSetupUseCase.getUserDetail(auth.currentUser?.uid ?: return@launch)
+                .collectLatest {
+                    _profileUIState.value = it
+                }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
@@ -169,13 +181,6 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
 
     fun signInGithub(activity: Activity) = viewModelScope.launch {
         signInGithubUseCase(activity).collectLatest {
-            _socialSignIn.emit(it)
-        }
-    }
-
-    fun signInFacebook(token: String) = viewModelScope.launch {
-        Timber.tag(TAG).d("Facebook called!")
-        signInFacebookUseCase(token).collectLatest {
             _socialSignIn.emit(it)
         }
     }
@@ -196,7 +201,7 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
             _loginUIState.update {
                 it.copy(isEmailError = true)
             }
-        } else if (password.isNullOrEmpty()){
+        } else if (password.isNullOrEmpty()) {
             _loginUIState.update {
                 it.copy(isPasswordError = true)
             }
@@ -220,7 +225,7 @@ class OnboardingViewModel @Inject constructor(private val movieGenresUseCase: Mo
             _signupUIState.update {
                 it.copy(isEmailError = true)
             }
-        } else if (password.isNullOrEmpty()){
+        } else if (password.isNullOrEmpty()) {
             _signupUIState.update {
                 it.copy(isPasswordError = true)
             }

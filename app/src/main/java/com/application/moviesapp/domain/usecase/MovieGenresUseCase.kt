@@ -13,7 +13,8 @@ interface MovieGenresUseCase {
     suspend operator fun invoke(): Resource<MovieGenre>
 }
 
-class GetMovieGenreInteractor @Inject constructor(private val repository: MoviesRepository): MovieGenresUseCase {
+class GetMovieGenreInteractor @Inject constructor(private val repository: MoviesRepository) :
+    MovieGenresUseCase {
 
     private companion object {
         const val TAG = "GetMovieGenreInteractor"

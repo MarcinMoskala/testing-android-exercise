@@ -14,14 +14,16 @@ import com.application.moviesapp.ui.theme.MoviesAppTheme
 
 @Composable
 fun CastScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp)
+    ) {
         Text(text = "Cast screen")
     }
 }
 
-@Preview(showBackground = true , showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CastScreenLightThemePreview() {
     MoviesAppTheme(darkTheme = false) {

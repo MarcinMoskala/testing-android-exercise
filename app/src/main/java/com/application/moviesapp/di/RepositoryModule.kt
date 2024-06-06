@@ -8,7 +8,6 @@ import com.application.moviesapp.data.repository.AccountSetupRepository
 import com.application.moviesapp.data.repository.AccountSetupRepositoryImpl
 import com.application.moviesapp.data.repository.AuthRepository
 import com.application.moviesapp.data.repository.AuthRepositoryImpl
-import com.application.moviesapp.data.repository.FacebookRepositoryImpl
 import com.application.moviesapp.data.repository.GoogleRepositoryImpl
 import com.application.moviesapp.data.repository.LanguagePreferenceImpl
 import com.application.moviesapp.data.repository.LanguagePreferenceRepository
@@ -51,11 +50,6 @@ abstract class RepositoryModule {
     @Binds
     @Named("GithubRepo")
     abstract fun providesGithubRepoImpl(authRepoImpl: AuthRepositoryImpl): AuthRepository
-
-    //Facebook
-    @Binds
-    @Named("FacebookRepo")
-    abstract fun providesFacebookRepoImpl(facebookRepoImpl: FacebookRepositoryImpl): AuthRepository
 
     //Email
     @Binds

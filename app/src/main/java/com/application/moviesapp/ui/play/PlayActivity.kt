@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PlayActivity: BaseActivity() {
+class PlayActivity : BaseActivity() {
 
     companion object {
         const val FILE_PATH = "file_path"
@@ -30,7 +30,13 @@ class PlayActivity: BaseActivity() {
         const val VIDEO_ID = "video_id"
         const val FROM_SCREEN = "from_screen"
 
-        fun startActivity(activity: Activity?, videoTitle: String?, filePath: String?, videoId: String?, fromScreen: Screen?) {
+        fun startActivity(
+            activity: Activity?,
+            videoTitle: String?,
+            filePath: String?,
+            videoId: String?,
+            fromScreen: Screen?
+        ) {
             val intent = Intent(activity, PlayActivity::class.java)
             intent.putExtra(VIDEO_TITLE, videoTitle)
             intent.putExtra(FILE_PATH, filePath)

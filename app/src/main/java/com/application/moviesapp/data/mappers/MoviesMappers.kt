@@ -32,7 +32,8 @@ fun MoviesDiscoverDto.Result.toMoviesEntity(): MoviesEntity {
         title = title,
         video = video,
         voteAverage = voteAverage,
-        voteCount = voteCount)
+        voteCount = voteCount
+    )
 }
 
 fun MoviesDiscoverDto.Result.toMovies(): MoviesDiscover {
@@ -49,7 +50,8 @@ fun MoviesDiscoverDto.Result.toMovies(): MoviesDiscover {
         title = title,
         video = video,
         voteAverage = voteAverage,
-        voteCount = voteCount)
+        voteCount = voteCount
+    )
 }
 
 fun TvSeriesDiscoverDto.Result.toTvSeries(): TvSeriesDiscover {
@@ -65,7 +67,8 @@ fun TvSeriesDiscoverDto.Result.toTvSeries(): TvSeriesDiscover {
         firstAirDate = firstAirDate,
         name = name,
         voteAverage = voteAverage,
-        voteCount = voteCount)
+        voteCount = voteCount
+    )
 }
 
 fun MoviesEntity.toMovies(): MoviesDiscover {
@@ -85,7 +88,6 @@ fun MoviesEntity.toMovies(): MoviesDiscover {
         voteCount = voteCount
     )
 }
-
 
 
 fun MovieNewReleasesDto.Result.toMoviesEntity(): MovieNowPlayingEntity {
@@ -198,7 +200,7 @@ fun MovieFavouriteDto.toMovies(): List<MovieFavourite>? {
             video = it?.video,
             voteAverage = it?.voteAverage,
             voteCount = it?.voteCount
-            )
+        )
     }
 }
 

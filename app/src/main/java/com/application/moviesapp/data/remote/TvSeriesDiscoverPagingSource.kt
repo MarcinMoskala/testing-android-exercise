@@ -8,10 +8,12 @@ import com.application.moviesapp.data.api.response.TvSeriesDiscoverDto
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class TvSeriesDiscoverPagingSource @Inject constructor(private val moviesApi: MoviesApi,
-                                                     private val genre: String,
-                                                     private val sortBy: String,
-                                                     private val includeAdult: Boolean):  PagingSource<Int, TvSeriesDiscoverDto.Result>() {
+class TvSeriesDiscoverPagingSource @Inject constructor(
+    private val moviesApi: MoviesApi,
+    private val genre: String,
+    private val sortBy: String,
+    private val includeAdult: Boolean
+) : PagingSource<Int, TvSeriesDiscoverDto.Result>() {
 
     private companion object {
         const val TAG = "TvSeriesRemoteMediator"
@@ -28,7 +30,12 @@ class TvSeriesDiscoverPagingSource @Inject constructor(private val moviesApi: Mo
         return try {
             val page = params.key ?: 1
 
-            val apiResult = moviesApi.getDiscoverTvSeriesList(page = page, genres = genre, sortBy = sortBy, includeAdult = includeAdult)
+            val apiResult = moviesApi.getDiscoverTvSeriesList(
+                page = page,
+                genres = genre,
+                sortBy = sortBy,
+                includeAdult = includeAdult
+            )
             val movies = if (apiResult.isSuccessful) {
                 apiResult.body()
             } else if (apiResult.code() == 400 || apiResult.code() == 401 || apiResult.code() == 403) {
@@ -38,7 +45,24 @@ class TvSeriesDiscoverPagingSource @Inject constructor(private val moviesApi: Mo
             }
 
             LoadResult.Page(
-                data = movies?.results?.map { it ?: TvSeriesDiscoverDto.Result(null, null, null, null, null, null, null, null, null, null, null, null, null, null)} ?: listOf(),
+                data = movies?.results?.map {
+                    it ?: TvSeriesDiscoverDto.Result(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
+                } ?: listOf(),
                 prevKey = if (page == 1) null else page.minus(1),
                 nextKey = if (movies?.results?.isEmpty() == true) null else page.plus(1),
             )

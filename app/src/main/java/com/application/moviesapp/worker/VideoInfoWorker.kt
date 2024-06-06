@@ -17,9 +17,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltWorker
-class VideoInfoWorker @AssistedInject constructor(@Assisted ctx: Context,
-                                                  @Assisted params: WorkerParameters,
-                                                  private val repository: DownloaderRepository): CoroutineWorker(ctx, params) {
+class VideoInfoWorker @AssistedInject constructor(
+    @Assisted ctx: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: DownloaderRepository
+) : CoroutineWorker(ctx, params) {
 
     companion object {
         const val VIDEO_URL = "videoUrl"
@@ -42,10 +44,10 @@ class VideoInfoWorker @AssistedInject constructor(@Assisted ctx: Context,
 
         return withContext(Dispatchers.IO) {
             return@withContext try {
-                val videoTitle =  async { repository.getTitle(videoUrl) }
+                val videoTitle = async { repository.getTitle(videoUrl) }
                 val videoThumbnail = async { repository.getThumbnail(videoUrl) }
-                val videoStreams =  async { repository.getVideoStreams(videoUrl) }
-                val audioStreams =  async { repository.getAudioStreams(videoUrl) }
+                val videoStreams = async { repository.getVideoStreams(videoUrl) }
+                val audioStreams = async { repository.getAudioStreams(videoUrl) }
 
                 val outputData = workDataOf(
                     Pair(VIDEO_TITLE, videoTitle.await()),
@@ -55,7 +57,7 @@ class VideoInfoWorker @AssistedInject constructor(@Assisted ctx: Context,
                 )
 
                 Result.success(outputData)
-            }catch (throwable: Throwable) {
+            } catch (throwable: Throwable) {
                 Timber.tag(TAG).e(throwable, "video info failed")
                 Result.failure()
             }

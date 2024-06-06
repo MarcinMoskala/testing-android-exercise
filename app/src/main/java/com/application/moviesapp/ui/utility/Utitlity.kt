@@ -64,7 +64,6 @@ val String.getStream: Stream
     }
 
 
-
 val VERBOSE_NOTIFICATION_CHANNEL_NAME: CharSequence =
     "Verbose WorkManager Notifications"
 const val VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION =
@@ -94,7 +93,8 @@ fun makeStatusNotification(message: String, context: Context) {
     }
 
     // Create the notification
-    val builder = NotificationCompat.Builder(context,
+    val builder = NotificationCompat.Builder(
+        context,
         CHANNEL_ID
     )
         .setSmallIcon(R.drawable.ic_launcher_foreground)

@@ -21,16 +21,27 @@ import com.application.moviesapp.domain.model.LanguagePreference
 import com.application.moviesapp.ui.viewmodel.ProfileViewModel
 
 @Composable
-fun LanguageApp(modifier: Modifier = Modifier, profileViewModel: ProfileViewModel = hiltViewModel()) {
+fun LanguageApp(
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
 
-    val languageUIState by profileViewModel.selectLanguage.collectAsState(initial = LanguagePreference(language[0].language[0]))
+    val languageUIState by profileViewModel.selectLanguage.collectAsState(
+        initial = LanguagePreference(
+            language[0].language[0]
+        )
+    )
 
     Scaffold(
         topBar = {
             LanguageTopAppbar()
         }
     ) { paddingValues ->
-        LanguageScreen(paddingValues = paddingValues, languageUIState = languageUIState, onLanguageClick = profileViewModel::updateLanguage)
+        LanguageScreen(
+            paddingValues = paddingValues,
+            languageUIState = languageUIState,
+            onLanguageClick = profileViewModel::updateLanguage
+        )
     }
 }
 
@@ -44,8 +55,13 @@ private fun LanguageTopAppbar(modifier: Modifier = Modifier) {
         title = { Text(text = "Language") },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
 }

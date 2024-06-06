@@ -20,10 +20,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val settingsUseCase: SettingsUseCase,
-                                           private val languageUseCase: LanguageUseCase,
-                                           private val notificationUseCase: NotificationUseCase,
-                                           private val wifiUseCase: WifiUseCase): ViewModel() {
+class ProfileViewModel @Inject constructor(
+    private val settingsUseCase: SettingsUseCase,
+    private val languageUseCase: LanguageUseCase,
+    private val notificationUseCase: NotificationUseCase,
+    private val wifiUseCase: WifiUseCase
+) : ViewModel() {
 
     val isDarkMode: Flow<SettingsPreference> = settingsUseCase.readFlow.stateIn(
         scope = viewModelScope,
@@ -46,26 +48,27 @@ class ProfileViewModel @Inject constructor(private val settingsUseCase: Settings
         languageUseCase.updatePreference(value)
     }
 
-    val isGeneralNotification: Flow<GeneralNotificationPreference> = notificationUseCase.readGeneralNotificationPreference.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = GeneralNotificationPreference(false)
-    )
+    val isGeneralNotification: Flow<GeneralNotificationPreference> =
+        notificationUseCase.readGeneralNotificationPreference.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = GeneralNotificationPreference(false)
+        )
 
     fun updateGeneraNotification(value: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         notificationUseCase.updateGeneralNotificationPreference(value)
     }
 
-    val isAppUpdates: Flow<AppUpdatesPreference> = notificationUseCase.readAppUpdatesPreference.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = AppUpdatesPreference(false)
-    )
+    val isAppUpdates: Flow<AppUpdatesPreference> =
+        notificationUseCase.readAppUpdatesPreference.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = AppUpdatesPreference(false)
+        )
 
     fun updateAppUpdates(value: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         notificationUseCase.updateAppUpdatesPreference(value)
     }
-
 
 
     val isWifiRequired: Flow<SettingsPreference> = wifiUseCase.readFlow.stateIn(

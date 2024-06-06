@@ -28,7 +28,10 @@ import com.application.moviesapp.ui.accountsetup.AccountSetupScreen
 import com.application.moviesapp.ui.viewmodel.OnboardingViewModel
 
 @Composable
-fun EditProfileApp(modifier: Modifier = Modifier, onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
+fun EditProfileApp(
+    modifier: Modifier = Modifier,
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
+) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -47,7 +50,15 @@ fun EditProfileApp(modifier: Modifier = Modifier, onboardingViewModel: Onboardin
         EditProfileScreen(
             modifier = modifier,
             paddingValues = paddingValues,
-            onContinueClick = { onboardingViewModel.updateProfile(it.fullName, it.nickName, it.email, it.phoneNumber, it.gender) },
+            onContinueClick = {
+                onboardingViewModel.updateProfile(
+                    it.fullName,
+                    it.nickName,
+                    it.email,
+                    it.phoneNumber,
+                    it.gender
+                )
+            },
             onProfileClick = onboardingViewModel::uploadProfilePhoto,
             profileUIState = profileUIState,
             userDetailUIState = userDetailUIState,
@@ -67,8 +78,13 @@ private fun EditProfileTopAppbar(modifier: Modifier = Modifier) {
         title = { Text(text = stringResource(id = R.string.edit_profile)) },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
 }

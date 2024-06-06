@@ -68,11 +68,14 @@ import timber.log.Timber
 import java.io.File
 
 private const val TAG = "PlayScreenApp"
+
 @Composable
-fun PlayScreenApp(modifier: Modifier = Modifier,
-                  playerViewModel: PlayerViewModel = hiltViewModel(),
-                  downloadViewModel: DownloadViewModel = hiltViewModel(),
-                  detailsViewModel: DetailsViewModel = hiltViewModel()) {
+fun PlayScreenApp(
+    modifier: Modifier = Modifier,
+    playerViewModel: PlayerViewModel = hiltViewModel(),
+    downloadViewModel: DownloadViewModel = hiltViewModel(),
+    detailsViewModel: DetailsViewModel = hiltViewModel()
+) {
 
     val context = LocalContext.current
     val systemUiController: SystemUiController = rememberSystemUiController()
@@ -96,11 +99,26 @@ fun PlayScreenApp(modifier: Modifier = Modifier,
     LaunchedEffect(key1 = null) {
         when ((context as Activity).intent.getStringExtra(PlayActivity.FROM_SCREEN)) {
             Screen.Download.title -> {
-                playerViewModel.playVideo(context, (context as Activity).intent.getStringExtra(PlayActivity.VIDEO_TITLE) ?: return@LaunchedEffect ,(context as Activity).intent.getStringExtra(PlayActivity.FILE_PATH) ?: return@LaunchedEffect)
+                playerViewModel.playVideo(
+                    context,
+                    (context as Activity).intent.getStringExtra(PlayActivity.VIDEO_TITLE)
+                        ?: return@LaunchedEffect,
+                    (context as Activity).intent.getStringExtra(PlayActivity.FILE_PATH)
+                        ?: return@LaunchedEffect
+                )
             }
+
             else -> {
-                playerViewModel.playVideoStream(videoId = (context as Activity).intent.getStringExtra(PlayActivity.VIDEO_ID) ?: return@LaunchedEffect, context = context)
-                detailsViewModel.getVideoInfo(videoId = (context as Activity).intent.getStringExtra(PlayActivity.VIDEO_ID) ?: return@LaunchedEffect)
+                playerViewModel.playVideoStream(
+                    videoId = (context as Activity).intent.getStringExtra(
+                        PlayActivity.VIDEO_ID
+                    ) ?: return@LaunchedEffect, context = context
+                )
+                detailsViewModel.getVideoInfo(
+                    videoId = (context as Activity).intent.getStringExtra(
+                        PlayActivity.VIDEO_ID
+                    ) ?: return@LaunchedEffect
+                )
             }
         }
     }
@@ -137,18 +155,22 @@ fun PlayScreenApp(modifier: Modifier = Modifier,
                             onDownloadClick = {
                                 playerViewModel.saveMediaToStorage(
                                     context = context,
-                                    filePath = File(context.filesDir, "/output/${playerUIState.movieDownload.filePath}").path,
+                                    filePath = File(
+                                        context.filesDir,
+                                        "/output/${playerUIState.movieDownload.filePath}"
+                                    ).path,
                                     isVideo = true,
                                     fileName = playerUIState.movieDownload.title
                                 )
-                                Toast.makeText(context, "Video Downloaded", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Video Downloaded", Toast.LENGTH_SHORT)
+                                    .show()
                             },
                             onVolumeClick = playerViewModel::onVolumeClick,
                             onPlaybackSpeedClick = {
                                 drawerState = DrawerValue.Open
                                 sideSheetContent = SideSheet.Playback
-                                                   },
-                            )
+                            },
+                        )
                     }
 
                     else -> {
@@ -166,7 +188,7 @@ fun PlayScreenApp(modifier: Modifier = Modifier,
                             onPlaybackSpeedClick = {
                                 drawerState = DrawerValue.Open
                                 sideSheetContent = SideSheet.Playback
-                                                   },
+                            },
                             onDownloadClick = {
                                 drawerState = DrawerValue.Open
                                 sideSheetContent = SideSheet.Quality
@@ -178,22 +200,25 @@ fun PlayScreenApp(modifier: Modifier = Modifier,
                 if (drawerState == DrawerValue.Open && playerUIState.onScreenTouch) {
 
                     when (sideSheetContent) {
-                        SideSheet.Default -> {  }
+                        SideSheet.Default -> {}
                         SideSheet.Playback -> {
-                            SideSheet(modifier = modifier
-                                .width(width = parentWidth / 2)
-                                .offset(x = parentWidth / 1.4f),
+                            SideSheet(
+                                modifier = modifier
+                                    .width(width = parentWidth / 2)
+                                    .offset(x = parentWidth / 1.4f),
                                 onDismiss = {
                                     drawerState = DrawerValue.Closed
                                     sideSheetContent = SideSheet.Default
-                                            },
+                                },
                                 playbackSpeed = playbackSpeed,
                                 onPlaybackSpeedChange = {
                                     playbackSpeed = (it)
                                     playerViewModel.onPlaybackChange(playbackSpeed)
                                 },
-                                maxWidth = parentWidth)
+                                maxWidth = parentWidth
+                            )
                         }
+
                         SideSheet.Quality -> {
                             DownloadSideSheet(
                                 modifier = modifier
@@ -216,80 +241,101 @@ fun PlayScreenApp(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SideSheet(modifier: Modifier = Modifier,
-                        onDismiss: () -> Unit = {},
-                      playbackSpeed: Float = 1.0f,
-                      onPlaybackSpeedChange: (Float) -> Unit = { _ -> },
-                      maxWidth: Dp = 0.dp
+private fun SideSheet(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    playbackSpeed: Float = 1.0f,
+    onPlaybackSpeedChange: (Float) -> Unit = { _ -> },
+    maxWidth: Dp = 0.dp
 
 ) {
 
-        Column(modifier = modifier
+    Column(
+        modifier = modifier
             .padding(16.dp)
-            .background(color = Color(0xFF28282B), shape = RoundedCornerShape(10))) {
+            .background(color = Color(0xFF28282B), shape = RoundedCornerShape(10))
+    ) {
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onDismiss) {
-                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
-                }
-
-                Text(
-                    text = "Playback speed",
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
                 )
             }
 
-            Slider(
-                modifier = Modifier.padding(start = 16.dp, end = maxWidth / 4.5f),
-                value = playbackSpeed,
-                onValueChange = onPlaybackSpeedChange,
-                valueRange = 0.1f .. 2f
-                )
+            Text(
+                text = "Playback speed",
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
 
-            Row(modifier = Modifier
+        Slider(
+            modifier = Modifier.padding(start = 16.dp, end = maxWidth / 4.5f),
+            value = playbackSpeed,
+            onValueChange = onPlaybackSpeedChange,
+            valueRange = 0.1f..2f
+        )
+
+        Row(
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
                 .padding(start = 16.dp, end = maxWidth / 4.5f),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
 
-                Text(text = "0.1x", color = Color.White, fontWeight = FontWeight.Bold)
+            Text(text = "0.1x", color = Color.White, fontWeight = FontWeight.Bold)
 
-                when (playbackSpeed.toDouble().toOneDecimal) {
-                    "1.0" -> {
-                        Text(text = "Normal", color = Color.White, fontWeight = FontWeight.Bold)
-                    }
-                    else -> {
-                        Text(text = playbackSpeed.toDouble().toOneDecimal, color = Color.White, fontWeight = FontWeight.SemiBold)
-                    }
+            when (playbackSpeed.toDouble().toOneDecimal) {
+                "1.0" -> {
+                    Text(text = "Normal", color = Color.White, fontWeight = FontWeight.Bold)
                 }
 
-                Text(text = "2x", color = Color.White, fontWeight = FontWeight.Bold)
+                else -> {
+                    Text(
+                        text = playbackSpeed.toDouble().toOneDecimal,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
+
+            Text(text = "2x", color = Color.White, fontWeight = FontWeight.Bold)
         }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DownloadSideSheet(modifier: Modifier = Modifier,
-                              onDismiss: () -> Unit = {},
-                              onTrailerDownloadClick: (String, Stream, Stream, MovieDownloadEntity) -> Unit = { _, _, _, _ -> },
-                              downloaderUiState: DownloadUiState = DownloadUiState.Default,
+private fun DownloadSideSheet(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+    onTrailerDownloadClick: (String, Stream, Stream, MovieDownloadEntity) -> Unit = { _, _, _, _ -> },
+    downloaderUiState: DownloadUiState = DownloadUiState.Default,
 ) {
 
     val context = LocalContext.current
     var selectedVideoQuality by remember { mutableIntStateOf(0) }
 
-    Column(modifier = modifier
-        .padding(16.dp)
-        .background(color = Color(0xFF28282B), shape = RoundedCornerShape(10))) {
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .background(color = Color(0xFF28282B), shape = RoundedCornerShape(10))
+    ) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onDismiss) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
             }
 
             Text(
@@ -332,16 +378,22 @@ private fun DownloadSideSheet(modifier: Modifier = Modifier,
         when (downloaderUiState) {
             is DownloadUiState.Default -> {
                 Timber.tag(TAG).d("Video Downloader")
-                CircularProgressIndicator(modifier = modifier
-                    .fillMaxWidth()
-                    .size(28.dp), strokeWidth = 4.dp, strokeCap = StrokeCap.Round)
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .size(28.dp), strokeWidth = 4.dp, strokeCap = StrokeCap.Round
+                )
             }
+
             is DownloadUiState.Loading -> {
                 Timber.tag(TAG).d("Downloader Loading")
-                CircularProgressIndicator(modifier = modifier
-                    .fillMaxWidth()
-                    .size(28.dp), strokeWidth = 4.dp, strokeCap = StrokeCap.Round)
+                CircularProgressIndicator(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .size(28.dp), strokeWidth = 4.dp, strokeCap = StrokeCap.Round
+                )
             }
+
             is DownloadUiState.Complete -> {
                 Timber.tag(TAG).d(downloaderUiState.toString())
 
@@ -368,41 +420,57 @@ private fun DownloadSideSheet(modifier: Modifier = Modifier,
 
                 LazyColumn {
                     items(downloaderUiState.videoStreams.size) {
-                        Row(modifier = Modifier.clickable(
-                            onClick = {
-                        onTrailerDownloadClick((context as Activity).intent.getStringExtra(PlayActivity.VIDEO_ID) ?: return@clickable,
-                            downloaderUiState.videoStreams.first(),
-                            downloaderUiState.audioStreams ?: return@clickable,
-                            MovieDownloadEntity(
-                                backdropPath = downloaderUiState.videoThumbnail,
-                                runtime = null,
-                                title = downloaderUiState.videoTitle,
-                                filePath = downloaderUiState.videoTitle?.replace(":", "_") + ".mp4"
-                            )
-                        )
+                        Row(
+                            modifier = Modifier.clickable(
+                                onClick = {
+                                    onTrailerDownloadClick(
+                                        (context as Activity).intent.getStringExtra(PlayActivity.VIDEO_ID)
+                                            ?: return@clickable,
+                                        downloaderUiState.videoStreams.first(),
+                                        downloaderUiState.audioStreams ?: return@clickable,
+                                        MovieDownloadEntity(
+                                            backdropPath = downloaderUiState.videoThumbnail,
+                                            runtime = null,
+                                            title = downloaderUiState.videoTitle,
+                                            filePath = downloaderUiState.videoTitle?.replace(
+                                                ":",
+                                                "_"
+                                            ) + ".mp4"
+                                        )
+                                    )
 
-                                Toast.makeText(context, "Video downloading..", Toast.LENGTH_SHORT).show()
-                                onDismiss()
+                                    Toast.makeText(
+                                        context,
+                                        "Video downloading..",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    onDismiss()
 
-                                      },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
+                                },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
                             ),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
 
                             IconButton(onClick = { /*TODO*/ }) {
                                 if (selectedVideoQuality == it) {
-                                    Icon(imageVector = Icons.Rounded.Check,
+                                    Icon(
+                                        imageVector = Icons.Rounded.Check,
                                         contentDescription = null,
-                                        tint = color)
+                                        tint = color
+                                    )
                                 }
                             }
 
-                            Text(text = downloaderUiState.videoStreams[it].resolution.removeSurrounding("\""),
+                            Text(
+                                text = downloaderUiState.videoStreams[it].resolution.removeSurrounding(
+                                    "\""
+                                ),
                                 color = if (selectedVideoQuality == it) color else Color.White,
                                 fontWeight = FontWeight.SemiBold,
-                                )
+                            )
 
                         }
                     }

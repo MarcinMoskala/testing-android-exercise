@@ -37,8 +37,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.application.moviesapp.R
-import com.application.moviesapp.domain.usecase.GetSignInFacebookInteractor
-import com.application.moviesapp.domain.usecase.SignInFacebookUseCase
 import com.application.moviesapp.ui.home.HomeActivity
 import com.application.moviesapp.ui.onboarding.forgotpassword.ContactDetailsScreen
 import com.application.moviesapp.ui.onboarding.forgotpassword.CreateNewPasswordScreen
@@ -57,11 +55,14 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private const val TAG = "OnboardingApp"
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun OnboardingApp(modifier: Modifier = Modifier,
-                  navController: NavHostController = rememberNavController(),
-                  onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
+fun OnboardingApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
+) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val uiState by onboardingViewModel.movieGenreUiState.collectAsState()
@@ -78,84 +79,120 @@ fun OnboardingApp(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { OnboardingAppBar(currentScreen = backStackEntry?.destination?.route ?: OnboardingScreen.Start.name, canNavigateBack = navController.previousBackStackEntry != null) { navController.navigateUp() } },
+        topBar = {
+            OnboardingAppBar(
+                currentScreen = backStackEntry?.destination?.route ?: OnboardingScreen.Start.name,
+                canNavigateBack = navController.previousBackStackEntry != null
+            ) { navController.navigateUp() }
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) }
-     ) { innerPadding ->
-            NavHost(modifier = modifier.padding(innerPadding),
-                navController = navController,
-                startDestination = OnboardingScreen.Start.name) {
+    ) { innerPadding ->
+        NavHost(
+            modifier = modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = OnboardingScreen.Start.name
+        ) {
 
-                composable(route = OnboardingScreen.Start.name) {
-                    OnboardingScreen(modifier = modifier) {
-                        navController.navigate(OnboardingScreen.Login.name)
-                    }
-                }
-
-                composable(route = OnboardingScreen.Login.name) {
-                    LoginScreen(modifier = modifier,
-                        onSignInClick = { navController.navigate(OnboardingScreen.LoginWithPassword.name) },
-                        onSignupClick = { navController.navigate(OnboardingScreen.SignupWithPassword.name) },
-                        onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
-                        onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
-                        onSocialSignIn = onSocialSignIn,
-                        snackbarHostState = snackbarHostState
-                    )
-                }
-
-                composable(route = OnboardingScreen.LoginWithPassword.name) {
-                    LoginWithPasswordScreen(
-                        modifier = modifier,
-                        onSignInClick = { email: String?, password: String? -> onboardingViewModel.signInEmail(email, password) },
-                        onSignupClick = { navController.navigate(OnboardingScreen.SignupWithPassword.name) },
-                        onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
-                        onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
-                        onSocialSignIn = onSocialSignIn,
-                        snackbarHostState = snackbarHostState,
-                        onForgotPasswordClick = {
-                            if (onboardingViewModel.email.isEmpty()) {
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar(message = context.getString(R.string.enter_email_address), duration = SnackbarDuration.Short)
-                                }
-                            } else {
-                                navController.navigate(OnboardingScreen.ForgotPassword.name)
-                            }
-                        },
-                        email = onboardingViewModel.email,
-                        onEmailChange = onboardingViewModel::onEmailChange,
-                        loginUIState = loginUIState
-                    )
-                }
-
-                composable(route = OnboardingScreen.SignupWithPassword.name) {
-                    SignupWithPasswordScreen(
-                        modifier = modifier,
-                        onSignInClick = { navController.navigate(OnboardingScreen.LoginWithPassword.name) },
-                        onSignupClick = { email: String?, password: String? -> onboardingViewModel.signUpEmail(email, password) },
-                        onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
-                        onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
-                        onSocialSignIn = onSocialSignIn,
-                        snackbarHostState = snackbarHostState,
-                        signupUIState = signupUIState
-                    )
-                }
-
-                composable(route = OnboardingScreen.ForgotPassword.name) {
-                    ContactDetailsScreen(
-                        email = onboardingViewModel.email,
-                        onPasswordResetOtp = onboardingViewModel::sendPasswordResetOtp,
-                        snackbarHostState = snackbarHostState
-                    )
-                }
-
-                composable(route = OnboardingScreen.OtpCode.name) {
-                    OtpCodeScreen()
-                }
-
-                composable(route = OnboardingScreen.CreateNewPassword.name) {
-                    CreateNewPasswordScreen()
+            composable(route = OnboardingScreen.Start.name) {
+                OnboardingScreen(modifier = modifier) {
+                    navController.navigate(OnboardingScreen.Login.name)
                 }
             }
+
+            composable(route = OnboardingScreen.Login.name) {
+                LoginScreen(
+                    modifier = modifier,
+                    onSignInClick = { navController.navigate(OnboardingScreen.LoginWithPassword.name) },
+                    onSignupClick = { navController.navigate(OnboardingScreen.SignupWithPassword.name) },
+                    onGoogleSignInClick = { activity, intent ->
+                        onboardingViewModel.signInGoogle(
+                            activity,
+                            intent
+                        )
+                    },
+                    onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
+                    onSocialSignIn = onSocialSignIn,
+                    snackbarHostState = snackbarHostState
+                )
+            }
+
+            composable(route = OnboardingScreen.LoginWithPassword.name) {
+                LoginWithPasswordScreen(
+                    modifier = modifier,
+                    onSignInClick = { email: String?, password: String? ->
+                        onboardingViewModel.signInEmail(
+                            email,
+                            password
+                        )
+                    },
+                    onSignupClick = { navController.navigate(OnboardingScreen.SignupWithPassword.name) },
+                    onGoogleSignInClick = { activity, intent ->
+                        onboardingViewModel.signInGoogle(
+                            activity,
+                            intent
+                        )
+                    },
+                    onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
+                    onSocialSignIn = onSocialSignIn,
+                    snackbarHostState = snackbarHostState,
+                    onForgotPasswordClick = {
+                        if (onboardingViewModel.email.isEmpty()) {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.enter_email_address),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        } else {
+                            navController.navigate(OnboardingScreen.ForgotPassword.name)
+                        }
+                    },
+                    email = onboardingViewModel.email,
+                    onEmailChange = onboardingViewModel::onEmailChange,
+                    loginUIState = loginUIState
+                )
+            }
+
+            composable(route = OnboardingScreen.SignupWithPassword.name) {
+                SignupWithPasswordScreen(
+                    modifier = modifier,
+                    onSignInClick = { navController.navigate(OnboardingScreen.LoginWithPassword.name) },
+                    onSignupClick = { email: String?, password: String? ->
+                        onboardingViewModel.signUpEmail(
+                            email,
+                            password
+                        )
+                    },
+                    onGoogleSignInClick = { activity, intent ->
+                        onboardingViewModel.signInGoogle(
+                            activity,
+                            intent
+                        )
+                    },
+                    onGithubSignInClick = { onboardingViewModel.signInGithub(context as Activity) },
+                    onSocialSignIn = onSocialSignIn,
+                    snackbarHostState = snackbarHostState,
+                    signupUIState = signupUIState
+                )
+            }
+
+            composable(route = OnboardingScreen.ForgotPassword.name) {
+                ContactDetailsScreen(
+                    email = onboardingViewModel.email,
+                    onPasswordResetOtp = onboardingViewModel::sendPasswordResetOtp,
+                    snackbarHostState = snackbarHostState
+                )
+            }
+
+            composable(route = OnboardingScreen.OtpCode.name) {
+                OtpCodeScreen()
+            }
+
+            composable(route = OnboardingScreen.CreateNewPassword.name) {
+                CreateNewPasswordScreen()
+            }
         }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -166,9 +203,11 @@ fun OnboardingAppBar(currentScreen: String, canNavigateBack: Boolean, onNavigate
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = onNavigateUp) {
-                    Icon(imageVector = Icons.Outlined.ArrowBack,
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowBack,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSecondary)
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
                 }
             }
         },

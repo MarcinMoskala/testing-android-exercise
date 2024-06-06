@@ -5,6 +5,18 @@ import com.application.moviesapp.domain.model.MovieFavourite
 
 fun MovieFavouriteDto.Result.toMovie(): MovieFavourite {
     return MovieFavourite(
-        adult, backdropPath, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, video, voteAverage, voteCount
+        adult,
+        backdropPath,
+        id,
+        originalLanguage,
+        originalTitle,
+        overview,
+        popularity,
+        posterPath,
+        releaseDate,
+        title,
+        video,
+        voteAverage,
+        voteCount
     )
 }

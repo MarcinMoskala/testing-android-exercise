@@ -21,14 +21,21 @@ interface WorkManagerRepository {
     val readVideoInfo: Flow<WorkInfo>
     suspend fun getVideoInfo(videoUrl: String)
 
-    suspend fun videoDownload(videoUrl: String, videoStream: Stream, audioStream: Stream?, movieDownloadEntity: MovieDownloadEntity?)
+    suspend fun videoDownload(
+        videoUrl: String,
+        videoStream: Stream,
+        audioStream: Stream?,
+        movieDownloadEntity: MovieDownloadEntity?
+    )
 }
 
-class WorkManagerRepositoryImpl @Inject constructor(private val workManager: WorkManager): WorkManagerRepository {
+class WorkManagerRepositoryImpl @Inject constructor(private val workManager: WorkManager) :
+    WorkManagerRepository {
     override val readVideoInfo: Flow<WorkInfo>
-        get() =  workManager.getWorkInfosByTagLiveData(VideoInfoWorker.TAG_OUTPUT).asFlow().mapNotNull {
-            if (it.isNotEmpty()) it.first() else null
-        }
+        get() = workManager.getWorkInfosByTagLiveData(VideoInfoWorker.TAG_OUTPUT).asFlow()
+            .mapNotNull {
+                if (it.isNotEmpty()) it.first() else null
+            }
 
     override suspend fun getVideoInfo(videoUrl: String) {
         val videoInfoBuilder = OneTimeWorkRequestBuilder<VideoInfoWorker>()
@@ -40,12 +47,22 @@ class WorkManagerRepositoryImpl @Inject constructor(private val workManager: Wor
         )
         videoInfoBuilder.addTag(VideoInfoWorker.TAG_OUTPUT)
 
-        workManager.enqueueUniqueWork(VideoInfoWorker.WORK_NAME, ExistingWorkPolicy.REPLACE,videoInfoBuilder.build())
+        workManager.enqueueUniqueWork(
+            VideoInfoWorker.WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
+            videoInfoBuilder.build()
+        )
     }
 
-    override suspend fun videoDownload(videoUrl: String, videoStream: Stream, audioStream: Stream?, movieDownloadEntity: MovieDownloadEntity?)  {
+    override suspend fun videoDownload(
+        videoUrl: String,
+        videoStream: Stream,
+        audioStream: Stream?,
+        movieDownloadEntity: MovieDownloadEntity?
+    ) {
         val formattedResultVideo = videoStream.iTag.substring(1, videoStream.iTag.length.minus(1))
-        val formattedResultAudio = audioStream?.iTag?.substring(1, audioStream.iTag.length.minus(1)) ?: "0"
+        val formattedResultAudio =
+            audioStream?.iTag?.substring(1, audioStream.iTag.length.minus(1)) ?: "0"
 
         val downloadBuilder = OneTimeWorkRequestBuilder<DownloadWorker>()
 
@@ -54,7 +71,8 @@ class WorkManagerRepositoryImpl @Inject constructor(private val workManager: Wor
                 .putString(DownloadWorker.VIDEO_URL, videoUrl)
                 .putInt(DownloadWorker.VIDEO_ITAG, formattedResultVideo.toInt())
                 .putInt(DownloadWorker.AUDIO_ITAG, formattedResultAudio.toInt())
-                .build())
+                .build()
+        )
 
         val mergeBuilder = OneTimeWorkRequestBuilder<MergeWorker>()
         val gson = Gson().toJson(movieDownloadEntity)
@@ -64,7 +82,11 @@ class WorkManagerRepositoryImpl @Inject constructor(private val workManager: Wor
                 .build()
         )
 
-        workManager.beginUniqueWork("download", ExistingWorkPolicy.REPLACE, OneTimeWorkRequestBuilder<CleanerWorker>().build())
+        workManager.beginUniqueWork(
+            "download",
+            ExistingWorkPolicy.REPLACE,
+            OneTimeWorkRequestBuilder<CleanerWorker>().build()
+        )
             .then(downloadBuilder.build())
             .then(mergeBuilder.build())
             .enqueue()

@@ -11,7 +11,8 @@ interface TvSeriesGenreUseCase {
     suspend operator fun invoke(): Resource<MovieGenre>
 }
 
-class GetTvSeriesGenreInteractor @Inject constructor(private val repository: MoviesRepository): TvSeriesGenreUseCase {
+class GetTvSeriesGenreInteractor @Inject constructor(private val repository: MoviesRepository) :
+    TvSeriesGenreUseCase {
 
 
     private companion object {
@@ -25,7 +26,7 @@ class GetTvSeriesGenreInteractor @Inject constructor(private val repository: Mov
             val result = repository.getTvSeriesGenres()
 
             if (result.isSuccessful) {
-                val genres = result.body()?.toMovieGenre()  ?: MovieGenre(null)
+                val genres = result.body()?.toMovieGenre() ?: MovieGenre(null)
                 Timber.tag(TAG).d(genres.toString())
                 Resource.Success(data = genres)
             } else {

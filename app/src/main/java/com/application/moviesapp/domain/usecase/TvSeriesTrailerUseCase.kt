@@ -14,9 +14,10 @@ interface TvSeriesTrailerUseCase {
     suspend operator fun invoke(seriesId: Int): Resource<List<TvSeriesTrailerWithYoutube>>
 }
 
-class GetTvSeriesTrailerInteractor @Inject constructor(private val moviesRepository: MoviesRepository,
-                                                    private val youtubeRepository: YoutubeRepository
-): TvSeriesTrailerUseCase {
+class GetTvSeriesTrailerInteractor @Inject constructor(
+    private val moviesRepository: MoviesRepository,
+    private val youtubeRepository: YoutubeRepository
+) : TvSeriesTrailerUseCase {
 
     private companion object {
         const val TAG = "GetTvSeriesTrailerInteractor"
@@ -42,7 +43,8 @@ class GetTvSeriesTrailerInteractor @Inject constructor(private val moviesReposit
                             id = id,
                             title = snippet?.title,
                             duration = contentDetails?.duration,
-                            thumbnail = snippet?.thumbnails?.standard?.url)
+                            thumbnail = snippet?.thumbnails?.standard?.url
+                        )
                     }
 
                     trailer ?: TvSeriesTrailerWithYoutube(null, null, null, null)

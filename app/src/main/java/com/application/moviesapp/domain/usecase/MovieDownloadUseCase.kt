@@ -11,8 +11,11 @@ interface MovieDownloadUseCase {
     suspend fun deleteMovieDownload(download: MovieDownloadEntity)
 }
 
-class GetMovieDownloadInteractor @Inject constructor(private val repository: MoviesRepository): MovieDownloadUseCase {
-    override fun readMovieDownload(search: String): Flow<List<MovieDownloadEntity>> = repository.readMovieDownload(search)
+class GetMovieDownloadInteractor @Inject constructor(private val repository: MoviesRepository) :
+    MovieDownloadUseCase {
+    override fun readMovieDownload(search: String): Flow<List<MovieDownloadEntity>> =
+        repository.readMovieDownload(search)
 
-    override suspend fun deleteMovieDownload(download: MovieDownloadEntity) = repository.deleteMovieDownload(download)
+    override suspend fun deleteMovieDownload(download: MovieDownloadEntity) =
+        repository.deleteMovieDownload(download)
 }

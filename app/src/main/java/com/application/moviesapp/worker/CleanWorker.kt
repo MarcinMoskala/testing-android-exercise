@@ -16,8 +16,10 @@ import timber.log.Timber
 import java.io.File
 
 @HiltWorker
-class CleanerWorker  @AssistedInject constructor (@Assisted ctx: Context,
-                                                  @Assisted params: WorkerParameters): CoroutineWorker(ctx, params) {
+class CleanerWorker @AssistedInject constructor(
+    @Assisted ctx: Context,
+    @Assisted params: WorkerParameters
+) : CoroutineWorker(ctx, params) {
     companion object {
         private const val TAG = "CleanerWorker"
     }
@@ -27,14 +29,15 @@ class CleanerWorker  @AssistedInject constructor (@Assisted ctx: Context,
 
         makeStatusNotification(
             message = "Cleaning files",
-            context = applicationContext)
+            context = applicationContext
+        )
 
         return withContext(Dispatchers.IO) {
             return@withContext try {
                 val clean = listOf(
-                    async {  removeVideoDirectory() },
-                    async {  removeAudioDirectory() },
-                    async {  createOutputDirectory() }
+                    async { removeVideoDirectory() },
+                    async { removeAudioDirectory() },
+                    async { createOutputDirectory() }
                 )
 
                 clean.awaitAll()
