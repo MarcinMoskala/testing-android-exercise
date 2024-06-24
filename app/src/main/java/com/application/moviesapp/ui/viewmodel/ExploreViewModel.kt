@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.application.moviesapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -10,7 +12,6 @@ import com.application.moviesapp.data.common.Resource
 import com.application.moviesapp.data.repository.MoviesRepository
 import com.application.moviesapp.domain.MoviesDiscoverUseCase
 import com.application.moviesapp.domain.MoviesSortUseCase
-import com.application.moviesapp.domain.MoviesWithSort
 import com.application.moviesapp.domain.TvSeriesDiscoverUseCase
 import com.application.moviesapp.domain.model.MovieGenre
 import com.application.moviesapp.domain.model.MoviesDetail
@@ -20,7 +21,6 @@ import com.application.moviesapp.domain.usecase.MovieSearchUseCase
 import com.application.moviesapp.domain.usecase.TvSeriesGenreUseCase
 import com.application.moviesapp.ui.home.Categories
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 sealed interface ExploreUiState {
@@ -69,17 +68,17 @@ class ExploreViewModel @Inject constructor(
     )
 
 
-    private var _exploreUiState = MutableStateFlow<ExploreUiState>(ExploreUiState.Loading)
+    private val _exploreUiState = MutableStateFlow<ExploreUiState>(ExploreUiState.Loading)
     val exploreUiState: StateFlow<ExploreUiState> get() = _exploreUiState
 
-    private var _genreUiState = MutableStateFlow<Resource<MovieGenre>>(Resource.Loading)
-    val genreUiState get() = _genreUiState.asStateFlow()
+    private val _genreUiState = MutableStateFlow<Resource<MovieGenre>>(Resource.Loading)
+    val genreUiState: StateFlow<Resource<MovieGenre>> get() = _genreUiState
 
-    private var _searchInputUiState = MutableStateFlow(SearchUiState())
-    val searchInputUiState get() = _searchInputUiState.asStateFlow()
+    private val _searchInputUiState = MutableStateFlow(SearchUiState())
+    val searchInputUiState: StateFlow<SearchUiState> get() = _searchInputUiState
 
-    private var _sortAndFilterUiState = MutableStateFlow(SortAndFilterUiState())
-    val sortAndFilterUiState get() = _sortAndFilterUiState.asStateFlow()
+    private val _sortAndFilterUiState = MutableStateFlow(SortAndFilterUiState())
+    val sortAndFilterUiState: StateFlow<SortAndFilterUiState> get() = _sortAndFilterUiState.asStateFlow()
 
 
     fun moviesPagingFlow(
@@ -131,30 +130,22 @@ class ExploreViewModel @Inject constructor(
     }
 
     fun updateGenre(genre: MovieGenre.Genre) = viewModelScope.launch {
-        val genreList = mutableListOf<MovieGenre.Genre>().apply {
-            addAll(readUserPreference.value.genreList.map { MovieGenre.Genre(it.id, it.name) })
-        }
+        val genreList = readUserPreference.value.genreList.map { MovieGenre.Genre(it.id, it.name) }
+            .toMutableList()
 
         if (genreList.contains(genre)) {
             genreList.remove(genre)
-            accountSetupUseCase.updateGenre(genre = genreList.map {
-                MoviesDetail.Genre(
-                    it.id,
-                    it.name
-                )
-            }.toSet())
-
-            Timber.tag(TAG).d(genreList.toString())
         } else {
             genreList.add(genre)
-            accountSetupUseCase.updateGenre(genre = genreList.map {
-                MoviesDetail.Genre(
-                    it.id,
-                    it.name
-                )
-            }.toSet())
-            Timber.tag(TAG).d(genreList.toString())
         }
+
+        accountSetupUseCase.updateGenre(genre = genreList.map {
+            MoviesDetail.Genre(
+                it.id,
+                it.name
+            )
+        }.toSet())
+        Timber.tag(TAG).d(genreList.toString())
     }
 
     fun setSortAndFilter(

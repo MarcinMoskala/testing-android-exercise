@@ -1,10 +1,8 @@
 package com.application.moviesapp.domain.usecase
 
 import com.application.moviesapp.data.common.Resource
-import com.application.moviesapp.data.mappers.toMovieGenre
 import com.application.moviesapp.data.mappers.toTvSeries
 import com.application.moviesapp.data.repository.MoviesRepository
-import com.application.moviesapp.domain.model.MovieGenre
 import com.application.moviesapp.domain.model.TvSeriesEpisodes
 import timber.log.Timber
 
@@ -12,7 +10,7 @@ interface TvSeriesEpisodesUseCase {
     suspend operator fun invoke(seriesId: Int, seasonNumber: Int): Resource<TvSeriesEpisodes>
 }
 
-class GetTvSeriesEpisodesUseCase(private val repository: MoviesRepository) :
+class GetTvSeriesEpisodesInteractor(private val repository: MoviesRepository) :
     TvSeriesEpisodesUseCase {
 
     private companion object {

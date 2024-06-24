@@ -10,7 +10,7 @@ interface VideoInfoUseCase {
     suspend fun getVideoInfo(videoId: String)
 }
 
-class VideoInfoInteractors @Inject constructor(private val repository: WorkManagerRepository) :
+class VideoInfoInteractor @Inject constructor(private val repository: WorkManagerRepository) :
     VideoInfoUseCase {
     override val readVideoInfo: Flow<WorkInfo>
         get() = repository.readVideoInfo

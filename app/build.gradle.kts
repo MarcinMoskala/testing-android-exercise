@@ -164,6 +164,11 @@ dependencies {
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.dagger.nav.compose)
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation("app.cash.turbine:turbine:1.1.0")
+    testImplementation("com.lemonappdev:konsist:0.15.1")
+    androidTestImplementation("io.kotest:kotest-property:5.9.1")
 
     // ViewModel with ktx
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

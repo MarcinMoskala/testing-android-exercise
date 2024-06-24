@@ -20,8 +20,9 @@ import javax.inject.Inject
 data class DownloadsUiState(val data: List<MovieDownloadEntity> = emptyList())
 
 @HiltViewModel
-class DownloadViewModel @Inject constructor(private val useCase: MovieDownloadUseCase) :
-    ViewModel() {
+class DownloadViewModel @Inject constructor(
+    private val useCase: MovieDownloadUseCase
+) : ViewModel() {
 
     fun readAllDownload(search: String = "") = useCase.readMovieDownload(search)
         .map { DownloadsUiState(it) }

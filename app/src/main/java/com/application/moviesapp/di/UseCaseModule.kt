@@ -33,10 +33,10 @@ import com.application.moviesapp.domain.usecase.GetMovieNowPlayingInteractor
 import com.application.moviesapp.domain.usecase.GetMovieSearchInteractor
 import com.application.moviesapp.domain.usecase.GetMovieWithTvSeriesInteractor
 import com.application.moviesapp.domain.usecase.GetNotificationInteractor
-import com.application.moviesapp.domain.usecase.GetPasswordResetInteractors
+import com.application.moviesapp.domain.usecase.GetPasswordResetInteractor
 import com.application.moviesapp.domain.usecase.GetSettingsInteractor
 import com.application.moviesapp.domain.usecase.GetTvSeriesDetailsInteractor
-import com.application.moviesapp.domain.usecase.GetTvSeriesEpisodesUseCase
+import com.application.moviesapp.domain.usecase.GetTvSeriesEpisodesInteractor
 import com.application.moviesapp.domain.usecase.GetTvSeriesGenreInteractor
 import com.application.moviesapp.domain.usecase.GetTvSeriesNowPlayingInteractor
 import com.application.moviesapp.domain.usecase.GetTvSeriesTrailerInteractor
@@ -72,14 +72,13 @@ import com.application.moviesapp.domain.usecase.YoutubeThumbnailInteractor
 import com.application.moviesapp.domain.usecase.YoutubeThumbnailUseCase
 import com.application.moviesapp.domain.usecase.worker.DownloadUseCase
 import com.application.moviesapp.domain.usecase.worker.GetDownloadInteractor
-import com.application.moviesapp.domain.usecase.worker.VideoInfoInteractors
+import com.application.moviesapp.domain.usecase.worker.VideoInfoInteractor
 import com.application.moviesapp.domain.usecase.worker.VideoInfoUseCase
 import com.google.android.gms.auth.api.identity.SignInClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.checkerframework.checker.signature.qual.SignatureBottom
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -235,7 +234,7 @@ class UseCaseModule {
     @Provides
     @Singleton
     fun providesVideoInfoUseCase(workManagerRepository: WorkManagerRepository): VideoInfoUseCase {
-        return VideoInfoInteractors(workManagerRepository)
+        return VideoInfoInteractor(workManagerRepository)
     }
 
     @Provides
@@ -271,13 +270,13 @@ class UseCaseModule {
     @Provides
     @Singleton
     fun providesTvSeriesEpisodesUseCase(moviesRepository: MoviesRepository): TvSeriesEpisodesUseCase {
-        return GetTvSeriesEpisodesUseCase(moviesRepository)
+        return GetTvSeriesEpisodesInteractor(moviesRepository)
     }
 
     @Provides
     @Singleton
     fun providesPasswordResetUseCase(passwordResetRepository: PasswordResetRepository): PasswordResetUseCase {
-        return GetPasswordResetInteractors(passwordResetRepository)
+        return GetPasswordResetInteractor(passwordResetRepository)
     }
 
     @Provides
